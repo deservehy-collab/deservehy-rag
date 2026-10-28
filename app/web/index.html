@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#164d46">
+  <meta name="description" content="和deservehy客服聊聊购物中遇到的问题。">
+  <title>deservehy客服 · 好好聊，慢慢解决</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='10' fill='%23164d46'/%3E%3Cpath d='M8 9h16v12H13l-5 4V9z' fill='none' stroke='%23d6efda' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/assets/chat.css">
+  <script src="/assets/chat.js" defer></script>
+</head>
+<body>
+  <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="icon-chat" viewBox="0 0 24 24"><path d="M5 4.5h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-6 3V6.5a2 2 0 0 1 2-2Z"/><path d="M8 10h8M8 14h5"/></symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="m7 14 5-5 5 5M12 9v11"/></symbol>
+    <symbol id="icon-down" viewBox="0 0 24 24"><path d="m6 10 6 6 6-6M12 4v12"/></symbol>
+    <symbol id="icon-bag" viewBox="0 0 24 24"><path d="m5 8-1 12h16L19 8H5Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></symbol>
+    <symbol id="icon-box" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5ZM3 8v9l9 5 9-5V8M12 13v9M7.5 5.5l9 5"/></symbol>
+    <symbol id="icon-return" viewBox="0 0 24 24"><path d="M5 8h9a6 6 0 0 1 0 12h-3M9 4 5 8l4 4"/></symbol>
+    <symbol id="icon-shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></symbol>
+    <symbol id="icon-right" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></symbol>
+  </svg>
+
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="客服介绍">
+      <a class="brand" href="/" aria-label="deservehy客服首页">
+        <span class="brand-mark"><svg class="icon"><use href="#icon-chat"/></svg></span>
+        <span>deservehy<span class="brand-light">客服</span></span>
+      </a>
+      <div class="sidebar-content">
+        <div class="current-space"><svg class="icon"><use href="#icon-chat"/></svg><span>在线咨询</span><span class="space-dot"></span></div>
+        <div class="sidebar-intro">
+          <h2>好好聊，<br>慢慢解决。</h2>
+          <p>从一个购物小问题开始，<br>一起理清接下来怎么办。</p>
+        </div>
+        <div class="help-topics">
+          <p class="topics-title">这里可以聊</p>
+          <div class="help-topic"><svg class="icon"><use href="#icon-bag"/></svg><div><strong>购物疑问</strong><span>整理需求，补充必要信息</span></div></div>
+          <div class="help-topic"><svg class="icon"><use href="#icon-box"/></svg><div><strong>收货问题</strong><span>说说商品和包裹的情况</span></div></div>
+          <div class="help-topic"><svg class="icon"><use href="#icon-return"/></svg><div><strong>售后诉求</strong><span>理清想退、想换，还是维修</span></div></div>
+        </div>
+      </div>
+      <div class="sidebar-bottom"><svg class="icon"><use href="#icon-shield"/></svg><p>只聊问题，不索取密码。<br><span>请勿发送验证码或支付信息。</span></p></div>
+    </aside>
+
+    <main class="workspace">
+      <header class="chat-header">
+        <div class="assistant-heading">
+          <div class="assistant-avatar"><svg class="icon"><use href="#icon-chat"/></svg></div>
+          <div><h1>客服助手</h1><p id="header-status">关于购物，尽管问我</p></div>
+        </div>
+        <button class="new-chat" id="new-chat" type="button" title="清空当前对话，重新开始"><svg class="icon"><use href="#icon-plus"/></svg><span>新对话</span></button>
+      </header>
+
+      <div class="conversation-area">
+        <div class="conversation-scroll" id="conversation-scroll">
+          <section class="welcome" id="welcome" aria-label="开始咨询">
+            <div class="welcome-symbol" aria-hidden="true"><svg class="icon"><use href="#icon-chat"/></svg><span class="hello-note">Hi</span></div>
+            <h2>购物中的小问题，<br>一起聊明白。</h2>
+            <p>我是deservehy。告诉我你遇到的情况，<br class="mobile-break">也可以从下面的问题开始。</p>
+            <div class="suggestions" aria-label="试试这样问">
+              <button type="button" data-prompt="收到的商品有破损，我应该怎么处理？"><svg class="icon"><use href="#icon-box"/></svg><span>收到的商品有破损</span><svg class="icon suggestion-arrow"><use href="#icon-right"/></svg></button>
+              <button type="button" data-prompt="我想退货，需要准备哪些信息？"><svg class="icon"><use href="#icon-return"/></svg><span>想退货，需要准备什么？</span><svg class="icon suggestion-arrow"><use href="#icon-right"/></svg></button>
+              <button type="button" data-prompt="订单迟迟没有收到，我应该先确认哪些信息？"><svg class="icon"><use href="#icon-bag"/></svg><span>订单迟迟没有收到</span><svg class="icon suggestion-arrow"><use href="#icon-right"/></svg></button>
+            </div>
+          </section>
+          <div class="conversation-date" id="conversation-date" hidden>本次对话</div>
+          <div class="messages" id="messages" role="log" aria-label="聊天记录" aria-live="off"></div>
+        </div>
+        <button class="jump-bottom" id="jump-bottom" type="button" hidden><svg class="icon"><use href="#icon-down"/></svg>回到最新消息</button>
+      </div>
+
+      <footer class="composer-area">
+        <div class="composer-width">
+          <form id="chat-form" class="composer">
+            <label class="sr-only" for="message-input">输入你的问题</label>
+            <textarea id="message-input" rows="2" maxlength="12000" placeholder="说说你遇到的问题，也可以接着上面继续问…" aria-describedby="input-hint" required></textarea>
+            <div class="composer-actions"><span class="input-hint" id="input-hint">Enter 发送<span class="desktop-hint"> · Shift + Enter 换行</span></span><button class="send-button" id="send-button" type="submit" disabled><span>发送</span><svg class="icon"><use href="#icon-arrow"/></svg></button><button class="stop-button" id="stop-button" type="button" hidden><span class="stop-square"></span>停止回复</button></div>
+          </form>
+          <p class="disclaimer">deservehy是 AI 客服助手，不能直接操作订单。具体处理以店铺政策为准。</p>
+        </div>
+      </footer>
+    </main>
+  </div>
+  <p class="sr-only" id="announcer" role="status" aria-live="polite"></p>
+  <noscript><p class="noscript">聊天需要启用浏览器的 JavaScript，请启用后刷新页面。</p></noscript>
+</body>
+</html>
