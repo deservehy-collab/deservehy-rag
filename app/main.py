@@ -8,15 +8,22 @@ from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from langchain_openai import ChatOpenAI
 from pydantic import ValidationError
+from sqlalchemy.orm import Session, sessionmaker
 
 from app.config import Settings
 from app.context import ContextBudgetError
+from app.database import build_database_url, build_engine, build_session_factory
 from app.model import build_model
 from app.schemas import AfterSales, ChatRequest, ExtractRequest
 from app.service import CustomerService, ModelFailure
+from app.storage import ConversationStore
 
 
-def create_app(settings: Settings | None = None, model: ChatOpenAI | None = None) -> FastAPI:
+def create_app(
+    settings: Settings | None = None,
+    model: ChatOpenAI | None = None,
+    session_factory: sessionmaker[Session] | None = None,
+) -> FastAPI:
     @asynccontextmanager
     async def lifespan(application: FastAPI):
         try:
@@ -24,15 +31,22 @@ def create_app(settings: Settings | None = None, model: ChatOpenAI | None = None
         except ValidationError:
             raise RuntimeError("模型配置无效，请填写项目 .env 中的地址、模型名、密钥，并检查 token 预算。") from None
         resolved_model = model or build_model(resolved_settings)
+        engine = None
+        factory = session_factory
+        if factory is None:
+            engine = build_engine(build_database_url(resolved_settings))
+            factory = build_session_factory(engine)
         try:
-            application.state.service = CustomerService(resolved_settings, resolved_model)
+            application.state.service = CustomerService(resolved_settings, resolved_model, ConversationStore(factory))
             yield
         finally:
             if model is None:
                 await resolved_model.root_async_client.close()
                 resolved_model.root_client.close()
+            if engine is not None:
+                engine.dispose()
 
-    application = FastAPI(title="电商智能客服 · ch01", lifespan=lifespan)
+    application = FastAPI(title="电商智能客服 · ch02", lifespan=lifespan)
     web_directory = Path(__file__).resolve().parent / "web"
     application.mount("/assets", StaticFiles(directory=web_directory), name="assets")
 
@@ -58,7 +72,7 @@ def create_app(settings: Settings | None = None, model: ChatOpenAI | None = None
         messages = service.prepare_chat(body)
 
         async def encode_events():
-            stream = service.stream_chat(messages)
+            stream = service.respond(body, messages)
             try:
                 async for event, payload in stream:
                     yield f"event: {event}\ndata: {json.dumps(payload, ensure_ascii=False)}\n\n"

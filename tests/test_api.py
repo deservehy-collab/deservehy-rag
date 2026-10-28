@@ -14,13 +14,17 @@ def test_chat_streams_actual_model_chunks_and_no_tools():
         response = client.post("/api/chat", json={"message": "你好"})
         assert response.status_code == 200
         assert response.headers["content-type"].startswith("text/event-stream")
-        assert events(response) == [("token", {"content": "你\n好"}), ("token", {"content": "\"欢迎\""}), ("done", {"finish_reason": "stop"})]
+        output = events(response)
+        assert output[0][0] == "meta" and output[0][1]["conversation_id"] >= 1
+        assert output[1:] == [("token", {"content": "你\n好"}), ("token", {"content": "\"欢迎\""}), ("done", {"finish_reason": "stop"})]
         path, body = seen[0]
         assert path == "/v1/chat/completions"
         assert body["model"] == "test-model"
         assert body["stream"] is True
         assert body["max_completion_tokens"] == 1024
-        assert "tools" not in body and "tool_choice" not in body
+        assert [item["function"]["name"] for item in body["tools"]] == [
+            "query_order", "query_product", "query_logistics", "query_faq", "create_ticket",
+        ]
         assert "response_format" not in body and "stream_options" not in body
         assert body["messages"][0]["role"] == "system"
         assert body["messages"][-1] == {"role": "user", "content": "你好"}
@@ -58,7 +62,7 @@ def test_chat_budget_rejected_before_stream():
 def test_upstream_failure_is_sanitized_error_event(status):
     with api(lambda request: httpx.Response(status, json={"error": {"message": "SECRET upstream failed", "type": "server_error"}})) as (client, seen):
         response = client.post("/api/chat", json={"message": "hello"})
-        assert [event for event, _ in events(response)] == ["error"]
+        assert [event for event, _ in events(response)] == ["meta", "error"]
         assert "SECRET" not in response.text and "test-secret" not in response.text
         assert len(seen) == 1
 
@@ -67,7 +71,7 @@ def test_midstream_failure_does_not_send_done():
     stream = ChunkStream([chunk("first")], httpx.ReadError("SECRET"))
     with api(lambda request: httpx.Response(200, headers={"content-type": "text/event-stream"}, stream=stream)) as (client, _):
         response = client.post("/api/chat", json={"message": "hello"})
-        assert [event for event, _ in events(response)] == ["token", "error"]
+        assert [event for event, _ in events(response)] == ["meta", "token", "error"]
         assert "SECRET" not in response.text
     assert stream.closed
 
@@ -144,9 +148,9 @@ def test_malformed_chunk_after_text_sends_error_and_closes_upstream(wire, code):
     with api(lambda request: httpx.Response(200, headers={"content-type": "text/event-stream"}, stream=stream)) as (client, _):
         response = client.post("/api/chat", json={"message": "hello"})
         output = events(response)
-        assert [event for event, _ in output] == ["token", "error"]
-        assert output[0][1] == {"content": "first"}
-        assert output[1][1]["code"] == code
+        assert [event for event, _ in output] == ["meta", "token", "error"]
+        assert output[1][1] == {"content": "first"}
+        assert output[2][1]["code"] == code
     assert stream.closed
 
 

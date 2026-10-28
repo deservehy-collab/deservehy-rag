@@ -22,6 +22,14 @@ class Settings(BaseSettings):
     token_safety_margin: int = Field(default=512, ge=0)
     request_timeout_seconds: float = Field(default=60, gt=0, allow_inf_nan=False)
     store_name: str = Field(default="本店", min_length=1, max_length=100)
+    db_host: str = Field(default="127.0.0.1", min_length=1, max_length=255)
+    db_port: int = Field(default=3307, ge=1, le=65535)
+    db_user: str = Field(default="root", min_length=1, max_length=64)
+    db_password: SecretStr = SecretStr("")
+    db_name: str = Field(default="xiaolin_ch02", min_length=1, max_length=64)
+    db_name_test: str = Field(default="xiaolin_ch02_test", min_length=1, max_length=64)
+    tool_timeout_seconds: float = Field(default=5, gt=0, allow_inf_nan=False)
+    tool_max_attempts: int = Field(default=2, ge=1, le=3)
 
     @field_validator("openai_api_key")
     @classmethod

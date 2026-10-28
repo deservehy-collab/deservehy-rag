@@ -12,9 +12,40 @@ const jumpButton = document.querySelector("#jump-bottom");
 const headerStatus = document.querySelector("#header-status");
 const announcer = document.querySelector("#announcer");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const CLIENT_KEY = "deservehy-client-id";
 let history = [];
+let conversationId = null;
+let cachedClientId = null;
 let activeTurn = null;
 let followBottom = true;
+
+function clientId() {
+  if (cachedClientId) return cachedClientId;
+  try {
+    const stored = localStorage.getItem(CLIENT_KEY);
+    if (stored && /^[A-Za-z0-9_-]{8,64}$/.test(stored)) {
+      cachedClientId = stored;
+      return cachedClientId;
+    }
+    const generated = (crypto.randomUUID?.() || `${Date.now()}${Math.random().toString(36).slice(2)}`)
+      .replace(/[^A-Za-z0-9_-]/g, "")
+      .slice(0, 64);
+    localStorage.setItem(CLIENT_KEY, generated);
+    cachedClientId = generated;
+  } catch {
+    cachedClientId = "anonymous" + Date.now().toString(36);
+  }
+  return cachedClientId;
+}
+
+function svgIcon(href) {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("class", "icon");
+  const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+  use.setAttribute("href", href);
+  svg.append(use);
+  return svg;
+}
 
 function scrollToLatest(force = false) {
   if (followBottom || force) scrollArea.scrollTop = scrollArea.scrollHeight;
@@ -41,12 +72,7 @@ function messageElement(role, text = "") {
   avatar.className = "message-avatar";
   avatar.setAttribute("aria-hidden", "true");
   if (role === "assistant") {
-    const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    icon.classList.add("icon");
-    const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
-    use.setAttribute("href", "#icon-chat");
-    icon.append(use);
-    avatar.append(icon);
+    avatar.append(svgIcon("#icon-chat"));
   } else {
     avatar.textContent = "我";
   }
@@ -71,7 +97,55 @@ function messageElement(role, text = "") {
   stack.append(meta, bubble);
   article.append(avatar, stack);
   messages.append(article);
-  return { article, stack, bubble, content, textNode };
+  return { article, stack, bubble, content, textNode, tools: new Map() };
+}
+
+function createToolBadge(view) {
+  const badge = document.createElement("div");
+  badge.className = "tool-badge is-running";
+  badge.setAttribute("aria-hidden", "true");
+  const glyph = document.createElement("span");
+  glyph.className = "tool-glyph";
+  const label = document.createElement("span");
+  label.className = "tool-label";
+  badge.append(glyph, label);
+  view.stack.insertBefore(badge, view.bubble);
+  scrollToLatest();
+  return badge;
+}
+
+function beginTool(view, payload) {
+  const name = typeof payload.tool === "string" ? payload.tool : "";
+  const label = typeof payload.label === "string" && payload.label ? payload.label : "查询";
+  const badge = createToolBadge(view);
+  badge.querySelector(".tool-label").textContent = "正在" + label;
+  view.tools.set(name || label, { badge, label });
+}
+
+function endTool(view, payload) {
+  const name = typeof payload.tool === "string" ? payload.tool : "";
+  const entry = view.tools.get(name) || Array.from(view.tools.values()).at(-1);
+  if (!entry) return;
+  view.tools.delete(name);
+  const ok = payload.ok === true;
+  const summary = typeof payload.summary === "string" ? payload.summary : "";
+  entry.badge.classList.remove("is-running");
+  entry.badge.classList.add(ok ? "is-ok" : "is-failed");
+  entry.badge.querySelector(".tool-glyph").replaceChildren(svgIcon(ok ? "#icon-check" : "#icon-alert"));
+  entry.badge.querySelector(".tool-label").textContent = ok ? "已" + entry.label : entry.label + "失败";
+  entry.badge.title = summary;
+  announcer.textContent = ok ? "已" + entry.label : entry.label + "失败，可以稍后重试。";
+}
+
+function interruptTools(view) {
+  for (const { badge, label } of view.tools.values()) {
+    badge.classList.remove("is-running");
+    badge.classList.add("is-failed");
+    badge.querySelector(".tool-glyph").replaceChildren(svgIcon("#icon-alert"));
+    badge.querySelector(".tool-label").textContent = label + "未完成";
+    badge.title = "回复中断，可以重新提问";
+  }
+  view.tools.clear();
 }
 
 function typewriter(node) {
@@ -118,11 +192,12 @@ function readableError(payload) {
     upstream_rate_limited: "客服暂时繁忙，请稍后重新提问。",
     invalid_model_output: "这次没有收到完整、有效的回复，请重新提问。",
     upstream_error: "客服暂时无法回复，请稍后重试；持续出现时请联系服务维护者。",
+    database_unavailable: "会话存储暂时不可用，请稍后重新提问。",
   };
   return messagesByCode[payload?.code] || "暂时无法完成回复，请稍后重新提问。";
 }
 
-async function readStream(response, onText) {
+async function readStream(response, handlers) {
   if (!response.ok) {
     let payload;
     try { payload = await response.json(); } catch { payload = null; }
@@ -153,9 +228,15 @@ async function readStream(response, onText) {
         try { payload = JSON.parse(data.join("\n")); }
         catch { throw new Error("收到的回复不完整，请重新提问。"); }
         if (event === "error") throw new Error(readableError(payload));
+        if (event === "meta") {
+          if (Number.isInteger(payload?.conversation_id) && payload.conversation_id > 0) handlers.onMeta(payload.conversation_id);
+        }
+        if (event === "status") {
+          if (payload && (payload.phase === "start" || payload.phase === "end")) handlers.onStatus(payload);
+        }
         if (event === "token") {
           if (typeof payload?.content !== "string") throw new Error("收到的回复格式不正确，请重新提问。");
-          onText(payload.content);
+          handlers.onText(payload.content);
         }
         if (event === "done") {
           if (!["stop", "length"].includes(payload?.finish_reason)) throw new Error("回复没有完整结束，请重新提问。");
@@ -220,17 +301,27 @@ form.addEventListener("submit", async event => {
   scrollToLatest(true);
   announcer.textContent = "问题已发送，正在等待回复。";
   try {
+    const body = { message: question, history: history.slice(-100), client_id: clientId() };
+    if (conversationId) body.conversation_id = conversationId;
     const response = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: question, history: history.slice(-100) }),
+      body: JSON.stringify(body),
       signal: turn.controller.signal,
     });
-    const finishReason = await readStream(response, text => {
-      if (!text) return;
-      waiting.remove();
-      answer += text;
-      writer.push(text);
+    const finishReason = await readStream(response, {
+      onMeta: id => { conversationId = id; },
+      onStatus: payload => {
+        waiting.remove();
+        if (payload.phase === "start") beginTool(view, payload);
+        else endTool(view, payload);
+      },
+      onText: text => {
+        if (!text) return;
+        waiting.remove();
+        answer += text;
+        writer.push(text);
+      },
     });
     window.clearTimeout(timeout);
     await writer.drain();
@@ -243,6 +334,7 @@ form.addEventListener("submit", async event => {
     announcer.textContent = "小邻已回复，你可以继续追问。";
   } catch (error) {
     writer.flush();
+    interruptTools(view);
     if (!answer) view.textNode.data = turn.stopped ? "已停止回复。" : "这次暂时没能回复你。";
     const message = turn.stopped ? "这条回复未完成，可以重新提问。" : turn.timedOut ? "等候回复超时了，请重新提问。" : error instanceof TypeError ? "连接失败，请检查网络或确认客服服务已启动。" : error.message;
     showFeedback(view, message, question, turn.stopped);
@@ -272,6 +364,7 @@ stopButton.addEventListener("click", () => {
 newChatButton.addEventListener("click", () => {
   if (activeTurn) return;
   history = [];
+  conversationId = null;
   messages.replaceChildren();
   welcome.hidden = false;
   document.querySelector("#conversation-date").hidden = true;

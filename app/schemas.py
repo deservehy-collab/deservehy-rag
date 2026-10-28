@@ -17,6 +17,8 @@ class ChatRequest(BaseModel):
 
     message: Text
     history: list[HistoryMessage] = Field(default_factory=list, max_length=100)
+    client_id: Annotated[str, Field(min_length=8, max_length=64, pattern=r"[A-Za-z0-9_-]+")] | None = None
+    conversation_id: Annotated[int, Field(ge=1)] | None = None
 
     @model_validator(mode="after")
     def complete_turns(self) -> Self:

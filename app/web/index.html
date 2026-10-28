@@ -21,6 +21,8 @@
     <symbol id="icon-return" viewBox="0 0 24 24"><path d="M5 8h9a6 6 0 0 1 0 12h-3M9 4 5 8l4 4"/></symbol>
     <symbol id="icon-shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></symbol>
     <symbol id="icon-right" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7"/></symbol>
+    <symbol id="icon-alert" viewBox="0 0 24 24"><path d="M12 4 2.8 20h18.4L12 4Z"/><path d="M12 10v4.5M12 17.4v.2"/></symbol>
   </svg>
 
   <div class="app-shell">
@@ -63,7 +65,7 @@
             <div class="suggestions" aria-label="试试这样问">
               <button type="button" data-prompt="收到的商品有破损，我应该怎么处理？"><svg class="icon"><use href="#icon-box"/></svg><span>收到的商品有破损</span><svg class="icon suggestion-arrow"><use href="#icon-right"/></svg></button>
               <button type="button" data-prompt="我想退货，需要准备哪些信息？"><svg class="icon"><use href="#icon-return"/></svg><span>想退货，需要准备什么？</span><svg class="icon suggestion-arrow"><use href="#icon-right"/></svg></button>
-              <button type="button" data-prompt="订单迟迟没有收到，我应该先确认哪些信息？"><svg class="icon"><use href="#icon-bag"/></svg><span>订单迟迟没有收到</span><svg class="icon suggestion-arrow"><use href="#icon-right"/></svg></button>
+              <button type="button" data-prompt="订单 1001 的物流到哪了？"><svg class="icon"><use href="#icon-bag"/></svg><span>查一下包裹到哪了</span><svg class="icon suggestion-arrow"><use href="#icon-right"/></svg></button>
             </div>
           </section>
           <div class="conversation-date" id="conversation-date" hidden>本次对话</div>
@@ -79,7 +81,7 @@
             <textarea id="message-input" rows="2" maxlength="12000" placeholder="说说你遇到的问题，也可以接着上面继续问…" aria-describedby="input-hint" required></textarea>
             <div class="composer-actions"><span class="input-hint" id="input-hint">Enter 发送<span class="desktop-hint"> · Shift + Enter 换行</span></span><button class="send-button" id="send-button" type="submit" disabled><span>发送</span><svg class="icon"><use href="#icon-arrow"/></svg></button><button class="stop-button" id="stop-button" type="button" hidden><span class="stop-square"></span>停止回复</button></div>
           </form>
-          <p class="disclaimer">deservehy是 AI 客服助手，不能直接操作订单。具体处理以店铺政策为准。</p>
+          <p class="disclaimer">deservehy是 AI 客服助手，可以查订单、物流和店铺政策，需要人工跟进时会创建工单；不能直接退款或改单，具体处理以店铺政策为准。</p>
         </div>
       </footer>
     </main>
