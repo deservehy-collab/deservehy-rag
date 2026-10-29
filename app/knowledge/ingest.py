@@ -115,6 +115,9 @@ class KnowledgeIngestor:
                         KnowledgeChunk.category,
                         KnowledgeChunk.questions,
                         KnowledgeChunk.answer,
+                        KnowledgeChunk.section_path,
+                        KnowledgeChunk.content_type,
+                        KnowledgeChunk.is_key_clause,
                     )
                     .where(or_(KnowledgeChunk.vectorize_status == "pending", KnowledgeChunk.vector_id.is_(None)))
                     .order_by(KnowledgeChunk.id)
@@ -125,7 +128,18 @@ class KnowledgeIngestor:
             texts = [embedding_text(row.category, row.questions, row.answer) for row in rows]
             vectors = self.embedder.encode(texts)
             ids = [row.id for row in rows]
-            self.vector_store.upsert(ids, vectors)
+            self.vector_store.upsert([
+                {
+                    "vector_id": str(row.id),
+                    "embedding": vector,
+                    "text": text,
+                    "category": row.category,
+                    "content_type": row.content_type,
+                    "section_path": row.section_path,
+                    "is_key_clause": row.is_key_clause,
+                }
+                for row, text, vector in zip(rows, texts, vectors)
+            ])
             with self.session_factory() as session:
                 for item_id in ids:
                     session.execute(

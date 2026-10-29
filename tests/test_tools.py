@@ -10,6 +10,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 
 from app.database import build_session_factory
+from app.knowledge.retrieval import Evidence, RetrievalResult
 from app.models import Base, Ticket
 from app.seed import seed_faq
 from app.storage import ConversationStore
@@ -19,29 +20,18 @@ from app.tools import OrderArgs, TOOL_LABELS, ToolExecutor, make_tools
 class FakeKnowledge:
     def __init__(self):
         self.error = None
+        self.low = False
 
-    def search(self, query, limit=5):
+    def retrieve(self, query, category=None):
         if self.error is not None:
             raise self.error
+        if self.low:
+            return RetrievalResult("hybrid_rerank", query, low_confidence=True, reason="top1=0.1<0.30")
         if "邮费" in query:
-            return [
-                {
-                    "id": 1,
-                    "question": "普通地区邮费",
-                    "answer": "单笔订单实付满 99 元免运费，未满 99 元收取 8 元邮费。",
-                    "category": "配送与运费 › 运费标准",
-                }
-            ]
-        if "退货" in query:
-            return [
-                {
-                    "id": 2,
-                    "question": "退货政策是什么",
-                    "answer": "签收后 7 天内可申请无理由退货。",
-                    "category": "售后",
-                }
-            ]
-        return []
+            item = Evidence(1, "普通地区邮费", "单笔订单实付满 99 元免运费，未满 99 元收取 8 元邮费。",
+                            "配送与运费 › 运费标准", "配送与运费 › 运费标准 › 普通地区邮费", "policy", {"rerank": 0.9}, 1)
+            return RetrievalResult("hybrid_rerank", "普通地区邮费标准", [item], [item])
+        return RetrievalResult("hybrid_rerank", query, low_confidence=True, reason="no_hits")
 
 
 @pytest.fixture()
@@ -105,15 +95,16 @@ def test_query_product_matches_by_id_and_keyword(toolchain):
 
 def test_query_faq_keeps_contract_and_reaches_shipping_fee(toolchain):
     tools = toolchain[4]
-    hit = tools["query_faq"].invoke({"keyword": "退货"})
-    shipping = tools["query_faq"].invoke({"keyword": "邮费是多少"})
+    hit = tools["query_faq"].invoke({"keyword": "邮费是多少"})
+    shipping = hit
     miss = tools["query_faq"].invoke({"keyword": "发票"})
     assert hit["ok"] is True
-    assert set(hit["data"]["items"][0]) == {"id", "question", "answer", "category"}
-    assert any("退货" in item["question"] for item in hit["data"]["items"])
+    assert {"n", "id", "question", "answer", "category", "section_path", "content_type", "scores"} == set(hit["data"]["items"][0])
     assert shipping["ok"] is True
+    assert shipping["data"]["canonical_query"] == "普通地区邮费标准"
     assert "邮费" in shipping["data"]["items"][0]["answer"]
-    assert miss["ok"] is False and miss["error"] == "no_match"
+    assert miss["ok"] is False and miss["error"] == "low_confidence"
+    assert miss["reason"] == "no_hits"
 
 
 def test_query_faq_reports_unavailable_knowledge_base(toolchain):
@@ -203,3 +194,24 @@ def test_executor_times_out_and_retries_reads_only(toolchain):
     assert len(reads) == 3
     assert write_outcome.ok is False and write_outcome.code == "tool_timeout"
     assert len(writes) == 1
+
+
+def test_faq_uses_its_own_timeout(toolchain):
+    *_, tools = toolchain
+    executor = ToolExecutor(tools, timeout=0.01, attempts=1, timeouts={"query_faq": 2})
+    outcome = asyncio.run(executor.execute("query_faq", {"keyword": "邮费"}))
+    assert outcome.ok is True
+
+
+def test_category_reaches_the_retriever(toolchain):
+    knowledge, tools = toolchain[3], toolchain[4]
+    seen = {}
+    original = knowledge.retrieve
+
+    def capture(query, category=None):
+        seen["category"] = category
+        return original(query, category=category)
+
+    knowledge.retrieve = capture
+    assert tools["query_faq"].invoke({"keyword": "邮费", "category": "配送与运费"})["ok"] is True
+    assert seen["category"] == "配送与运费"

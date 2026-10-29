@@ -80,8 +80,10 @@ def streamed_tool_call(name="query_logistics", arguments=None, call_id="call_1")
 def _settings(settings_overrides):
     from app.config import Settings
 
+    # 默认关掉改写与自评，避免旧用例额外调用模型；ch04 用例按需替换对象或显式打开。
     return Settings(_env_file=None, openai_base_url="http://upstream.invalid/v1", openai_model="test-model",
-                    openai_api_key="test-secret-not-real", **settings_overrides)
+                    openai_api_key="test-secret-not-real", knowledge_query_rewrite=False,
+                    knowledge_self_check=False, **settings_overrides)
 
 
 @contextmanager

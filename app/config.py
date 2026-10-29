@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Self
+from typing import Any, Literal, Self
 
 from pydantic import AnyHttpUrl, Field, SecretStr, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -36,9 +36,17 @@ class Settings(BaseSettings):
     milvus_uri: str = Field(default="http://127.0.0.1:19530", min_length=1, max_length=255)
     milvus_collection: str = Field(default="knowledge", min_length=1, max_length=64)
     knowledge_doc_dir: str = Field(default="examples/knowledge", min_length=1, max_length=255)
-    knowledge_top_k: int = Field(default=5, ge=1, le=20)
-    knowledge_candidates: int = Field(default=12, ge=1, le=100)
-    knowledge_min_score: float = Field(default=0.35, ge=0, le=1, allow_inf_nan=False)
+    knowledge_top_k: int = Field(default=10, ge=1, le=20)
+    knowledge_candidates: int = Field(default=50, ge=1, le=100)
+    knowledge_rrf_k: int = Field(default=60, ge=1, le=1000)
+    knowledge_rerank_model: str = Field(default=".cache/models/bge-reranker-v2-m3", min_length=1, max_length=255)
+    knowledge_rerank_device: str = Field(default="cuda", min_length=1, max_length=16)
+    knowledge_rerank_batch_size: int = Field(default=8, ge=1, le=64)
+    knowledge_rerank_min_score: float = Field(default=0.30, ge=0, le=1, allow_inf_nan=False)
+    knowledge_query_rewrite: bool = True
+    knowledge_self_check: bool = True
+    knowledge_tool_timeout_seconds: float = Field(default=20, gt=0, allow_inf_nan=False)
+    knowledge_strategy: Literal["dense", "bm25", "hybrid", "hybrid_rerank"] = "hybrid_rerank"
     knowledge_mining_enabled: bool = False
     knowledge_mining_interval_minutes: int = Field(default=60, ge=0)
     knowledge_mining_lookback_days: int = Field(default=7, ge=1, le=365)

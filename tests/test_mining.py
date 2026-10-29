@@ -32,9 +32,9 @@ class FakeVectorStore:
     def ensure_collection(self):
         pass
 
-    def upsert(self, ids, vectors):
-        for item_id, vector in zip(ids, vectors):
-            self.rows[str(item_id)] = vector
+    def upsert(self, rows):
+        for row in rows:
+            self.rows[str(row["vector_id"])] = row["embedding"]
 
     def search(self, vector, limit):
         return []

@@ -33,7 +33,9 @@ def main() -> int:
         store,
         candidates=settings.knowledge_candidates,
         top_k=settings.knowledge_top_k,
-        min_score=settings.knowledge_min_score,
+        rrf_k=settings.knowledge_rrf_k,
+        rewrite=None,
+        strategy="hybrid",
     )
     try:
         with factory() as session:

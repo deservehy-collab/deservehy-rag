@@ -30,6 +30,8 @@ def test_schema_has_the_business_and_knowledge_tables(sqlite_factory):
             "tickets",
             "knowledge_chunks",
             "qa_extraction_staging",
+            "low_confidence_questions",
+            "faith_cases",
         }
 
 
@@ -89,6 +91,17 @@ def test_docker_seed_sql_matches_python_seed():
     assert "ON DELETE SET NULL" in rag
     assert "KEY idx_category (category)" in rag
     assert "KEY idx_vectorize_status (vectorize_status)" in rag
+    advanced = (ROOT / "scripts/init_sql/004_rag_advanced.sql").read_text(encoding="utf-8")
+    assert advanced.startswith("SET NAMES utf8mb4;")
+    for token in (
+        "fk_lcq_conversation",
+        "ENUM('retrieval_low_conf','self_check','user_feedback')",
+        "uk_eval_id",
+        "ENUM('未解决','已解决','无需解决')",
+        "COMMENT='低置信度问题池'",
+        "COMMENT='ch04 忠实度编造个案台账'",
+    ):
+        assert token in advanced
 
 
 def test_database_name_guard_rejects_injection():
@@ -135,7 +148,10 @@ def test_mysql_schema_uses_real_enum_and_json():
         Base.metadata.create_all(engine)
         ddl = {}
         with engine.connect() as connection:
-            for table in ("conversations", "messages", "faq", "tickets", "knowledge_chunks", "qa_extraction_staging"):
+            for table in (
+                "conversations", "messages", "faq", "tickets", "knowledge_chunks", "qa_extraction_staging",
+                "low_confidence_questions", "faith_cases",
+            ):
                 ddl[table] = connection.execute(text(f"show create table {table}")).one()[1]
         assert "enum('user','assistant','tool')" in ddl["messages"]
         assert "`tool_calls` json" in ddl["messages"]
@@ -145,6 +161,14 @@ def test_mysql_schema_uses_real_enum_and_json():
         assert "ON DELETE SET NULL" in ddl["knowledge_chunks"]
         assert "idx_knowledge_category" in ddl["knowledge_chunks"]
         assert "enum('extracted','kept','discarded')" in ddl["qa_extraction_staging"]
+        assert "enum('retrieval_low_conf','self_check','user_feedback')" in ddl["low_confidence_questions"]
+        assert "idx_low_confidence_source" in ddl["low_confidence_questions"]
+        assert "fk_lcq_conversation" in ddl["low_confidence_questions"]
+        assert "`citations` json" in ddl["faith_cases"]
+        assert "int unsigned" in ddl["faith_cases"]
+        assert "uk_eval_id" in ddl["faith_cases"]
+        assert "idx_faith_status" in ddl["faith_cases"]
+        assert "bigint unsigned" in ddl["faith_cases"]
 
         # 中文 ENUM、中文种子都要能真正写进去再读回来，防止连接字符集把值截断。
         factory = build_session_factory(engine)

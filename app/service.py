@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 from collections.abc import AsyncIterator
 
 import httpx
@@ -10,10 +11,13 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from app.config import Settings
 from app.context import build_messages
+from app.knowledge.quality import REFUSAL_TEXT, CitationGuard
 from app.prompts import chat_system, extraction_system
 from app.schemas import AfterSales, ChatRequest, ExtractRequest
 from app.storage import ConversationStore
 from app.tools import TOOL_LABELS, ToolExecutor, make_tools
+
+logger = logging.getLogger(__name__)
 
 MAX_TOOL_CALLS = 5
 ANONYMOUS_USER = "anonymous"
@@ -61,6 +65,15 @@ class ReplyGuard:
             self.pending = ""
         return self.clean
 
+    def flush_tail(self) -> str:
+        """只交出还没发送的尾巴；clean 已经通过 feed 逐段发出去了。"""
+        if self.blocked:
+            self.pending = ""
+            return ""
+        tail, self.pending = self.pending, ""
+        self.clean += tail
+        return tail
+
     def _cut(self) -> int:
         cut = -1
         for marker in LEAK_MARKERS:
@@ -101,11 +114,16 @@ class CustomerService:
         model: ChatOpenAI,
         store: ConversationStore | None = None,
         knowledge=None,
+        *,
+        pool=None,
+        selfcheck=None,
     ):
         self.settings = settings
         self.model = model
         self.store = store
         self.knowledge = knowledge
+        self.pool = pool
+        self.selfcheck = selfcheck
         self.structured = model.with_structured_output(AfterSales, method="json_mode", include_raw=True)
 
     def prepare_chat(self, request: ChatRequest) -> list[BaseMessage]:
@@ -129,7 +147,8 @@ class CustomerService:
 
         tools = make_tools(self.store, conversation_id, self.knowledge)
         executor = ToolExecutor(
-            tools, timeout=self.settings.tool_timeout_seconds, attempts=self.settings.tool_max_attempts
+            tools, timeout=self.settings.tool_timeout_seconds, attempts=self.settings.tool_max_attempts,
+            timeouts={"query_faq": self.settings.knowledge_tool_timeout_seconds},
         )
 
         try:
@@ -174,6 +193,7 @@ class CustomerService:
             await asyncio.to_thread(self.store.add_message, conversation_id, "assistant", tool_calls=stored_calls)
 
             tool_messages: list[ToolMessage] = []
+            faq_data, faq_reason = None, None
             for call in stored_calls:
                 label = TOOL_LABELS.get(call["name"], call["name"])
                 yield "status", {"phase": "start", "tool": call["name"], "label": label}
@@ -189,9 +209,47 @@ class CustomerService:
                     "summary": outcome.summary,
                     "duration_ms": outcome.duration_ms,
                 }
+                if call["name"] == "query_faq":
+                    payload = json.loads(outcome.content)
+                    if outcome.ok:
+                        faq_data, faq_reason = payload.get("data") or {}, None
+                    elif outcome.code == "low_confidence":
+                        faq_data, faq_reason = None, payload.get("reason") or "low_confidence"
                 tool_messages.append(ToolMessage(content=outcome.content, tool_call_id=call["id"], name=call["name"]))
 
+            if faq_data:
+                yield "citations", {"items": [
+                    {"n": item["n"], "chunk_id": item["id"], "question": item["question"],
+                     "answer": item["answer"], "category": item["category"],
+                     "section_path": item.get("section_path")}
+                    for item in faq_data.get("items") or []
+                ]}
+                if self.selfcheck is not None:
+                    useful, reason = await asyncio.to_thread(
+                        self.selfcheck.check, request.message, faq_data.get("canonical_query") or "",
+                        faq_data.get("items") or [],
+                    )
+                    if not useful:
+                        faq_reason = reason or "self_check"
+                        await self._record_low_confidence(
+                            conversation_id, request.message, "self_check", faq_reason
+                        )
+            if faq_reason is not None:
+                if faq_data is None:
+                    await self._record_low_confidence(
+                        conversation_id, request.message, "retrieval_low_conf", faq_reason
+                    )
+                await asyncio.to_thread(
+                    self.store.add_message, conversation_id, "assistant", content=REFUSAL_TEXT
+                )
+                yield "token", {"content": REFUSAL_TEXT}
+                yield "done", {"finish_reason": "stop"}
+                return
+
             # 第二遍不绑定工具，只负责依据工具结果收敛回答，因此单轮最多一次工具调用。
+            valid = {item["n"] for item in (faq_data or {}).get("items") or []}
+            cite_guard = CitationGuard(valid) if valid else None
+            parts: list[str] = []
             final, finish_reason = None, None
             final_guard = ReplyGuard()
             stream = None
@@ -204,7 +262,10 @@ class CustomerService:
                         final = chunk if final is None else final + chunk
                         if chunk.text:
                             safe = final_guard.feed(chunk.text)
+                            if safe and cite_guard is not None:
+                                safe = cite_guard.feed(safe)
                             if safe:
+                                parts.append(safe)
                                 yield "token", {"content": safe}
                         finish_reason = chunk.response_metadata.get("finish_reason") or finish_reason
             finally:
@@ -212,7 +273,17 @@ class CustomerService:
                     await stream.aclose()
             if not isinstance(final, AIMessageChunk) or finish_reason not in {"stop", "length"}:
                 raise ValueError("Missing text or valid finish reason")
-            final_text = final_guard.flush()
+            tail = final_guard.flush_tail()
+            if tail and cite_guard is not None:
+                tail = cite_guard.feed(tail)
+            if tail:
+                parts.append(tail)
+                yield "token", {"content": tail}
+            rest = cite_guard.flush() if cite_guard is not None else ""
+            if rest:
+                parts.append(rest)
+                yield "token", {"content": rest}
+            final_text = "".join(parts)
             if not final_text:
                 if not final_guard.blocked:
                     raise ValueError("Missing text")
@@ -221,7 +292,17 @@ class CustomerService:
             await asyncio.to_thread(self.store.add_message, conversation_id, "assistant", content=final_text)
             yield "done", {"finish_reason": finish_reason}
         except (OpenAIError, httpx.HTTPError, SQLAlchemyError, ValueError, TimeoutError, IndexError, TypeError, AttributeError) as exc:
-            yield "error", model_failure(exc).payload()
+            failure = model_failure(exc)
+            logger.warning("回复生成失败：%s", failure.code, exc_info=True)
+            yield "error", failure.payload()
+
+    async def _record_low_confidence(self, conversation_id, message, source, reason):
+        if self.pool is None:
+            return
+        try:
+            await asyncio.to_thread(self.pool.record, conversation_id, message, source, reason)
+        except Exception:
+            logger.exception("低置信问题入池失败，不影响回复。")
 
     async def stream_chat(self, messages: list[BaseMessage]) -> AsyncIterator[tuple[str, dict]]:
         stream = self.model.astream(messages)

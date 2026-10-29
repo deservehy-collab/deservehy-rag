@@ -18,8 +18,12 @@ from app.database import build_database_url, build_engine, build_session_factory
 from app.knowledge.embedding import BgeM3Embedder
 from app.knowledge.ingest import KnowledgeIngestor
 from app.knowledge.mining import ConversationMiner
+from app.knowledge.pool import LowConfidencePool
+from app.knowledge.rerank import BgeReranker
 from app.knowledge.retrieval import KnowledgeRetriever
+from app.knowledge.rewrite import QueryRewriter
 from app.knowledge.scheduler import MiningScheduler
+from app.knowledge.selfcheck import EvidenceSelfCheck
 from app.knowledge.vector_store import MilvusVectorStore
 from app.model import build_model
 from app.schemas import AfterSales, ChatRequest, ExtractRequest
@@ -57,18 +61,35 @@ def create_app(
                 await asyncio.to_thread(embedder.warmup)
         except Exception:
             logger.exception("嵌入模型预热失败，首次检索可能较慢或返回 knowledge_unavailable。")
+        reranker = BgeReranker(
+            resolved_settings.knowledge_rerank_model,
+            device=resolved_settings.knowledge_rerank_device,
+            batch_size=resolved_settings.knowledge_rerank_batch_size,
+        )
+        # 重排模型约 2.3GB，和嵌入模型同时常驻会挤压 6GB 显存；改为首次 FAQ 检索时按需加载。
         knowledge = KnowledgeRetriever(
             factory,
             embedder,
             vector_store,
             candidates=resolved_settings.knowledge_candidates,
             top_k=resolved_settings.knowledge_top_k,
-            min_score=resolved_settings.knowledge_min_score,
+            rrf_k=resolved_settings.knowledge_rrf_k,
+            rewrite=QueryRewriter(resolved_model, enabled=resolved_settings.knowledge_query_rewrite),
+            reranker=reranker,
+            strategy=resolved_settings.knowledge_strategy,
+            rerank_min_score=resolved_settings.knowledge_rerank_min_score,
         )
         scheduler = None
         try:
             application.state.service = CustomerService(
-                resolved_settings, resolved_model, ConversationStore(factory), knowledge
+                resolved_settings,
+                resolved_model,
+                ConversationStore(factory),
+                knowledge,
+                pool=LowConfidencePool(factory),
+                selfcheck=EvidenceSelfCheck(
+                    resolved_model, enabled=resolved_settings.knowledge_self_check
+                ),
             )
             if (
                 resolved_settings.knowledge_mining_enabled
@@ -107,7 +128,7 @@ def create_app(
             if engine is not None:
                 engine.dispose()
 
-    application = FastAPI(title="电商智能客服 · ch03", lifespan=lifespan)
+    application = FastAPI(title="电商智能客服 · ch04", lifespan=lifespan)
     web_directory = Path(__file__).resolve().parent / "web"
     application.mount("/assets", StaticFiles(directory=web_directory), name="assets")
 

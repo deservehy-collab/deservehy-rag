@@ -1,10 +1,11 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, Enum, ForeignKey, Index, Integer, JSON, String, Text, func
+from sqlalchemy import DateTime, Enum, ForeignKey, Index, Integer, JSON, String, Text, UniqueConstraint, func
 from sqlalchemy.dialects import mysql
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 IdType = mysql.BIGINT(unsigned=True).with_variant(Integer, "sqlite")
+CountType = mysql.INTEGER(unsigned=True).with_variant(Integer, "sqlite")
 TABLE_OPTIONS = {"mysql_engine": "InnoDB", "mysql_charset": "utf8mb4"}
 
 
@@ -125,3 +126,52 @@ class QaExtractionStaging(Base):
         server_default="extracted",
     )
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+
+class LowConfidenceQuestion(Base):
+    __tablename__ = "low_confidence_questions"
+    __table_args__ = (
+        Index("idx_low_confidence_source", "source"),
+        Index("idx_low_confidence_created_at", "created_at"),
+        TABLE_OPTIONS,
+    )
+
+    id: Mapped[int] = mapped_column(IdType, primary_key=True, autoincrement=True)
+    conversation_id: Mapped[int | None] = mapped_column(
+        IdType, ForeignKey("conversations.id", name="fk_lcq_conversation"), nullable=True
+    )
+    raw_question: Mapped[str] = mapped_column(Text, nullable=False)
+    source: Mapped[str] = mapped_column(
+        Enum("retrieval_low_conf", "self_check", "user_feedback", name="low_confidence_source"), nullable=False
+    )
+    reason: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=True, server_default=func.now())
+
+
+class FaithCase(Base):
+    __tablename__ = "faith_cases"
+    __table_args__ = (
+        UniqueConstraint("eval_id", name="uk_eval_id"),
+        Index("idx_faith_status", "status"),
+        Index("idx_faith_last_seen_at", "last_seen_at"),
+        TABLE_OPTIONS,
+    )
+
+    id: Mapped[int] = mapped_column(IdType, primary_key=True, autoincrement=True)
+    eval_id: Mapped[str] = mapped_column(String(16), nullable=False)
+    bucket: Mapped[str] = mapped_column(String(24), nullable=False)
+    query: Mapped[str] = mapped_column(String(512), nullable=False)
+    strategy: Mapped[str] = mapped_column(String(24), nullable=False, default="hybrid_rerank", server_default="hybrid_rerank")
+    answer: Mapped[str] = mapped_column(Text, nullable=False)
+    reason: Mapped[str] = mapped_column(Text, nullable=False)
+    citations: Mapped[list[dict] | None] = mapped_column(JSON)
+    judge_model: Mapped[str | None] = mapped_column(String(64))
+    status: Mapped[str] = mapped_column(
+        Enum("未解决", "已解决", "无需解决", name="faith_case_status"),
+        nullable=False, default="未解决", server_default="未解决",
+    )
+    seen_count: Mapped[int] = mapped_column(CountType, nullable=False, default=1, server_default="1")
+    first_seen_at: Mapped[datetime] = mapped_column(DateTime, nullable=True, server_default=func.now())
+    last_seen_at: Mapped[datetime] = mapped_column(DateTime, nullable=True, server_default=func.now())
+    resolution: Mapped[str | None] = mapped_column(String(300))
+    resolved_at: Mapped[datetime | None] = mapped_column(DateTime)

@@ -28,6 +28,8 @@ def main() -> int:
     )
     store = MilvusVectorStore(settings.milvus_uri, settings.milvus_collection)
     try:
+        if args.rebuild:
+            store.drop()
         ingestor = KnowledgeIngestor(
             factory, embedder, store, batch_size=settings.embedding_batch_size
         )

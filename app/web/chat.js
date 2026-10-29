@@ -11,8 +11,11 @@ const scrollArea = document.querySelector("#conversation-scroll");
 const jumpButton = document.querySelector("#jump-bottom");
 const headerStatus = document.querySelector("#header-status");
 const announcer = document.querySelector("#announcer");
+const citationLayer = document.querySelector("#citation-layer");
+const citationPanel = citationLayer.querySelector(".citation-panel");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const CLIENT_KEY = "deservehy-client-id";
+const FEEDBACK_PREFIX = "deservehy-feedback:";
 let history = [];
 let conversationId = null;
 let cachedClientId = null;
@@ -197,6 +200,113 @@ function readableError(payload) {
   return messagesByCode[payload?.code] || "暂时无法完成回复，请稍后重新提问。";
 }
 
+function renderAnswer(view, text, citations) {
+  const sources = new Map((citations || []).map(item => [item.n, item]));
+  view.article.classList.remove("is-writing");
+  view.content.replaceChildren();
+  const pattern = /\[(\d{1,2})\]/g;
+  let lastIndex = 0;
+  let match;
+  while ((match = pattern.exec(text))) {
+    if (match.index > lastIndex) view.content.append(document.createTextNode(text.slice(lastIndex, match.index)));
+    const source = sources.get(Number(match[1]));
+    if (source) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "citation";
+      button.textContent = match[0];
+      button.title = source.section_path || source.question || "查看来源";
+      button.setAttribute("aria-label", "查看来源 " + match[1] + "：" + (source.section_path || source.question || "知识库条目"));
+      button.addEventListener("click", () => openCitation(source, button));
+      view.content.append(button);
+    } else {
+      view.content.append(document.createTextNode(match[0]));
+    }
+    lastIndex = pattern.lastIndex;
+  }
+  view.content.append(document.createTextNode(text.slice(lastIndex)));
+}
+
+let citationTrigger = null;
+let citationHideTimer = null;
+function openCitation(source, trigger) {
+  citationTrigger = trigger || null;
+  citationLayer.querySelector(".citation-path").textContent = source.section_path || "店铺知识库";
+  citationLayer.querySelector(".citation-category").textContent = source.category ? "分类：" + source.category : "";
+  citationLayer.querySelector(".citation-question").textContent = source.question || "（无来源问题）";
+  citationLayer.querySelector(".citation-answer").textContent = source.answer || "（无原文）";
+  window.clearTimeout(citationHideTimer);
+  citationHideTimer = null;
+  citationLayer.hidden = false;
+  void citationLayer.offsetWidth;
+  citationLayer.classList.add("is-open");
+  citationPanel.focus();
+  announcer.textContent = "已打开来源详情，按 Esc 关闭。";
+}
+
+function closeCitation() {
+  if (citationLayer.hidden) return;
+  citationLayer.classList.remove("is-open");
+  const delay = reducedMotion.matches ? 0 : 220;
+  citationHideTimer = window.setTimeout(() => { citationLayer.hidden = true; citationHideTimer = null; }, delay);
+  if (citationTrigger) { citationTrigger.focus(); citationTrigger = null; }
+}
+
+function readFeedback(key) {
+  try {
+    const value = localStorage.getItem(key);
+    return value === "up" || value === "down" ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveFeedback(key, value) {
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function addAnswerFeedback(view, turnId) {
+  const row = document.createElement("div");
+  row.className = "answer-feedback";
+  const note = document.createElement("span");
+  note.className = "feedback-note";
+  const buttons = {};
+  const key = FEEDBACK_PREFIX + turnId;
+  const lock = value => {
+    for (const [name, button] of Object.entries(buttons)) {
+      button.classList.toggle("is-selected", name === value);
+      button.setAttribute("aria-pressed", name === value ? "true" : "false");
+      button.disabled = true;
+    }
+    note.textContent = "已反馈";
+  };
+  for (const [value, label, icon] of [["up", "有帮助", "#icon-thumb-up"], ["down", "没帮助", "#icon-thumb-down"]]) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "feedback-button";
+    button.title = label;
+    button.setAttribute("aria-label", label);
+    button.setAttribute("aria-pressed", "false");
+    button.append(svgIcon(icon));
+    button.addEventListener("click", () => {
+      if (!saveFeedback(key, value)) return;
+      lock(value);
+      announcer.textContent = "已记录你的反馈，谢谢。";
+    });
+    buttons[value] = button;
+    row.append(button);
+  }
+  row.append(note);
+  const saved = readFeedback(key);
+  if (saved) lock(saved);
+  view.stack.append(row);
+}
+
 async function readStream(response, handlers) {
   if (!response.ok) {
     let payload;
@@ -233,6 +343,9 @@ async function readStream(response, handlers) {
         }
         if (event === "status") {
           if (payload && (payload.phase === "start" || payload.phase === "end")) handlers.onStatus(payload);
+        }
+        if (event === "citations") {
+          if (Array.isArray(payload?.items)) handlers.onCitations(payload.items);
         }
         if (event === "token") {
           if (typeof payload?.content !== "string") throw new Error("收到的回复格式不正确，请重新提问。");
@@ -275,7 +388,9 @@ form.addEventListener("submit", async event => {
   event.preventDefault();
   const question = input.value.trim();
   if (!question || activeTurn) return;
-  const turn = { controller: new AbortController(), stopped: false, timedOut: false };
+  const suffix = Date.now() + "-" + Math.random().toString(36).slice(2, 8);
+  const turn = { controller: new AbortController(), stopped: false, timedOut: false,
+    turnId: "local-" + suffix, citations: [] };
   activeTurn = turn;
   input.value = "";
   welcome.hidden = true;
@@ -310,11 +425,15 @@ form.addEventListener("submit", async event => {
       signal: turn.controller.signal,
     });
     const finishReason = await readStream(response, {
-      onMeta: id => { conversationId = id; },
+      onMeta: id => { conversationId = id; turn.turnId = id + "-" + suffix; },
       onStatus: payload => {
         waiting.remove();
         if (payload.phase === "start") beginTool(view, payload);
         else endTool(view, payload);
+      },
+      onCitations: items => {
+        waiting.remove();
+        turn.citations = items;
       },
       onText: text => {
         if (!text) return;
@@ -329,6 +448,8 @@ form.addEventListener("submit", async event => {
     if (!answer.trim()) throw new Error("这次没有收到正文，请重新提问。");
     if (finishReason === "length") throw new Error("回复因长度限制而中断，请缩短问题后重新提问。");
     if (Array.from(answer.trim()).length > 12000) throw new Error("回复过长，无法继续接续这一轮。请开启新对话。");
+    renderAnswer(view, answer, turn.citations);
+    addAnswerFeedback(view, turn.turnId);
     history.push({ role: "user", content: question }, { role: "assistant", content: answer.trim() });
     history = history.slice(-100);
     announcer.textContent = "小邻已回复，你可以继续追问。";
@@ -387,4 +508,9 @@ scrollArea.addEventListener("scroll", () => {
 }, { passive: true });
 window.addEventListener("resize", () => scrollToLatest());
 jumpButton.addEventListener("click", () => { followBottom = true; scrollToLatest(true); });
+citationLayer.querySelector(".citation-close").addEventListener("click", closeCitation);
+citationLayer.querySelector(".citation-scrim").addEventListener("click", closeCitation);
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && !citationLayer.hidden) closeCitation();
+});
 updateInput();

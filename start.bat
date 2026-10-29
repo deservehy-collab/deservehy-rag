@@ -23,7 +23,13 @@ if errorlevel 1 echo MySQL/Milvus did not start. Chat will report database_unava
 if errorlevel 1 echo Database init failed. Check Docker and DB_PASSWORD.
 if not exist ".cache\models\bge-m3\pytorch_model.bin" goto no_model
 ".venv\Scripts\python.exe" -X utf8 -m scripts.ingest_knowledge
-if errorlevel 1 echo Knowledge ingest failed. query_faq will report knowledge_unavailable until it succeeds.
+if errorlevel 1 echo Knowledge ingest failed. If the Milvus schema changed, run: scripts.ingest_knowledge --rebuild --yes
+if not exist ".cache\models\bge-reranker-v2-m3\model.safetensors" goto no_reranker
+goto run_server
+
+:no_reranker
+echo Reranker model missing. Run: .venv\Scripts\modelscope download --model BAAI/bge-reranker-v2-m3 --local_dir .cache\models\bge-reranker-v2-m3
+echo Knowledge questions will report knowledge_unavailable until the reranker is ready.
 goto run_server
 
 :no_model

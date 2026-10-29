@@ -11,6 +11,10 @@ CASES = (
      "must": ("退货",), "any": ("7 天", "7天", "七天")},
     {"label": "知识库检索运费", "question": "邮费是多少？", "tool": "query_faq", "ok": True,
      "must": (), "any": ("邮费", "运费")},
+    {"label": "型号兼容", "question": "G500 杯盖能装在 B750 上吗？", "tool": "query_faq", "ok": True,
+     "must": (), "any": ("G500", "B750")},
+    {"label": "知识库拒答", "question": "你们支持货到付款吗？", "tool": "query_faq", "ok": False,
+     "must": (), "any": ("没有找到可靠依据", "人工")},
 )
 
 
@@ -82,7 +86,7 @@ def main() -> int:
         message = str(exc) if isinstance(exc, DemoFailure) else "服务不可用或返回格式无效，请检查服务、数据库与上游配置。"
         print("验收未通过：" + message)
         return 1
-    print("三项工具验收通过：订单物流命中、退货政策命中、邮费经向量检索命中。")
+    print("五项验收通过：订单物流、退货政策、运费检索、型号兼容、知识库拒答。")
     return 0
 
 

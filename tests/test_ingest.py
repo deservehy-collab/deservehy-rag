@@ -37,18 +37,29 @@ class FakeVectorStore:
     def __init__(self):
         self.rows = {}
         self.calls = []
-        self.search_results = []
+        self.payloads = []
+        self.dense = []
 
     def ensure_collection(self):
         pass
 
-    def upsert(self, ids, vectors):
-        self.calls.append(list(ids))
-        for item_id, vector in zip(ids, vectors):
-            self.rows[str(item_id)] = vector
+    def upsert(self, rows):
+        self.calls.append([row["vector_id"] for row in rows])
+        for row in rows:
+            self.rows[str(row["vector_id"])] = row["embedding"]
+            self.payloads.append(row)
+
+    def dense_search(self, vector, limit, expr=None):
+        return self.dense[:limit]
+
+    def sparse_search(self, text, limit, expr=None):
+        return []
+
+    def hybrid_search(self, vector, text, limit, rrf_k, expr=None):
+        return []
 
     def search(self, vector, limit):
-        return self.search_results[:limit]
+        return self.dense[:limit]
 
     def drop(self):
         self.rows.clear()
@@ -112,6 +123,18 @@ def test_vectorize_pending_backfills_and_clears_pending(knowledge_db):
     assert len(store.rows) == 3
 
 
+def test_vectorized_rows_carry_bm25_text_and_metadata(knowledge_db):
+    ingestor, _, store = make_ingestor(knowledge_db)
+    ingestor.ingest_chunks(chunks_of(1))
+    ingestor.vectorize_pending()
+    row = store.payloads[0]
+    assert row["text"].startswith("配送与运费 › 运费标准\n小节0\n")
+    assert row["category"] == "配送与运费 › 运费标准"
+    assert row["section_path"] == "配送与运费 › 运费标准 › 小节0"
+    assert row["content_type"] == "policy"
+    assert row["is_key_clause"] is False
+
+
 def test_resume_after_milvus_write_without_mysql_backfill(knowledge_db):
     ingestor, embedder, store = make_ingestor(knowledge_db)
     ingestor.ingest_chunks(chunks_of(2))
@@ -119,20 +142,21 @@ def test_resume_after_milvus_write_without_mysql_backfill(knowledge_db):
         first = session.scalars(select(KnowledgeChunk).order_by(KnowledgeChunk.id)).first()
         first_id = first.id
     cluster = FakeVectorStore()
-    cluster.upsert([first_id], embedder.encode([embedding_text("a", "b", "c")]))
+    cluster.upsert([{"vector_id": str(first_id), "embedding": embedder.encode([embedding_text("a", "b", "c")])[0],
+                     "text": "a", "category": "a"}])
     ingestor.vector_store = cluster
     assert ingestor.stats()["pending"] == 2
     assert ingestor.vectorize_pending() == 2
     assert ingestor.stats()["pending"] == 0
     assert len(cluster.rows) == 2
-    assert cluster.calls[0][0] == first_id
+    assert cluster.calls[0][0] == str(first_id)
 
 
 def test_partial_batch_failure_keeps_rows_pending(knowledge_db):
     ingestor, _, store = make_ingestor(knowledge_db)
     ingestor.ingest_chunks(chunks_of(3))
 
-    def fail(ids, vectors):
+    def fail(rows):
         raise RuntimeError("Milvus 挂了")
 
     store.upsert = fail
@@ -174,20 +198,18 @@ def test_retrieval_filters_pending_and_low_scores(knowledge_db):
         rows[2].vectorize_status = "pending"
         rows[2].vector_id = None
         session.commit()
-    store.search_results = [(str(done_b.id), 0.92), (str(done_a.id), 0.55), (str(rows[2].id), 0.99)]
-    retriever = KnowledgeRetriever(
-        knowledge_db, embedder, store, candidates=5, top_k=2, min_score=0.5
-    )
-    results = retriever.search("运费怎么算")
-    assert [item["id"] for item in results] == [done_b.id, done_a.id]
-    assert set(results[0]) == {"id", "question", "answer", "category"}
-    assert results[0]["question"] == done_b.questions
+    store.dense = [(str(done_b.id), 0.92), (str(done_a.id), 0.55), (str(rows[2].id), 0.99)]
+    retriever = KnowledgeRetriever(knowledge_db, embedder, store, candidates=5, top_k=2, strategy="dense")
+    results = retriever.retrieve("运费怎么算", strategy="dense").items
+    assert [item.id for item in results] == [done_b.id, done_a.id]
+    assert results[0].question == done_b.questions
 
 
 def test_retrieval_skips_blank_query(knowledge_db):
     ingestor, embedder, store = make_ingestor(knowledge_db)
-    retriever = KnowledgeRetriever(knowledge_db, embedder, store)
-    assert retriever.search("   ") == []
+    retriever = KnowledgeRetriever(knowledge_db, embedder, store, strategy="dense")
+    result = retriever.retrieve("   ")
+    assert result.low_confidence is True
     assert embedder.calls == []
 
 

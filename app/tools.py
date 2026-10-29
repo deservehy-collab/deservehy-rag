@@ -96,7 +96,8 @@ class ProductArgs(BaseModel):
 class FaqArgs(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    keyword: str = Field(min_length=1, max_length=40, description="要查询的政策关键词，例如 退货")
+    keyword: str = Field(min_length=1, max_length=200, description="要查询的政策问题或关键词，尽量保留用户原话")
+    category: str | None = Field(default=None, max_length=255, description="可选分类过滤，例如 配送与运费")
 
 
 class TicketArgs(BaseModel):
@@ -117,10 +118,18 @@ class ToolOutcome:
 
 
 class ToolExecutor:
-    def __init__(self, tools: dict[str, BaseTool], *, timeout: float, attempts: int):
+    def __init__(
+        self,
+        tools: dict[str, BaseTool],
+        *,
+        timeout: float,
+        attempts: int,
+        timeouts: dict[str, float] | None = None,
+    ):
         self.tools = tools
         self.timeout = timeout
         self.attempts = attempts
+        self.timeouts = dict(timeouts or {})
 
     async def execute(self, name: str, args: dict) -> ToolOutcome:
         started = time.perf_counter()
@@ -135,11 +144,12 @@ class ToolExecutor:
         result: dict | None = None
         code = "tool_error"
         message = "工具执行失败，请稍后重试。"
+        limit = self.timeouts.get(name, self.timeout)
         # 写工具超时后线程可能仍在执行，重试会造成重复工单，因此只重试只读工具。
         attempts = self.attempts if name in RESTRICTED_TOOLS else 1
         for _ in range(attempts):
             try:
-                result = await asyncio.wait_for(asyncio.to_thread(tool.invoke, validated.model_dump()), self.timeout)
+                result = await asyncio.wait_for(asyncio.to_thread(tool.invoke, validated.model_dump()), limit)
             except TimeoutError:
                 code = "tool_timeout"
                 message = "工具响应超时，请稍后重试。"
@@ -242,17 +252,22 @@ def make_tools(
             return {"ok": False, "error": "not_found", "message": f"没有找到订单 {order_id} 的物流记录。"}
         return {"ok": True, "data": record}
 
-    @tool("query_faq", args_schema=FaqArgs, description="按用户问题查询店铺知识库：退货、退款、换货、发货、发票、保修、运费、邮费、时效等政策。")
-    def query_faq(keyword: str) -> dict:
+    @tool("query_faq", args_schema=FaqArgs, description="按用户问题检索店铺知识库：退换货、退款、发票、保修、运费、时效、型号与配件兼容性等政策。")
+    def query_faq(keyword: str, category: str | None = None) -> dict:
         if knowledge is None:
             return {"ok": False, "error": "knowledge_unavailable", "message": "知识库暂时不可用，请稍后重试。"}
         try:
-            items = knowledge.search(keyword)
+            result = knowledge.retrieve(keyword, category=category)
         except Exception:
             return {"ok": False, "error": "knowledge_unavailable", "message": "知识库暂时不可用，请稍后重试。"}
-        if not items:
-            return {"ok": False, "error": "no_match", "message": f"没有找到和「{keyword}」相关的店铺政策。"}
-        return {"ok": True, "data": {"items": items}}
+        if result.low_confidence:
+            return {"ok": False, "error": "low_confidence",
+                    "message": "知识库没有足够依据回答这个问题。", "reason": result.reason}
+        return {"ok": True, "data": {
+            "items": [item.item() for item in result.evidence],
+            "canonical_query": result.canonical_query,
+            "low_confidence": False,
+        }}
 
     @tool("create_ticket", args_schema=TicketArgs, description="用户的问题需要人工跟进时创建工单。服务端会自动关联当前会话，只需填写问题描述和类型。")
     def create_ticket(description: str, ticket_type: str) -> dict:
