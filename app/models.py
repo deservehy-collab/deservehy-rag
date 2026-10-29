@@ -70,3 +70,58 @@ class Ticket(Base):
         Enum("待处理", "已处理", name="ticket_status"), nullable=False, default="待处理", server_default="待处理"
     )
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+
+class KnowledgeChunk(Base):
+    __tablename__ = "knowledge_chunks"
+    # SQLite 索引名全库唯一，索引名加表前缀；MySQL 的 DDL 仍用 idx_category / idx_vectorize_status。
+    __table_args__ = (
+        Index("idx_knowledge_category", "category"),
+        Index("idx_knowledge_vectorize_status", "vectorize_status"),
+        TABLE_OPTIONS,
+    )
+
+    id: Mapped[int] = mapped_column(IdType, primary_key=True, autoincrement=True)
+    category: Mapped[str] = mapped_column(String(255), nullable=False)
+    questions: Mapped[str] = mapped_column(Text, nullable=False)
+    answer: Mapped[str] = mapped_column(Text, nullable=False)
+    section_path: Mapped[str | None] = mapped_column(String(512))
+    content_type: Mapped[str | None] = mapped_column(String(32))
+    is_key_clause: Mapped[bool] = mapped_column(default=False, server_default="0", nullable=False)
+    prev_chunk_id: Mapped[int | None] = mapped_column(
+        IdType, ForeignKey("knowledge_chunks.id", name="fk_knowledge_prev", ondelete="SET NULL")
+    )
+    next_chunk_id: Mapped[int | None] = mapped_column(
+        IdType, ForeignKey("knowledge_chunks.id", name="fk_knowledge_next", ondelete="SET NULL")
+    )
+    vector_id: Mapped[str | None] = mapped_column(String(64))
+    vectorize_status: Mapped[str] = mapped_column(
+        Enum("pending", "done", name="vectorize_status"),
+        nullable=False,
+        default="pending",
+        server_default="pending",
+    )
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), onupdate=func.now())
+
+
+class QaExtractionStaging(Base):
+    __tablename__ = "qa_extraction_staging"
+    __table_args__ = (
+        Index("idx_staging_batch_no", "batch_no"),
+        Index("idx_staging_status", "status"),
+        TABLE_OPTIONS,
+    )
+
+    id: Mapped[int] = mapped_column(IdType, primary_key=True, autoincrement=True)
+    batch_no: Mapped[str] = mapped_column(String(64), nullable=False)
+    source_ref: Mapped[str | None] = mapped_column(String(255))
+    question: Mapped[str | None] = mapped_column(Text)
+    answer: Mapped[str | None] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(
+        Enum("extracted", "kept", "discarded", name="staging_status"),
+        nullable=False,
+        default="extracted",
+        server_default="extracted",
+    )
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())

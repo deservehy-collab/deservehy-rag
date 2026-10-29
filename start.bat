@@ -7,9 +7,9 @@ py -3.12 -m venv .venv
 if errorlevel 1 goto failed
 
 :check_dependencies
-".venv\Scripts\python.exe" -c "import fastapi, langchain_openai, pydantic_settings, uvicorn, sqlalchemy, pymysql" >nul 2>&1
+".venv\Scripts\python.exe" -c "import fastapi, langchain_openai, pydantic_settings, uvicorn, sqlalchemy, pymysql, sentence_transformers, pymilvus, apscheduler, torch" >nul 2>&1
 if not errorlevel 1 goto run
-".venv\Scripts\python.exe" -m pip install -r requirements.lock.txt
+".venv\Scripts\python.exe" -m pip install -i https://mirrors.aliyun.com/pypi/simple/ -f https://mirrors.aliyun.com/pytorch-wheels/cu128/ -r requirements.lock.txt
 if errorlevel 1 goto failed
 
 :run
@@ -18,13 +18,22 @@ echo Configure OPENAI_BASE_URL, OPENAI_MODEL, OPENAI_API_KEY and DB_PASSWORD in 
 where docker >nul 2>&1
 if errorlevel 1 goto no_docker
 docker compose up -d
-if errorlevel 1 echo MySQL did not start. Chat will report database_unavailable until it is ready.
+if errorlevel 1 echo MySQL/Milvus did not start. Chat will report database_unavailable until they are ready.
 ".venv\Scripts\python.exe" -X utf8 -m scripts.init_db
 if errorlevel 1 echo Database init failed. Check Docker and DB_PASSWORD.
+if not exist ".cache\models\bge-m3\pytorch_model.bin" goto no_model
+".venv\Scripts\python.exe" -X utf8 -m scripts.ingest_knowledge
+if errorlevel 1 echo Knowledge ingest failed. query_faq will report knowledge_unavailable until it succeeds.
+goto run_server
+
+:no_model
+echo Embedding model missing. Run: .venv\Scripts\python.exe -m pip install modelscope
+echo Then: .venv\Scripts\modelscope download --model BAAI/bge-m3 --local_dir .cache\models\bge-m3
+echo Then: .venv\Scripts\python.exe -X utf8 -m scripts.ingest_knowledge
 goto run_server
 
 :no_docker
-echo Docker not found. Start MySQL on 127.0.0.1:3307 and run scripts.init_db manually.
+echo Docker not found. Start MySQL on 127.0.0.1:3307 and Milvus on 127.0.0.1:19530, then run scripts.init_db and scripts.ingest_knowledge manually.
 
 :run_server
 echo Local server: http://127.0.0.1:8000

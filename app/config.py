@@ -30,6 +30,19 @@ class Settings(BaseSettings):
     db_name_test: str = Field(default="xiaolin_ch02_test", min_length=1, max_length=64)
     tool_timeout_seconds: float = Field(default=5, gt=0, allow_inf_nan=False)
     tool_max_attempts: int = Field(default=2, ge=1, le=3)
+    embedding_model: str = Field(default="BAAI/bge-m3", min_length=1, max_length=255)
+    embedding_device: str = Field(default="cuda", min_length=1, max_length=16)
+    embedding_batch_size: int = Field(default=16, ge=1, le=128)
+    milvus_uri: str = Field(default="http://127.0.0.1:19530", min_length=1, max_length=255)
+    milvus_collection: str = Field(default="knowledge", min_length=1, max_length=64)
+    knowledge_doc_dir: str = Field(default="examples/knowledge", min_length=1, max_length=255)
+    knowledge_top_k: int = Field(default=5, ge=1, le=20)
+    knowledge_candidates: int = Field(default=12, ge=1, le=100)
+    knowledge_min_score: float = Field(default=0.35, ge=0, le=1, allow_inf_nan=False)
+    knowledge_mining_enabled: bool = False
+    knowledge_mining_interval_minutes: int = Field(default=60, ge=0)
+    knowledge_mining_lookback_days: int = Field(default=7, ge=1, le=365)
+    knowledge_dedupe_threshold: float = Field(default=0.95, ge=0, le=1, allow_inf_nan=False)
 
     @field_validator("openai_api_key")
     @classmethod

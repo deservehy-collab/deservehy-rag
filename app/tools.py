@@ -211,7 +211,9 @@ def summarize(name: str, result: dict) -> str:
     return "工具已执行"
 
 
-def make_tools(store: ConversationStore, conversation_id: int) -> dict[str, BaseTool]:
+def make_tools(
+    store: ConversationStore, conversation_id: int, knowledge=None
+) -> dict[str, BaseTool]:
     @tool("query_order", args_schema=OrderArgs, description="按订单号查询订单状态、下单时间、金额和商品明细。用户给出订单号时使用。")
     def query_order(order_id: str) -> dict:
         order = ORDERS.get(order_id.strip())
@@ -240,9 +242,14 @@ def make_tools(store: ConversationStore, conversation_id: int) -> dict[str, Base
             return {"ok": False, "error": "not_found", "message": f"没有找到订单 {order_id} 的物流记录。"}
         return {"ok": True, "data": record}
 
-    @tool("query_faq", args_schema=FaqArgs, description="按关键词查询店铺常见问题：退货、退款、换货、发货、发票、保修、运费、邮费、时效等政策。")
+    @tool("query_faq", args_schema=FaqArgs, description="按用户问题查询店铺知识库：退货、退款、换货、发货、发票、保修、运费、邮费、时效等政策。")
     def query_faq(keyword: str) -> dict:
-        items = store.search_faq(keyword)
+        if knowledge is None:
+            return {"ok": False, "error": "knowledge_unavailable", "message": "知识库暂时不可用，请稍后重试。"}
+        try:
+            items = knowledge.search(keyword)
+        except Exception:
+            return {"ok": False, "error": "knowledge_unavailable", "message": "知识库暂时不可用，请稍后重试。"}
         if not items:
             return {"ok": False, "error": "no_match", "message": f"没有找到和「{keyword}」相关的店铺政策。"}
         return {"ok": True, "data": {"items": items}}

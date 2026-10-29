@@ -6,7 +6,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from app.config import Settings
 from app.database import build_database_url, build_engine, build_session_factory, ensure_database, validate_database_name
-from app.models import Base, Conversation, Faq, Message, Ticket
+from app.models import Base, Conversation, Faq, KnowledgeChunk, Message, Ticket
 from app.seed import FAQ_SEED, seed_faq
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,10 +20,17 @@ def sqlite_factory(tmp_path):
     engine.dispose()
 
 
-def test_schema_has_the_four_business_tables(sqlite_factory):
+def test_schema_has_the_business_and_knowledge_tables(sqlite_factory):
     with sqlite_factory() as session:
         engine = session.get_bind()
-        assert set(inspect(engine).get_table_names()) == {"conversations", "messages", "faq", "tickets"}
+        assert set(inspect(engine).get_table_names()) == {
+            "conversations",
+            "messages",
+            "faq",
+            "tickets",
+            "knowledge_chunks",
+            "qa_extraction_staging",
+        }
 
 
 def test_message_row_keeps_tool_round_trip(sqlite_factory):
@@ -71,10 +78,17 @@ def test_seed_faq_is_idempotent(sqlite_factory):
 def test_docker_seed_sql_matches_python_seed():
     sql = (ROOT / "scripts/init_sql/002_seed_faq.sql").read_text(encoding="utf-8")
     schema = (ROOT / "scripts/init_sql/001_schema.sql").read_text(encoding="utf-8")
+    rag = (ROOT / "scripts/init_sql/003_rag.sql").read_text(encoding="utf-8")
     for row in FAQ_SEED:
         assert row["question"] in sql
     for table in ("conversations", "messages", "faq", "tickets"):
         assert f"CREATE TABLE IF NOT EXISTS {table}" in schema
+    for table in ("knowledge_chunks", "qa_extraction_staging"):
+        assert f"CREATE TABLE IF NOT EXISTS {table}" in rag
+    assert "ENUM('pending','done')" in rag
+    assert "ON DELETE SET NULL" in rag
+    assert "KEY idx_category (category)" in rag
+    assert "KEY idx_vectorize_status (vectorize_status)" in rag
 
 
 def test_database_name_guard_rejects_injection():
@@ -121,12 +135,16 @@ def test_mysql_schema_uses_real_enum_and_json():
         Base.metadata.create_all(engine)
         ddl = {}
         with engine.connect() as connection:
-            for table in ("conversations", "messages", "faq", "tickets"):
+            for table in ("conversations", "messages", "faq", "tickets", "knowledge_chunks", "qa_extraction_staging"):
                 ddl[table] = connection.execute(text(f"show create table {table}")).one()[1]
         assert "enum('user','assistant','tool')" in ddl["messages"]
         assert "`tool_calls` json" in ddl["messages"]
         assert "bigint unsigned" in ddl["conversations"]
         assert "ENGINE=InnoDB" in ddl["faq"]
+        assert "enum('pending','done')" in ddl["knowledge_chunks"]
+        assert "ON DELETE SET NULL" in ddl["knowledge_chunks"]
+        assert "idx_knowledge_category" in ddl["knowledge_chunks"]
+        assert "enum('extracted','kept','discarded')" in ddl["qa_extraction_staging"]
 
         # 中文 ENUM、中文种子都要能真正写进去再读回来，防止连接字符集把值截断。
         factory = build_session_factory(engine)
@@ -137,6 +155,23 @@ def test_mysql_schema_uses_real_enum_and_json():
             session.commit()
             assert conversation.status == "进行中"
             assert session.scalar(select(Faq.question).where(Faq.question == "退货政策是什么")) == "退货政策是什么"
+
+            first = KnowledgeChunk(category="配送与运费", questions="邮费是多少？", answer="普通地区邮费 10 元。")
+            session.add(first)
+            session.commit()
+            second = KnowledgeChunk(
+                category="配送与运费", questions="多久发货？", answer="48 小时内发货。", prev_chunk_id=first.id
+            )
+            session.add(second)
+            session.commit()
+            first.next_chunk_id = second.id
+            session.commit()
+            assert second.vectorize_status == "pending"
+
+            session.delete(first)
+            session.commit()
+            session.refresh(second)
+            assert second.prev_chunk_id is None
     finally:
         Base.metadata.drop_all(engine)
         engine.dispose()

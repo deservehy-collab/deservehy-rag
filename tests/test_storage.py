@@ -84,25 +84,3 @@ def test_create_ticket_uses_daily_sequence_and_keeps_description(database):
         assert ticket.status == "待处理"
 
 
-def test_search_faq_matches_return_policy(database):
-    _, store = database
-    results = store.search_faq("退货")
-    assert results
-    assert any(result["question"] == "退货政策是什么" for result in results)
-    assert all({"id", "question", "answer", "category"} <= set(result) for result in results)
-
-
-def test_search_faq_misses_shipping_fee_keyword(database):
-    _, store = database
-    assert store.search_faq("邮费") == []
-
-
-def test_search_faq_escapes_wildcards_and_blank(database):
-    _, store = database
-    assert store.search_faq("%") == []
-    assert store.search_faq("  ") == []
-
-
-def test_search_faq_limits_results(database):
-    _, store = database
-    assert len(store.search_faq("订单", limit=1)) == 1

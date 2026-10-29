@@ -9,8 +9,8 @@ CASES = (
      "must": ("1001",), "any": ("顺丰", "上海分拨中心", "运输中")},
     {"label": "FAQ 命中", "question": "退货政策是什么？", "tool": "query_faq", "ok": True,
      "must": ("退货",), "any": ("7 天", "7天", "七天")},
-    {"label": "FAQ 未命中", "question": "邮费是多少？", "tool": "query_faq", "ok": False,
-     "must": (), "any": ()},
+    {"label": "知识库检索运费", "question": "邮费是多少？", "tool": "query_faq", "ok": True,
+     "must": (), "any": ("邮费", "运费")},
 )
 
 
@@ -82,7 +82,7 @@ def main() -> int:
         message = str(exc) if isinstance(exc, DemoFailure) else "服务不可用或返回格式无效，请检查服务、数据库与上游配置。"
         print("验收未通过：" + message)
         return 1
-    print("三项工具验收通过：订单物流命中、FAQ 命中、FAQ 未命中按预期失败（留给 ch03 改进检索）。")
+    print("三项工具验收通过：订单物流命中、退货政策命中、邮费经向量检索命中。")
     return 0
 
 

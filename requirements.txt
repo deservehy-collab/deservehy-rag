@@ -8,3 +8,8 @@ pytest>=8.4,<10
 sqlalchemy==2.1.6
 pymysql==1.2.3
 cryptography==50.0.2
+torch>=2.6,<3
+# GPU 版 torch 请从 cu128 wheel 源安装，start.bat 已带 -f https://mirrors.aliyun.com/pytorch-wheels/cu128/
+sentence-transformers>=5,<7
+pymilvus>=2.6,<2.7
+apscheduler>=3.11,<4

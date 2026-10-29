@@ -1,4 +1,6 @@
+import asyncio
 import json
+import logging
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -13,10 +15,18 @@ from sqlalchemy.orm import Session, sessionmaker
 from app.config import Settings
 from app.context import ContextBudgetError
 from app.database import build_database_url, build_engine, build_session_factory
+from app.knowledge.embedding import BgeM3Embedder
+from app.knowledge.ingest import KnowledgeIngestor
+from app.knowledge.mining import ConversationMiner
+from app.knowledge.retrieval import KnowledgeRetriever
+from app.knowledge.scheduler import MiningScheduler
+from app.knowledge.vector_store import MilvusVectorStore
 from app.model import build_model
 from app.schemas import AfterSales, ChatRequest, ExtractRequest
 from app.service import CustomerService, ModelFailure
 from app.storage import ConversationStore
+
+logger = logging.getLogger(__name__)
 
 
 def create_app(
@@ -36,17 +46,68 @@ def create_app(
         if factory is None:
             engine = build_engine(build_database_url(resolved_settings))
             factory = build_session_factory(engine)
+        embedder = BgeM3Embedder(
+            resolved_settings.embedding_model,
+            device=resolved_settings.embedding_device,
+            batch_size=resolved_settings.embedding_batch_size,
+        )
+        vector_store = MilvusVectorStore(resolved_settings.milvus_uri, resolved_settings.milvus_collection)
         try:
-            application.state.service = CustomerService(resolved_settings, resolved_model, ConversationStore(factory))
+            if embedder.local_model_path() is not None:
+                await asyncio.to_thread(embedder.warmup)
+        except Exception:
+            logger.exception("嵌入模型预热失败，首次检索可能较慢或返回 knowledge_unavailable。")
+        knowledge = KnowledgeRetriever(
+            factory,
+            embedder,
+            vector_store,
+            candidates=resolved_settings.knowledge_candidates,
+            top_k=resolved_settings.knowledge_top_k,
+            min_score=resolved_settings.knowledge_min_score,
+        )
+        scheduler = None
+        try:
+            application.state.service = CustomerService(
+                resolved_settings, resolved_model, ConversationStore(factory), knowledge
+            )
+            if (
+                resolved_settings.knowledge_mining_enabled
+                and resolved_settings.knowledge_mining_interval_minutes > 0
+            ):
+                try:
+                    ingestor = await asyncio.to_thread(
+                        KnowledgeIngestor,
+                        factory,
+                        embedder,
+                        vector_store,
+                        batch_size=resolved_settings.embedding_batch_size,
+                    )
+                    miner = ConversationMiner(
+                        factory,
+                        resolved_model,
+                        ingestor,
+                        embedder,
+                        lookback_days=resolved_settings.knowledge_mining_lookback_days,
+                        dedupe_threshold=resolved_settings.knowledge_dedupe_threshold,
+                    )
+                    scheduler = MiningScheduler(
+                        miner, resolved_settings.knowledge_mining_interval_minutes
+                    )
+                    await scheduler.start()
+                except Exception:
+                    logger.exception("知识挖掘定时任务启动失败，服务继续运行。")
             yield
         finally:
+            if scheduler is not None:
+                scheduler.shutdown()
+            vector_store.close()
             if model is None:
                 await resolved_model.root_async_client.close()
                 resolved_model.root_client.close()
             if engine is not None:
                 engine.dispose()
 
-    application = FastAPI(title="电商智能客服 · ch02", lifespan=lifespan)
+    application = FastAPI(title="电商智能客服 · ch03", lifespan=lifespan)
     web_directory = Path(__file__).resolve().parent / "web"
     application.mount("/assets", StaticFiles(directory=web_directory), name="assets")
 

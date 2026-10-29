@@ -95,10 +95,17 @@ def model_failure(exc: Exception) -> ModelFailure:
 
 
 class CustomerService:
-    def __init__(self, settings: Settings, model: ChatOpenAI, store: ConversationStore | None = None):
+    def __init__(
+        self,
+        settings: Settings,
+        model: ChatOpenAI,
+        store: ConversationStore | None = None,
+        knowledge=None,
+    ):
         self.settings = settings
         self.model = model
         self.store = store
+        self.knowledge = knowledge
         self.structured = model.with_structured_output(AfterSales, method="json_mode", include_raw=True)
 
     def prepare_chat(self, request: ChatRequest) -> list[BaseMessage]:
@@ -120,7 +127,7 @@ class CustomerService:
             return
         yield "meta", {"conversation_id": conversation_id}
 
-        tools = make_tools(self.store, conversation_id)
+        tools = make_tools(self.store, conversation_id, self.knowledge)
         executor = ToolExecutor(
             tools, timeout=self.settings.tool_timeout_seconds, attempts=self.settings.tool_max_attempts
         )

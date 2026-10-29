@@ -1,12 +1,10 @@
 from datetime import date
 
-from sqlalchemy import func, or_, select
+from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, sessionmaker
 
-from app.models import Conversation, Faq, Message, Ticket
-
-FAQ_LIMIT = 5
+from app.models import Conversation, Message, Ticket
 
 
 class ConversationStore:
@@ -70,27 +68,3 @@ class ConversationStore:
         latest = session.scalar(select(func.max(Ticket.ticket_no)).where(Ticket.ticket_no.like(f"T{day}%")))
         sequence = int(latest[-3:]) + 1 if latest else 1
         return f"T{day}{sequence:03d}"
-
-    def search_faq(self, keyword: str, limit: int = FAQ_LIMIT) -> list[dict]:
-        keyword = keyword.strip()[:40]
-        if not keyword:
-            return []
-        escaped = keyword.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
-        pattern = f"%{escaped}%"
-        statement = (
-            select(Faq)
-            .where(
-                or_(
-                    Faq.question.like(pattern, escape="\\"),
-                    Faq.answer.like(pattern, escape="\\"),
-                    Faq.category.like(pattern, escape="\\"),
-                )
-            )
-            .order_by(Faq.id)
-            .limit(limit)
-        )
-        with self.session_factory() as session:
-            return [
-                {"id": row.id, "question": row.question, "answer": row.answer, "category": row.category}
-                for row in session.scalars(statement)
-            ]

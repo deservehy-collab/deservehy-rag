@@ -16,6 +16,34 @@ from app.storage import ConversationStore
 from app.tools import OrderArgs, TOOL_LABELS, ToolExecutor, make_tools
 
 
+class FakeKnowledge:
+    def __init__(self):
+        self.error = None
+
+    def search(self, query, limit=5):
+        if self.error is not None:
+            raise self.error
+        if "邮费" in query:
+            return [
+                {
+                    "id": 1,
+                    "question": "普通地区邮费",
+                    "answer": "单笔订单实付满 99 元免运费，未满 99 元收取 8 元邮费。",
+                    "category": "配送与运费 › 运费标准",
+                }
+            ]
+        if "退货" in query:
+            return [
+                {
+                    "id": 2,
+                    "question": "退货政策是什么",
+                    "answer": "签收后 7 天内可申请无理由退货。",
+                    "category": "售后",
+                }
+            ]
+        return []
+
+
 @pytest.fixture()
 def toolchain(tmp_path):
     engine = create_engine(f"sqlite:///{tmp_path / 'tools.db'}")
@@ -24,8 +52,9 @@ def toolchain(tmp_path):
     seed_faq(factory)
     store = ConversationStore(factory)
     conversation_id = store.start_turn(user_id="anon-1", message="订单 1001 的物流到哪了")
-    tools = make_tools(store, conversation_id)
-    yield factory, store, conversation_id, tools
+    knowledge = FakeKnowledge()
+    tools = make_tools(store, conversation_id, knowledge)
+    yield factory, store, conversation_id, knowledge, tools
     engine.dispose()
 
 
@@ -74,17 +103,30 @@ def test_query_product_matches_by_id_and_keyword(toolchain):
     assert missing["ok"] is False and missing["error"] == "not_found"
 
 
-def test_query_faq_hits_return_policy_and_misses_shipping_fee(toolchain):
-    *_, tools = toolchain
+def test_query_faq_keeps_contract_and_reaches_shipping_fee(toolchain):
+    tools = toolchain[4]
     hit = tools["query_faq"].invoke({"keyword": "退货"})
-    miss = tools["query_faq"].invoke({"keyword": "邮费"})
+    shipping = tools["query_faq"].invoke({"keyword": "邮费是多少"})
+    miss = tools["query_faq"].invoke({"keyword": "发票"})
     assert hit["ok"] is True
+    assert set(hit["data"]["items"][0]) == {"id", "question", "answer", "category"}
     assert any("退货" in item["question"] for item in hit["data"]["items"])
+    assert shipping["ok"] is True
+    assert "邮费" in shipping["data"]["items"][0]["answer"]
     assert miss["ok"] is False and miss["error"] == "no_match"
 
 
+def test_query_faq_reports_unavailable_knowledge_base(toolchain):
+    knowledge, tools = toolchain[3], toolchain[4]
+    knowledge.error = RuntimeError("Milvus 挂了")
+    result = tools["query_faq"].invoke({"keyword": "邮费"})
+    assert result["ok"] is False
+    assert result["error"] == "knowledge_unavailable"
+    assert "知识库" in result["message"]
+
+
 def test_create_ticket_writes_row_with_server_side_conversation(toolchain):
-    factory, _, conversation_id, tools = toolchain
+    factory, _, conversation_id, _, tools = toolchain
     result = tools["create_ticket"].invoke({"description": "杯子送达时已经碎了，希望换货。", "ticket_type": "售后"})
     assert result["ok"] is True
     ticket_no = result["data"]["ticket_no"]
