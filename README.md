@@ -1,6 +1,6 @@
 # deservehy-rag
 
-电商智能客服：FastAPI + LangChain，SSE 流式多轮对话、售后诉求结构化提取、让模型自己决定调用业务工具的 Function Calling 链路，Milvus 原生 BM25 + BGE-M3 混合检索、bge-reranker 重排与引用拒答的知识库，以及 LangGraph 工作流编排（意图分流 + 强制检索闸门 + 手写 ReAct 主 Agent）。
+电商智能客服：FastAPI + LangChain，SSE 流式多轮对话、售后诉求结构化提取、让模型自己决定调用业务工具的 Function Calling 链路，Milvus 原生 BM25 + BGE-M3 混合检索、bge-reranker 重排与引用拒答的知识库，以及 LangGraph 工作流编排（指代消解 + 八类意图分流 + 强制检索闸门 + 退款售后子流程 + 手写 ReAct 主 Agent）。
 
 ## 功能
 
@@ -14,11 +14,13 @@
 - 会话挖掘：从最近历史会话抽取可复用问答，精确 + 语义去重后入库；默认关闭，可用脚本或服务内定时器触发。
 - 八张表：`conversations`、`messages`、`faq`、`tickets`、`knowledge_chunks`、`qa_extraction_staging`、`low_confidence_questions`、`faith_cases`。
 - 聊天页面：`http://127.0.0.1:8000/`，支持桌面与手机宽度。
-- Workflow 编排：LangGraph 图负责意图分流（七意图 → 知识/业务/投诉/闲聊四出口），知识类强制检索后过置信闸门，业务类直连主 Agent；主 Agent 是手写 ReAct 循环（最多 4 轮工具 + 1 次收敛，token 预算 6000）。
-- 投诉回合不进 Agent、不生成正文：固定安抚话术 + 前端「转人工」「建工单」两个独立按钮；转人工是前端模拟，建工单走 `POST /api/tickets` 写 `tickets` 表，重复点击幂等。（意图分类本身仍会调用一次模型；分类失败按默认意图 `售后` 走业务路由。）
+- Workflow 编排：LangGraph 图 `coref → intent → route`。先做指代消解（「它能退吗」补成「订单 1001 的商品能退吗」，已经明确的问题原样透传），再按八类意图（物流、订单、商品咨询、退款退货、售后、投诉、其他、闲聊）强制 JSON 输出 `intent` 与 `confidence`，低于置信阈值改判「其他」。知识类强制检索后过置信闸门，业务类直连主 Agent；主 Agent 是手写 ReAct 循环（最多 4 轮工具 + 1 次收敛，token 预算 6000）。
+- 退款退货 / 售后子流程：先取订单（缺号或查无都不让模型猜，下发订单卡片让用户点选），再把「这一单能不能退」做 2–3 条问法扩写并强制检索政策，最后把订单与政策证据交给主 Agent 判断。扩写只用于退款退货与售后，且在检索侧现查现用，知识库只保留一份原文。
+- 槽位与前端：订单号只从用户消息或演示订单数据里提取；退款原因不追问，提交时从固定 6 类原因里下拉选。订单选择器是聊天流里可点选的卡片，点中后自动回填「订单 1001」续跑；退款单是简单表单，走 `POST /api/refunds` 写 `tickets`（`ticket_type` 为「售后」）。
+- 投诉回合不进 Agent、不生成正文：固定安抚话术 + 前端「转人工」「建工单」两个独立按钮；转人工是前端模拟，建工单走 `POST /api/tickets` 写 `tickets` 表，重复点击幂等。（意图分类本身仍会调用一次模型；分类失败按默认意图 `其他` 走业务路由。）
 - 状态由 LangGraph checkpointer 持久化（默认 `.cache/langgraph/ch05.sqlite`），跨轮保留轮次与待确认操作。
 
-不做正式意图识别与指代消解的工程化（coref 直通、指代靠模型在 prompt 里自己看历史）；不做 MCP 接入与飞轮回灌。
+ch06 不做：不训练意图分类模型（用 prompt + 强制 JSON + few-shot）、不做跨会话长期记忆，也不做多级意图降级链路；不做 MCP 接入与飞轮回灌。
 
 ## 环境
 
@@ -49,7 +51,12 @@
 | `WORKFLOW_CHECKPOINT_PATH` | LangGraph 检查点路径，默认 `.cache/langgraph/ch05.sqlite`；填 `:memory:` 则只在进程内保存 |
 | `WORKFLOW_AGENT_MAX_STEPS` | 主 Agent 最多几轮生成（含工具往返），默认 4 |
 | `WORKFLOW_AGENT_TOKEN_BUDGET` | 单轮 token 预算，超预算提前收敛，默认 6000 |
-| `WORKFLOW_INTENT_TIMEOUT_SECONDS` | 意图分类单次调用超时，超时按默认意图 `售后` 兜底，默认 10 秒 |
+| `WORKFLOW_INTENT_TIMEOUT_SECONDS` | 意图分类单次调用超时，超时按默认意图 `其他` 兜底，默认 10 秒 |
+| `WORKFLOW_INTENT_MIN_CONFIDENCE` | 意图置信度低于该值改判「其他」，默认 0.6 |
+| `WORKFLOW_UNDERSTANDING_ENABLED` | 是否启用指代消解，默认开启；失败或超时退回原问题 |
+| `WORKFLOW_UNDERSTANDING_TIMEOUT_SECONDS` | 指代消解与问法扩写的单次调用超时，默认 10 秒 |
+| `WORKFLOW_QUERY_EXPANSION` | 是否在退款退货 / 售后子流程做问法扩写，默认开启 |
+| `WORKFLOW_QUERY_EXPANSION_MAX` | 每次扩写最多几条问法，默认 3（范围 2–3） |
 
 其余检索条数、批次大小、挖掘间隔、去重阈值都有默认值。
 
@@ -118,10 +125,20 @@ docker compose up -d
 ```bat
 .venv\Scripts\python.exe -X utf8 -m scripts.demo_agent_loop    :: 不用框架的手写 ReAct 循环（祛魅对照）
 .venv\Scripts\python.exe -X utf8 -m scripts.demo_workflow      :: 5 条验收场景，打印 SSE 事件；节点轨迹看日志里的 workflow node=
-.venv\Scripts\python.exe -X utf8 -m scripts.evaluate_intent    :: 43 题意图标注集，报告写 evals/reports/ch05-intent-<时间戳>.md
 ```
 
-`demo_workflow` 的 5 句分别是：知识类（强制检索 + 角标）、物流（Agent 自调工具）、投诉（两个操作按钮）、闲聊（不调模型）、多步（连查订单与物流）。
+`demo_workflow` 的 5 句分别是：知识类（强制检索 + 角标）、物流（Agent 自调工具）、投诉（两个操作按钮）、闲聊（固定话术，不生成正文）、多步（连查订单与物流）。
+
+分流器、指代消解与退款子流程（ch06）：
+
+```bat
+.venv\Scripts\python.exe -X utf8 -m scripts.demo_router        :: 三轮：这个能退吗 → 订单 1001 → 那物流呢，看指代补全与子流程事件
+.venv\Scripts\python.exe -X utf8 -m scripts.evaluate_intent    :: 47 题八类意图标注集，报告写 evals/reports/ch06-intent-<时间戳>.md
+.venv\Scripts\python.exe -X utf8 -m scripts.evaluate_router    :: 4 个多轮场景共 11 轮，意图与指代片段双门槛 1.00
+.venv\Scripts\python.exe -X utf8 -m scripts.evaluate_expansion :: 5 题问法扩写，检查 2–3 条与关键词覆盖，门槛 0.90
+```
+
+三个评估都需要真实上游，报告写 `evals/reports/ch06-*-<时间戳>.md`，不达标以非零码退出。
 
 其他命令：
 
@@ -147,6 +164,18 @@ docker compose up -d
 - 已知风险：0.30 阈值偏保守，C11 这类口语问法可能被误拒；9 题不可答全部正确拒答，说明当前阈值在“宁可拒答”一侧。调阈值前先补测更多口语样本，不要只对这份评估集调参。
 - 分桶看，BM25 在 C 口语与 E 多跳上明显弱于 dense，hybrid+rerank 把 C 口语 Recall@5 从 0.889 拉回 1.000，型号题（B）由 BM25 补足精确匹配。
 - 详细逐题明细与分桶数字见 `evals/reports/ch04-<时间戳>.json`。报告不含密钥；生成时间 2026-10-29 16:09。
+
+ch06 分流器（模型 deepseek-flash，2026-10-30）：
+
+| 评估 | 样本 | 结果 | 门槛 |
+|---|---|---|---|
+| 八类意图 | 47 题 | 准确率 1.000，平均置信度 0.954，低于 0.60 的样本 0 | 0.90 |
+| 多轮指代 + 意图 | 4 场景 11 轮 | 意图 1.000，指代片段命中 1.000 | 1.00 |
+| 问法扩写 | 5 题 | 2–3 条合规率 / 关键词覆盖 1.000 | 0.90 |
+
+- 意图评估里快速通道（确定性寒暄正则）命中 9 题，其余 38 题走模型；八类各自准确率均为 1.000，没有错例。
+- 多轮场景覆盖「物流 → 退款 → 物流」：第三轮「那快递呢」只补回订单号，不把上一轮的退货主题拼进来。
+- 扩写只对退款退货 / 售后生效；要求正好 2–3 条，超过 3 条会解析失败并回退原问题检索（宁可少扩，不错扩）。
 
 ## 低置信池与编造台账
 
@@ -187,7 +216,8 @@ FROM faith_cases ORDER BY last_seen_at DESC;
 - `status`：工具开始/结束（`phase`、`tool`、`label`，结束帧带 `ok`、`summary`、`duration_ms`）；
 - `citations`：`query_faq` 成功后、第二轮正文前下发，`items` 含 `n`、`chunk_id`、`question`、`answer`、`category`、`section_path`；
 - `token`：正文增量；
-- `actions`：待用户决定的操作（投诉回合的 `{"items":[{"id":"human","label":"转人工"},{"id":"ticket","label":"建工单"}],"turn":1}`）；按钮只在当轮消息下生效；
+- `actions`：待用户决定的操作（投诉回合的 `{"items":[{"id":"human","label":"转人工"},{"id":"ticket","label":"建工单"}],"turn":1}`；退款回合额外带 `refund`：`{"order_id":"1001","reasons":["商品破损或质量问题", "..."]}`）；按钮只在当轮消息下生效；
+- `orders`：退款子流程拿不到订单号或查无订单时下发 `{"items":[{"order_id":"1001","status":"...","amount":...,"created_at":"...","items":[...]}],"reason":"missing_order"}`，前端渲染成可点选卡片；
 - `done`：`finish_reason`；
 - `error`：`code`、`message`（例如 `database_unavailable`）。
 
@@ -195,13 +225,15 @@ FROM faith_cases ORDER BY last_seen_at DESC;
 
 `POST /api/tickets`，请求体 `{"conversation_id": 12, "client_id": "web-xxxxxxxx", "turn": 1}`：只能对当轮投诉 `offer` 建单（`turn` 来自 `actions` 帧，原样带回）；他人会话 403，offer 失效或轮次不符 409，建单失败 502，重复点击直接返回同一工单号。成功后写 `tickets` 表，`ticket_type` 为 `投诉`，描述以 `用户投诉：` 开头。
 
+`POST /api/refunds`，请求体 `{"conversation_id": 12, "client_id": "web-xxxxxxxx", "turn": 2, "reason": "商品破损或质量问题", "note": "可选，最多 200 字"}`：同样只对当轮退款 `offer` 生效。`reason` 必须是固定 6 类原因之一（否则 422），他人会话 403，offer 失效或轮次不符 409，建单失败 502；`offer.refund_no` 与进程内缓存双保险，重复提交返回同一单号。成功后写 `tickets` 表，`ticket_type` 为 `售后`，描述以 `退款申请：订单 <号>｜原因：<原因>` 开头。
+
 ## 目录
 
 ```
 app/          配置、模型、提示词、SSE 服务、工具、存储、ORM 模型、知识库模块、workflow 图与主 Agent 循环、网页
 scripts/      初始化数据库、知识导入/挖掘/演示、评估、初始化 SQL
 examples/     知识库示例文档
-evals/        80 题标注集与四策略评估报告
+evals/        80 题检索标注集、ch06 意图/多轮/扩写标注集与评估报告
 tests/        SQLite 自动测试 + MySQL/Milvus 集成检查（不可用时跳过）
 dev-notes/    分阶段开发留痕
 docs/         规格与实施计划

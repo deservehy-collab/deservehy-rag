@@ -2,12 +2,12 @@ import asyncio
 import json
 import logging
 
-from langchain_core.messages import SystemMessage
+from langchain_core.messages import HumanMessage, SystemMessage
 
 from app.agent.guards import ACTION_LABELS, AgentStream
 from app.agent.react import run_react
 from app.knowledge.quality import REFUSAL_TEXT
-from app.prompts import AGENT_ADDENDUM, KNOWLEDGE_HINT
+from app.prompts import AGENT_ADDENDUM, KNOWLEDGE_HINT, POLICY_HINT
 from app.tools import ToolExecutor, make_tools
 from app.workflow.actions import actions_payload, build_offer
 from app.workflow.events import emit
@@ -24,6 +24,13 @@ def evidence_block(evidence: list[dict]) -> str:
         )
     lines.append("【证据结束】")
     return "\n".join(lines)
+
+
+def order_block(order: dict) -> str:
+    items = "、".join(f"{item.get('name')}×{item.get('quantity')}"
+                     for item in order.get("items") or [])
+    return (f"【订单信息】\n订单号：{order.get('order_id')}｜状态：{order.get('status')}｜"
+            f"金额：{order.get('amount')}｜下单：{order.get('created_at')}\n商品：{items}")
 
 
 def _citation(item: dict) -> dict:
@@ -70,20 +77,30 @@ def make_agent_node(deps):
         question = state["question"]
         route = state.get("route") or "agent"
         tools = make_tools(deps.store, conversation_id, deps.knowledge)
-        if route == "knowledge":
+        if route in ("knowledge", "policy"):
             tools.pop("query_faq", None)
         executor = ToolExecutor(
             tools, timeout=deps.settings.tool_timeout_seconds, attempts=deps.settings.tool_max_attempts,
             timeouts={"query_faq": deps.settings.knowledge_tool_timeout_seconds},
         )
         messages = list(state["messages"])
+        resolved = state.get("resolved_question") or question
+        if resolved != question:
+            # 指代消解的结果必须进入模型上下文；否则选单后的「订单 1001」会被答成订单查询。
+            for index in range(len(messages) - 1, -1, -1):
+                if isinstance(messages[index], HumanMessage):
+                    messages[index] = HumanMessage(content=resolved)
+                    break
         base = messages[0].content if messages else ""
         extra = KNOWLEDGE_HINT + "\n" + evidence_block(state.get("evidence") or []) \
             if route == "knowledge" else AGENT_ADDENDUM
+        if route == "policy":
+            extra = (POLICY_HINT + "\n" + order_block(state.get("order") or {}) + "\n"
+                     + evidence_block(state.get("evidence") or []))
         messages[0] = SystemMessage(content=f"{base}\n\n{extra}")
 
         guard = AgentStream()
-        if route == "knowledge":
+        if route in ("knowledge", "policy"):
             guard.enable_citations({item["n"] for item in state.get("evidence") or []
                                     if isinstance(item.get("n"), int)})
 
@@ -102,11 +119,14 @@ def make_agent_node(deps):
         )
 
         actions = [name for name in guard.actions.actions if name in ACTION_LABELS]
+        if "refund" in actions and not (route == "policy" and state.get("order")):
+            actions = [name for name in actions if name != "refund"]
         offer = None
         if actions:
             turn = state.get("turn_count") or 1
-            offer = build_offer(turn, actions, question, state.get("intent") or "")
-            emit("actions", actions_payload(actions, turn))
+            offer = build_offer(turn, actions, question, state.get("intent") or "",
+                                state.get("order") if route == "policy" else None)
+            emit("actions", actions_payload(actions, turn, offer["refund"]))
         return {"reply": result.reply, "actions": actions, "offer": offer,
                 "finish_reason": result.finish_reason, "steps": result.steps,
                 "tool_calls": result.tool_calls, "tokens": result.tokens,

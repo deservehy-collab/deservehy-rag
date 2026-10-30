@@ -29,7 +29,7 @@ from app.knowledge.scheduler import MiningScheduler
 from app.knowledge.selfcheck import EvidenceSelfCheck
 from app.knowledge.vector_store import MilvusVectorStore
 from app.model import build_model
-from app.schemas import AfterSales, ChatRequest, ExtractRequest, TicketRequest
+from app.schemas import AfterSales, ChatRequest, ExtractRequest, RefundRequest, TicketRequest
 from app.service import CustomerService, ModelFailure
 from app.storage import ConversationStore
 from app.tools import ToolExecutor, make_tools
@@ -145,6 +145,7 @@ def create_app(
     # 检查点回写失败时记住 (会话, 轮次) → 工单号，同一进程内重试不会再建第二张；
     # 多进程部署需要数据库级幂等键，教学项目按单进程。
     application.state.ticket_ids: dict[tuple[int, int], str] = {}
+    application.state.refund_ids: dict[tuple[int, int], str] = {}
     web_directory = Path(__file__).resolve().parent / "web"
     application.mount("/assets", StaticFiles(directory=web_directory), name="assets")
 
@@ -238,6 +239,63 @@ def create_app(
             except (SQLAlchemyError, sqlite3.Error):
                 logger.warning("工单 %s 已创建，但写回检查点失败。", ticket_no, exc_info=True)
             return {"ticket_no": ticket_no, "status": "待处理"}
+
+    @application.post("/api/refunds")
+    async def create_refund(body: RefundRequest, request: Request):
+        service = request.app.state.service
+        workflow = request.app.state.workflow
+        store = service.store
+        try:
+            owner = await asyncio.to_thread(store.owner, body.conversation_id)
+        except (SQLAlchemyError, AttributeError):
+            raise ModelFailure("database_unavailable", DB_FAILURE_MESSAGE, 503) from None
+        if owner != body.client_id:
+            raise ModelFailure("forbidden", "无权操作该会话。", 403)
+
+        cache_key = (body.conversation_id, body.turn)
+        # 和 /api/tickets 同一条路径：锁住会话，避免新聊天清掉 offer 时退款单还按旧 offer 建。
+        async with workflow.lock(body.conversation_id):
+            try:
+                snapshot = await workflow.get_state(body.conversation_id)
+            except (SQLAlchemyError, sqlite3.Error):
+                raise ModelFailure("database_unavailable", DB_FAILURE_MESSAGE, 503) from None
+            offer = (snapshot.values or {}).get("offer") or {}
+            refund = offer.get("refund") or {}
+            if (offer.get("turn") != body.turn or not refund
+                    or "refund" not in (offer.get("actions") or [])):
+                raise ModelFailure("no_pending_offer", "这个操作已经失效，请重新提问。", 409)
+            if offer.get("refund_no"):
+                return {"refund_no": offer["refund_no"], "status": "待处理"}
+            cached = request.app.state.refund_ids.get(cache_key)
+            if cached:
+                return {"refund_no": cached, "status": "待处理"}
+
+            description = f"退款申请：订单 {refund.get('order_id')}｜原因：{body.reason}"
+            if body.note:
+                description += f"｜补充：{body.note}"
+            tools = make_tools(store, body.conversation_id, workflow.knowledge)
+            executor = ToolExecutor(
+                tools, timeout=service.settings.tool_timeout_seconds,
+                attempts=service.settings.tool_max_attempts,
+                timeouts={"query_faq": service.settings.knowledge_tool_timeout_seconds},
+            )
+            outcome = await executor.execute(
+                "create_ticket", {"description": description[:500], "ticket_type": "售后"})
+            if not outcome.ok:
+                logger.warning("退款申请创建失败：%s", outcome.code)
+                raise ModelFailure("ticket_failed", "退款申请暂时提交失败，请稍后重试。", 502)
+            try:
+                refund_no = json.loads(outcome.content)["data"]["ticket_no"]
+            except (TypeError, ValueError, KeyError):
+                logger.warning("工单工具返回了无法解析的结果。")
+                raise ModelFailure("ticket_failed", "退款申请暂时提交失败，请稍后重试。", 502) from None
+            request.app.state.refund_ids[cache_key] = refund_no
+            try:
+                await workflow.update_state(body.conversation_id,
+                                            {"offer": {**offer, "refund_no": refund_no}})
+            except (SQLAlchemyError, sqlite3.Error):
+                logger.warning("退款申请 %s 已创建，但写回检查点失败。", refund_no, exc_info=True)
+            return {"refund_no": refund_no, "status": "待处理"}
 
     @application.post("/api/after-sales/extract", response_model=AfterSales)
     async def extract(body: ExtractRequest, request: Request):

@@ -1,0 +1,4 @@
+{"name":"物流转退款再回物流","turns":[{"text":"订单 1001 的物流到哪了","intent":"物流","contains":[]},{"text":"那它能退吗","intent":"退款退货","contains":["1001"]},{"text":"那快递呢","intent":"物流","contains":["1001"]}]}
+{"name":"商品咨询转售后转物流","turns":[{"text":"保温杯多少钱","intent":"商品咨询","contains":[]},{"text":"收到的时候杯口裂了","intent":"售后","contains":["保温杯"]},{"text":"订单 1002 发了吗","intent":"订单","contains":["1002"]}]}
+{"name":"投诉后追问物流不串味","turns":[{"text":"我要投诉","intent":"投诉","contains":[]},{"text":"订单 1001 的物流到哪了","intent":"物流","contains":["1001"]},{"text":"那退款政策呢","intent":"退款退货","contains":[]}]}
+{"name":"指代省略与选单","turns":[{"text":"这个能退吗","intent":"退款退货","contains":[]},{"text":"订单 1001","intent":"退款退货","contains":["1001"]}]}

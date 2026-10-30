@@ -44,6 +44,7 @@ class RetrievalResult:
     evidence: list[Evidence] = field(default_factory=list)
     low_confidence: bool = False
     reason: str = ""
+    queries: list[str] = field(default_factory=list)
 
 
 class KnowledgeRetriever:
@@ -123,7 +124,8 @@ class KnowledgeRetriever:
         ordered = [(rows[item_id], scores[item_id]) for item_id, _ in hits
                    if item_id in rows and (not category or rows[item_id].category == category)]
         if not ordered:
-            return RetrievalResult(strategy=strategy, canonical_query=canonical, low_confidence=True, reason="no_hits")
+            return RetrievalResult(strategy=strategy, canonical_query=canonical, queries=[canonical],
+                                   low_confidence=True, reason="no_hits")
         items = [self._evidence(row, score) for row, score in ordered]
         low, reason = False, ""
         if strategy == "hybrid_rerank":
@@ -140,7 +142,94 @@ class KnowledgeRetriever:
             for numbered in number_evidence([item.item() for item in items]):
                 evidence.append(Evidence(**numbered))
         return RetrievalResult(strategy=strategy, canonical_query=canonical, items=items,
-                               evidence=evidence, low_confidence=low, reason=reason)
+                               evidence=evidence, low_confidence=low, reason=reason, queries=[canonical])
+
+    def retrieve_expanded(self, queries, *, category=None) -> RetrievalResult:
+        strategy = self.strategy
+        cleaned: list[str] = []
+        for query in queries or []:
+            text = (query or "").strip()
+            if text and text not in cleaned:
+                cleaned.append(text)
+        cleaned = cleaned[:5]
+        if not cleaned:
+            return RetrievalResult(strategy=strategy, canonical_query="", low_confidence=True,
+                                   reason="empty_query")
+        expr = _category_expr(category)
+        scores: dict[str, dict] = {}
+        order: list[str] = []
+        hits_by_query: dict[str, list[tuple[str, float]]] = {}
+        for query in cleaned:
+            if strategy == "dense":
+                hits = self.vector_store.dense_search(
+                    self.embedder.encode([query])[0], self.candidates, expr)
+                key = "dense"
+            elif strategy == "bm25":
+                hits = self.vector_store.sparse_search(
+                    expand_for_bm25(query) if self.synonyms else query, self.candidates, expr)
+                key = "bm25"
+            else:
+                sparse = expand_for_bm25(query) if self.synonyms else query
+                hits = self.vector_store.hybrid_search(
+                    self.embedder.encode([query])[0], sparse, self.candidates, self.rrf_k, expr)
+                key = "rrf"
+            hits_by_query[query] = hits
+            for item_id, value in hits:
+                if item_id not in scores:
+                    scores[item_id] = {key: value}
+                    order.append(item_id)
+                else:
+                    scores[item_id][key] = max(scores[item_id].get(key, value), value)
+        rows = self._rows(order)
+        ranked = sorted(
+            ((rows[item_id], scores[item_id]) for item_id in order
+             if item_id in rows and (not category or rows[item_id].category == category)),
+            key=lambda pair: max(pair[1].values()), reverse=True,
+        )
+        if not ranked:
+            return RetrievalResult(strategy=strategy, canonical_query=cleaned[0], queries=cleaned,
+                                   low_confidence=True, reason="no_hits")
+        items: list[Evidence] = []
+        seen: set[tuple] = set()
+        for row, score in ranked:
+            fingerprint = (row.section_path, row.answer)
+            if fingerprint in seen:
+                continue
+            seen.add(fingerprint)
+            items.append(self._evidence(row, dict(score)))
+        low, reason = False, ""
+        if strategy == "hybrid_rerank":
+            by_id = {item.id: item for item in items}
+            for query in cleaned:
+                targets: list[Evidence] = []
+                passages: list[str] = []
+                local_seen: set[tuple] = set()
+                for item_id, _ in hits_by_query[query]:
+                    row = rows.get(item_id)
+                    if row is None or (category and row.category != category):
+                        continue
+                    fingerprint = (row.section_path, row.answer)
+                    if fingerprint in local_seen:
+                        continue
+                    item = by_id.get(row.id)
+                    if item is None:
+                        continue
+                    local_seen.add(fingerprint)
+                    targets.append(item)
+                    passages.append(item.rerank_text())
+                for item, value in zip(targets, self.reranker.score(query, passages)):
+                    item.scores["rerank"] = max(item.scores.get("rerank", value), value)
+            items.sort(key=lambda item: item.scores["rerank"], reverse=True)
+            top = items[0].scores["rerank"]
+            if top < self.rerank_min_score:
+                low, reason = True, f"top1={top:.3f}<{self.rerank_min_score:.2f}"
+        items = items[:self.top_k]
+        evidence: list[Evidence] = []
+        if not low:
+            for numbered in number_evidence([item.item() for item in items]):
+                evidence.append(Evidence(**numbered))
+        return RetrievalResult(strategy=strategy, canonical_query=cleaned[0], queries=cleaned,
+                               items=items, evidence=evidence, low_confidence=low, reason=reason)
 
     def search(self, query: str, limit: int | None = None) -> list[dict]:
         result = self.retrieve(query)

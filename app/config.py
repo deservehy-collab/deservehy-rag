@@ -55,6 +55,11 @@ class Settings(BaseSettings):
     workflow_agent_max_steps: int = Field(default=4, ge=1, le=8)
     workflow_agent_token_budget: int = Field(default=6000, ge=1000, le=60000)
     workflow_intent_timeout_seconds: float = Field(default=10, gt=0, allow_inf_nan=False)
+    workflow_intent_min_confidence: float = Field(default=0.6, ge=0, le=1, allow_inf_nan=False)
+    workflow_understanding_enabled: bool = True
+    workflow_understanding_timeout_seconds: float = Field(default=10, gt=0, allow_inf_nan=False)
+    workflow_query_expansion: bool = True
+    workflow_query_expansion_max: int = Field(default=3, ge=2, le=3)
 
     @field_validator("openai_api_key")
     @classmethod

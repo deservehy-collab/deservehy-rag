@@ -1,13 +1,14 @@
 import re
 
-INTENTS = ("物流", "订单", "商品咨询", "退款退货", "售后", "投诉", "闲聊")
-DEFAULT_INTENT = "售后"
+INTENTS = ("物流", "订单", "商品咨询", "退款退货", "售后", "投诉", "其他", "闲聊")
+DEFAULT_INTENT = "其他"
 ROUTES = {
     "商品咨询": "knowledge",
-    "退款退货": "knowledge",
+    "退款退货": "policy",
     "物流": "agent",
     "订单": "agent",
-    "售后": "agent",
+    "售后": "policy",
+    "其他": "agent",
     "投诉": "complaint",
     "闲聊": "chitchat",
 }

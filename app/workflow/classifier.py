@@ -16,7 +16,7 @@ class IntentClassifier:
         self.structured = model.with_structured_output(IntentResult, method="json_mode")
         self.timeout = timeout
 
-    async def classify(self, question: str, previous_question: str | None = None) -> str:
+    async def classify(self, question: str, previous_question: str | None = None) -> IntentResult:
         payload = json.dumps({"question": question, "previous_question": previous_question or ""},
                              ensure_ascii=False)
         try:
@@ -26,7 +26,7 @@ class IntentClassifier:
                 )
             if not isinstance(result, IntentResult):
                 raise ValueError("Intent result has an unexpected type")
-            return result.intent
+            return result
         except Exception:
             logger.warning("意图分类失败，按默认意图 %s 继续。", DEFAULT_INTENT, exc_info=True)
-            return DEFAULT_INTENT
+            return IntentResult(intent=DEFAULT_INTENT, confidence=0.0)

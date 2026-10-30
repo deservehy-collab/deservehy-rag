@@ -36,12 +36,13 @@ class GatedStream(httpx.AsyncByteStream):
 @contextmanager
 def running_server(stream):
     settings = Settings(_env_file=None, openai_base_url="http://upstream.invalid/v1", openai_model="test-model",
-                        openai_api_key="test", request_timeout_seconds=5, workflow_checkpoint_path=":memory:")
+                        openai_api_key="test", request_timeout_seconds=5, workflow_checkpoint_path=":memory:",
+                        workflow_understanding_enabled=False)
     client = httpx.AsyncClient(transport=httpx.MockTransport(lambda request: httpx.Response(200, headers={"content-type": "text/event-stream"}, stream=stream)))
     model = build_model(settings, async_client=client)
     with sqlite_factory() as factory:
         config = uvicorn.Config(create_app(settings, model, session_factory=factory,
-                                           classifier=FixedClassifier("售后")), host="127.0.0.1", port=0, log_level="error", timeout_graceful_shutdown=2)
+                                           classifier=FixedClassifier("订单")), host="127.0.0.1", port=0, log_level="error", timeout_graceful_shutdown=2)
         sock = config.bind_socket()
         server = uvicorn.Server(config)
         started = threading.Event()

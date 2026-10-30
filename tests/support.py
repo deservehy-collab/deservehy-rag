@@ -84,7 +84,8 @@ def _settings(settings_overrides):
     # 检查点走内存，避免 pytest 往 .cache 落 sqlite。
     return Settings(_env_file=None, openai_base_url="http://upstream.invalid/v1", openai_model="test-model",
                     openai_api_key="test-secret-not-real", knowledge_query_rewrite=False,
-                    knowledge_self_check=False, workflow_checkpoint_path=":memory:",
+                    knowledge_self_check=False, workflow_understanding_enabled=False,
+                    workflow_checkpoint_path=":memory:",
                     **settings_overrides)
 
 
@@ -93,7 +94,9 @@ class FixedClassifier:
         self.intent = intent
 
     async def classify(self, question, previous_question=None):
-        return self.intent
+        from app.schemas import IntentResult
+
+        return IntentResult(intent=self.intent, confidence=1.0)
 
 
 @contextmanager
@@ -126,7 +129,7 @@ def api_with_db(handler, *, classifier=None, **settings_overrides):
         model = build_model(settings, async_client=async_client)
         try:
             with TestClient(create_app(settings, model, session_factory=factory,
-                                       classifier=classifier or FixedClassifier("售后"))) as client:
+                                       classifier=classifier or FixedClassifier("订单"))) as client:
                 yield client, seen, factory
         finally:
             asyncio.run(model.root_async_client.close())

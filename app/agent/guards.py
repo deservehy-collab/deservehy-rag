@@ -14,7 +14,7 @@ HOLD_SUFFIXES = ("DSM", "DS", "D", "<｜", "<", "｜")
 FALLBACK_TOOL = "抱歉，刚才的查询结果没能整理成回答，请再问一次，或转人工客服。"
 FALLBACK_PLAIN = "抱歉，刚才没能生成有效回答，请再问一次。"
 BUDGET_TEXT = "这段对话需要的处理步骤太多，我先停在这里。你可以补充更具体的信息，或转人工客服继续。"
-ACTION_LABELS = {"human": "转人工", "ticket": "建工单"}
+ACTION_LABELS = {"human": "转人工", "ticket": "建工单", "refund": "申请退款"}
 ACTION_PATTERN = re.compile(r"\[\[actions:([A-Za-z]+(?:,[A-Za-z]+)*)\]\]")
 ACTION_PREFIX = "[[actions:"
 

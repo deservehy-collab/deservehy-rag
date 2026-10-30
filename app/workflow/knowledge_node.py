@@ -20,10 +20,11 @@ async def record_low_confidence(pool, conversation_id, question, source, reason)
 def make_retrieve_node(deps):
     async def retrieve_node(state) -> dict:
         started = time.perf_counter()
+        question = state.get("resolved_question") or state["question"]
         emit("status", {"phase": "start", "tool": "retrieve", "label": "检索知识库"})
         try:
             result = await asyncio.wait_for(
-                asyncio.to_thread(deps.knowledge.retrieve, state["question"]),
+                asyncio.to_thread(deps.knowledge.retrieve, question),
                 deps.settings.knowledge_tool_timeout_seconds,
             )
         except TimeoutError:

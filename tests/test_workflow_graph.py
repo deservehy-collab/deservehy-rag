@@ -5,6 +5,7 @@ from langgraph.checkpoint.memory import InMemorySaver
 from sqlalchemy import select
 
 from app.agent.guards import FALLBACK_PLAIN
+from app.knowledge.retrieval import RetrievalResult
 from app.models import Message
 from app.prompts import CHITCHAT_TEXT, COMPLAINT_TEXT, chat_system
 from app.storage import ConversationStore
@@ -39,14 +40,35 @@ class CountingClassifier:
         self.calls = 0
 
     async def classify(self, question, previous_question=None):
+        from app.schemas import IntentResult
+
         self.calls += 1
-        return self.intent
+        return IntentResult(intent=self.intent, confidence=1.0)
 
 
-def build(factory, classifier, model=None):
-    deps = WorkflowDeps(model=model or NoModel(), settings=_settings({}), store=ConversationStore(factory),
-                        knowledge=None, pool=None, selfcheck=None, classifier=classifier)
-    return Workflow(deps=deps, checkpointer=InMemorySaver())
+class FixedResolver:
+    def __init__(self, question):
+        self.question = question
+
+    async def resolve(self, question, **kwargs):
+        return self.question
+
+
+class RecordingKnowledge:
+    def __init__(self, result):
+        self.result = result
+        self.seen = []
+
+    def retrieve(self, question, *args, **kwargs):
+        self.seen.append(question)
+        return self.result
+
+
+def build(factory, classifier, model=None, **overrides):
+    options = dict(model=model or NoModel(), settings=_settings({}), store=ConversationStore(factory),
+                   knowledge=None, pool=None, selfcheck=None, classifier=classifier)
+    options.update(overrides)
+    return Workflow(deps=WorkflowDeps(**options), checkpointer=InMemorySaver())
 
 
 def messages(question):
@@ -120,7 +142,36 @@ def test_turn_count_accumulates_and_offer_is_cleared_each_turn():
 def test_empty_reply_uses_fallback_plain():
     with sqlite_factory() as factory:
         store = ConversationStore(factory)
-        workflow = build(factory, FixedClassifier("售后"), EmptyModel())
+        workflow = build(factory, FixedClassifier("订单"), EmptyModel())
         conversation_id = store.start_turn(user_id="u4", message="随便")
         frames = run(workflow, conversation_id, "随便")
         assert frames == [("token", {"content": FALLBACK_PLAIN}), ("done", {"finish_reason": "stop"})]
+
+
+def test_policy_missing_order_emits_picker_before_done():
+    with sqlite_factory() as factory:
+        store = ConversationStore(factory)
+        workflow = build(factory, FixedClassifier("退款退货"))
+        conversation_id = store.start_turn(user_id="u6", message="这个能退吗")
+        frames = run(workflow, conversation_id, "这个能退吗")
+        assert [name for name, _ in frames] == ["token", "orders", "done"]
+        assert "点选" in frames[0][1]["content"]
+        orders = frames[1][1]
+        assert orders["reason"] == "missing_order"
+        assert [item["order_id"] for item in orders["items"]] == ["1001", "1002"]
+
+
+def test_knowledge_retrieval_uses_resolved_question():
+    knowledge = RecordingKnowledge(RetrievalResult(
+        strategy="hybrid_rerank", canonical_query="保温杯能装碳酸饮料吗",
+        low_confidence=True, reason="retrieval_low_conf"))
+    with sqlite_factory() as factory:
+        store = ConversationStore(factory)
+        workflow = build(factory, FixedClassifier("商品咨询"), knowledge=knowledge,
+                         resolver=FixedResolver("保温杯能装碳酸饮料吗"))
+        conversation_id = store.start_turn(user_id="u7", message="那这个呢")
+        frames = run(workflow, conversation_id, "那这个呢")
+        assert knowledge.seen == ["保温杯能装碳酸饮料吗"]
+        names = [name for name, _ in frames]
+        assert "status" in names
+        assert names[-2:] == ["token", "done"]

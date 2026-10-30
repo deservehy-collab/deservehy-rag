@@ -90,3 +90,65 @@ def test_blank_query_does_not_call_models(tmp_path):
     retriever = KnowledgeRetriever(make_db(tmp_path), FakeEmbedder(), FakeStore(), strategy="dense")
     result = retriever.retrieve("   ")
     assert result.low_confidence is True and result.items == []
+
+
+class PerQueryStore(FakeStore):
+    def __init__(self, mapping):
+        super().__init__()
+        self.mapping = mapping
+
+    def hybrid_search(self, vector, text, limit, rrf_k, expr=None):
+        return self.mapping.get(text, [])[:limit]
+
+
+class PerQueryReranker:
+    def __init__(self, mapping):
+        self.mapping = mapping
+        self.queries = []
+
+    def score(self, query, passages):
+        self.queries.append(query)
+        return self.mapping.get(query, [0.0] * len(passages))[:len(passages)]
+
+
+def test_retrieve_expanded_merges_ids_and_takes_best_rerank(tmp_path):
+    store = PerQueryStore({"退款": [("1", 0.03), ("2", 0.02)],
+                           "退货运费": [("2", 0.05), ("3", 0.01)]})
+    reranker = PerQueryReranker({"退款": [0.4, 0.2], "退货运费": [0.9, 0.7]})
+    retriever = KnowledgeRetriever(make_db(tmp_path), FakeEmbedder(), store, candidates=5, top_k=3,
+                                   reranker=reranker, rerank_min_score=0.3, synonyms=False)
+    result = retriever.retrieve_expanded(["退款", "退货运费"])
+    assert result.low_confidence is False
+    assert [item.id for item in result.items] == [2, 3, 1]
+    assert result.items[0].scores["rerank"] == 0.9
+    assert result.queries == ["退款", "退货运费"]
+    assert [item.n for item in result.evidence] == [1, 2, 3]
+
+
+def test_retrieve_expanded_dedupes_identical_content(tmp_path):
+    store = PerQueryStore({"a": [("1", 0.03), ("2", 0.02)]})
+    retriever = KnowledgeRetriever(make_db(tmp_path), FakeEmbedder(), store, candidates=5, top_k=3,
+                                   reranker=PerQueryReranker({"a": [0.8, 0.7]}), rerank_min_score=0.3,
+                                   synonyms=False)
+    with retriever.session_factory() as session:
+        row = session.get(KnowledgeChunk, 2)
+        row.section_path = "根 › 节1"
+        row.answer = "答1"
+        session.commit()
+    result = retriever.retrieve_expanded(["a"])
+    assert [item.id for item in result.items] == [1]
+
+
+def test_retrieve_expanded_refuses_when_top1_below_threshold(tmp_path):
+    store = PerQueryStore({"a": [("1", 0.03)]})
+    retriever = KnowledgeRetriever(make_db(tmp_path), FakeEmbedder(), store, candidates=3, top_k=3,
+                                   reranker=PerQueryReranker({"a": [0.1]}), rerank_min_score=0.3,
+                                   synonyms=False)
+    result = retriever.retrieve_expanded(["a"])
+    assert result.low_confidence is True and result.reason.startswith("top1=")
+
+
+def test_retrieve_expanded_blank_queries_do_not_hit_models(tmp_path):
+    retriever = KnowledgeRetriever(make_db(tmp_path), FakeEmbedder(), FakeStore(), strategy="dense")
+    result = retriever.retrieve_expanded(["  ", ""])
+    assert result.low_confidence is True and result.reason == "empty_query"

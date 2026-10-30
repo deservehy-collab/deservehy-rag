@@ -17,7 +17,9 @@ from app.prompts import chat_system, extraction_system
 from app.schemas import AfterSales, ChatRequest, ExtractRequest
 from app.storage import ConversationStore
 from app.workflow.classifier import IntentClassifier
+from app.workflow.coref import QuestionResolver
 from app.workflow.graph import Workflow, WorkflowDeps
+from app.knowledge.expansion import QueryExpander
 
 logger = logging.getLogger(__name__)
 
@@ -42,12 +44,21 @@ class CustomerService:
         self.store = store
         self.workflow = None
         if store is not None:
+            resolver = (
+                QuestionResolver(model, timeout=settings.workflow_understanding_timeout_seconds)
+                if settings.workflow_understanding_enabled else None
+            )
             self.workflow = Workflow(
                 deps=WorkflowDeps(
                     model=model, settings=settings, store=store, knowledge=knowledge,
                     pool=pool, selfcheck=selfcheck,
                     classifier=classifier or IntentClassifier(
                         model, timeout=settings.workflow_intent_timeout_seconds),
+                    resolver=resolver,
+                    expander=QueryExpander(
+                        model, enabled=settings.workflow_query_expansion,
+                        max_queries=settings.workflow_query_expansion_max,
+                        timeout=settings.workflow_understanding_timeout_seconds),
                 ),
                 checkpointer=checkpointer,
             )

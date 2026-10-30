@@ -58,7 +58,7 @@ def test_agent_stream_strips_actions_and_invalid_citations():
     assert stream.finish() == ""
     assert stream.text == "G500 不适用 B750[1]。"
     assert stream.actions.actions == ["human"]
-    assert ACTION_LABELS == {"human": "转人工", "ticket": "建工单"}
+    assert ACTION_LABELS == {"human": "转人工", "ticket": "建工单", "refund": "申请退款"}
 
 
 def test_agent_stream_falls_back_when_leaked_markup_blocks_text():

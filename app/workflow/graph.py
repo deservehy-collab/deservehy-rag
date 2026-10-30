@@ -10,8 +10,10 @@ from langgraph.checkpoint.sqlite.aio import AsyncSqliteSaver
 from langgraph.graph import END, START, StateGraph
 
 from app.workflow.agent_node import make_agent_node
-from app.workflow.input_nodes import coref_node, make_intent_node, route_node, route_selector
+from app.workflow.coref import make_coref_node
+from app.workflow.input_nodes import make_intent_node, route_node, route_selector
 from app.workflow.knowledge_node import gate_node, gate_selector, make_refuse_node, make_retrieve_node
+from app.workflow.policy_nodes import make_order_node, make_policy_retrieve_node, policy_selector
 from app.workflow.reply_nodes import chitchat_node, complaint_node, make_log_node
 from app.workflow.state import WorkflowState
 
@@ -27,6 +29,8 @@ class WorkflowDeps:
     pool: object = None
     selfcheck: object = None
     classifier: object = None
+    resolver: object = None
+    expander: object = None
 
 
 def _traced(name, node):
@@ -42,10 +46,12 @@ def _traced(name, node):
 
 def build_graph(deps: WorkflowDeps, checkpointer):
     builder = StateGraph(WorkflowState)
-    builder.add_node("coref", _traced("coref", coref_node))
+    builder.add_node("coref", _traced("coref", make_coref_node(deps)))
     builder.add_node("intent", _traced("intent", make_intent_node(deps)))
     builder.add_node("route", _traced("route", route_node))
     builder.add_node("retrieve", _traced("retrieve", make_retrieve_node(deps)))
+    builder.add_node("policy_order", _traced("policy_order", make_order_node(deps)))
+    builder.add_node("policy_retrieve", _traced("policy_retrieve", make_policy_retrieve_node(deps)))
     builder.add_node("gate", _traced("gate", gate_node))
     builder.add_node("refuse", _traced("refuse", make_refuse_node(deps)))
     builder.add_node("agent", _traced("agent", make_agent_node(deps)))
@@ -57,8 +63,12 @@ def build_graph(deps: WorkflowDeps, checkpointer):
     builder.add_edge("coref", "intent")
     builder.add_edge("intent", "route")
     builder.add_conditional_edges("route", route_selector, {
-        "knowledge": "retrieve", "agent": "agent", "complaint": "complaint", "chitchat": "chitchat",
+        "knowledge": "retrieve", "policy": "policy_order", "agent": "agent",
+        "complaint": "complaint", "chitchat": "chitchat",
     })
+    builder.add_conditional_edges("policy_order", policy_selector,
+                                  {"retrieve": "policy_retrieve", "log": "log"})
+    builder.add_edge("policy_retrieve", "gate")
     builder.add_edge("retrieve", "gate")
     builder.add_conditional_edges("gate", gate_selector, {"refuse": "refuse", "agent": "agent"})
     for name in ("refuse", "agent", "complaint", "chitchat"):

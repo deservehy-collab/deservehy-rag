@@ -42,6 +42,7 @@ class MultiRound:
     async def astream(self, messages):
         self.calls += 1
         self.prompt = messages[0].content
+        self.user_prompt = messages[-1].content
         self.shapes.append([type(item).__name__ for item in messages])
         for item in self.rounds.pop(0):
             yield item
@@ -72,7 +73,7 @@ class SelfCheck:
         return self.useful, "证据没有到账时间"
 
 
-def build(factory, model, knowledge=None, pool=None, selfcheck=None, classifier="售后"):
+def build(factory, model, knowledge=None, pool=None, selfcheck=None, classifier="物流"):
     deps = WorkflowDeps(model=model, settings=_settings({}), store=ConversationStore(factory),
                         knowledge=knowledge, pool=pool, selfcheck=selfcheck,
                         classifier=FixedClassifier(classifier))
@@ -191,3 +192,75 @@ def test_agent_route_multi_round_persists_tool_round_and_one_reply_row():
         assert [row.content for row in assistant if row.content] == [streamed]
         assert any(row.tool_calls and row.content is None for row in assistant)
         assert [row.role for row in rows] == ["user", "assistant", "tool", "assistant"]
+
+
+class AsyncReturn:
+    def __init__(self, value):
+        self.value = value
+
+    async def __call__(self, question):
+        return list(self.value)
+
+
+class ExpandedRetriever:
+    def retrieve_expanded(self, queries):
+        item = Evidence(7, "退款时效", "退款审核通过后 1-3 个工作日到账。",
+                        "售后政策", "售后政策 › 退款", "policy", {"rerank": 0.9}, 1)
+        return RetrievalResult("hybrid_rerank", queries[0], queries=list(queries),
+                               items=[item], evidence=[item])
+
+
+def latest_state(workflow, conversation_id):
+    async def read():
+        return (await workflow.get_state(conversation_id)).values
+    return asyncio.run(read())
+
+
+def test_policy_route_uses_order_and_evidence_and_drops_query_faq():
+    model = MultiRound([[chunk("这一单在七天无理由范围内，可以在订单页提交退款。[[actions:refund]]")]])
+    with sqlite_factory() as factory:
+        store = ConversationStore(factory)
+        conversation_id = store.start_turn(user_id="p1", message="这个能退吗")
+        workflow = build(factory, model, knowledge=ExpandedRetriever(), classifier="退款退货")
+        workflow.deps.expander = AsyncReturn(["订单 1001 这个能退吗", "退款政策"])
+        frames = run(workflow, conversation_id, "订单 1001 这个能退吗")
+        assert "query_faq" not in model.tool_names
+        assert "【订单信息】" in model.prompt and "订单号：1001" in model.prompt
+        assert "【知识库证据】" in model.prompt
+        actions = [payload for name, payload in frames if name == "actions"][0]
+        assert actions["items"] == [{"id": "refund", "label": "申请退款"}]
+        assert actions["refund"]["order_id"] == "1001"
+        values = latest_state(workflow, conversation_id)
+        assert values["offer"]["actions"] == ["refund"]
+        assert values["offer"]["refund"]["order_id"] == "1001"
+
+
+def test_refund_action_dropped_when_no_order():
+    model = MultiRound([[chunk("先帮你转人工。[[actions:refund,human]]")]])
+    with sqlite_factory() as factory:
+        store = ConversationStore(factory)
+        conversation_id = store.start_turn(user_id="p2", message="订单有问题")
+        workflow = build(factory, model, classifier="订单")
+        frames = run(workflow, conversation_id, "订单有问题")
+        actions = [payload for name, payload in frames if name == "actions"][0]
+        assert [item["id"] for item in actions["items"]] == ["human"]
+        assert "refund" not in actions
+
+
+class FixedResolver:
+    def __init__(self, question):
+        self.question = question
+
+    async def resolve(self, question, **kwargs):
+        return self.question
+
+
+def test_agent_sees_resolved_question():
+    model = MultiRound([[chunk("这一单可以退。[[actions:refund]]")]])
+    with sqlite_factory() as factory:
+        store = ConversationStore(factory)
+        conversation_id = store.start_turn(user_id="p3", message="订单 1001")
+        workflow = build(factory, model, knowledge=ExpandedRetriever(), classifier="退款退货")
+        workflow.deps.resolver = FixedResolver("订单 1001 的商品能退吗")
+        run(workflow, conversation_id, "订单 1001")
+        assert model.user_prompt == "订单 1001 的商品能退吗"

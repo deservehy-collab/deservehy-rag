@@ -7,10 +7,15 @@ from langchain_core.messages import BaseMessage
 class WorkflowState(TypedDict, total=False):
     conversation_id: int
     question: str
+    resolved_question: str
     previous_question: str | None
     messages: list[BaseMessage]
     intent: str
+    intent_confidence: float
     route: str
+    queries: list[str]
+    order: dict | None
+    pending: dict | None
     retrieval: dict
     evidence: list[dict]
     citations: list[dict]

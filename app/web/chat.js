@@ -298,7 +298,7 @@ async function createTicket(turn, button, note) {
   }
 }
 
-function addActionButtons(view, items, turn) {
+function addActionButtons(view, items, turn, refund = null) {
   if (!items.length) return;
   const row = document.createElement("div");
   row.className = "action-row";
@@ -318,6 +318,11 @@ function addActionButtons(view, items, turn) {
       });
     } else if (item.id === "ticket") {
       button.addEventListener("click", () => createTicket(turn, button, note));
+    } else if (item.id === "refund" && refund) {
+      button.addEventListener("click", () => {
+        button.disabled = true;
+        addRefundForm(view, refund, turn);
+      });
     } else {
       button.hidden = true;
     }
@@ -325,6 +330,93 @@ function addActionButtons(view, items, turn) {
   }
   row.append(note);
   view.stack.append(row);
+  scrollToLatest();
+}
+
+function addOrderCards(view, items) {
+  if (!items.length) return;
+  const box = document.createElement("div");
+  box.className = "order-cards";
+  const title = document.createElement("p");
+  title.className = "order-cards-title";
+  title.textContent = "选择要处理的订单";
+  box.append(title);
+  for (const order of items) {
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "order-card";
+    const head = document.createElement("span");
+    head.className = "order-card-head";
+    head.textContent = "订单 " + order.order_id;
+    const state = document.createElement("span");
+    state.className = "order-card-state";
+    state.textContent = order.status;
+    const goods = document.createElement("span");
+    goods.className = "order-card-goods";
+    goods.textContent = (order.items || []).map(item => item.name + " ×" + item.quantity).join("、");
+    const amount = document.createElement("span");
+    amount.className = "order-card-amount";
+    amount.textContent = "¥" + order.amount;
+    card.append(head, goods, amount, state);
+    card.addEventListener("click", () => {
+      for (const other of box.parentElement.querySelectorAll(".order-card")) other.disabled = true;
+      sendQuestion("订单 " + order.order_id);
+    });
+    box.append(card);
+  }
+  view.stack.append(box);
+  scrollToLatest();
+}
+
+function addRefundForm(view, refund, turn) {
+  const form = document.createElement("form");
+  form.className = "refund-form";
+  const title = document.createElement("p");
+  title.className = "refund-title";
+  title.textContent = "提交退款申请 · 订单 " + refund.order_id;
+  const reason = document.createElement("select");
+  reason.className = "refund-reason";
+  reason.setAttribute("aria-label", "退款原因");
+  for (const item of refund.reasons) {
+    const option = document.createElement("option");
+    option.value = item;
+    option.textContent = item;
+    reason.append(option);
+  }
+  const note = document.createElement("textarea");
+  note.className = "refund-note";
+  note.rows = 2;
+  note.maxLength = 200;
+  note.placeholder = "补充说明（选填）";
+  const submit = document.createElement("button");
+  submit.type = "submit";
+  submit.className = "refund-submit";
+  submit.textContent = "提交申请";
+  const status = document.createElement("p");
+  status.className = "refund-status";
+  form.append(title, reason, note, submit, status);
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+    submit.disabled = true;
+    try {
+      const response = await fetch("/api/refunds", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ conversation_id: conversationId, client_id: clientId(), turn,
+                               reason: reason.value, note: note.value.trim() || null }),
+      });
+      const payload = await response.json().catch(() => null);
+      if (!response.ok || !payload?.refund_no) throw new Error(payload?.code || "refund_failed");
+      status.textContent = "退款申请 " + payload.refund_no + " 已提交，客服会尽快审核。";
+      reason.disabled = note.disabled = true;
+      submit.hidden = true;
+      announcer.textContent = "退款申请已提交。";
+    } catch {
+      submit.disabled = false;
+      status.textContent = "提交失败，请稍后重试。";
+    }
+  });
+  view.stack.append(form);
   scrollToLatest();
 }
 
@@ -407,8 +499,11 @@ async function readStream(response, handlers) {
         }
         if (event === "actions") {
           if (Array.isArray(payload?.items) && Number.isInteger(payload?.turn)) {
-            handlers.onActions(payload.items, payload.turn);
+            handlers.onActions(payload.items, payload.turn, payload.refund || null);
           }
+        }
+        if (event === "orders") {
+          if (Array.isArray(payload?.items)) handlers.onOrders(payload.items);
         }
         if (event === "token") {
           if (typeof payload?.content !== "string") throw new Error("收到的回复格式不正确，请重新提问。");
@@ -447,20 +542,21 @@ function showFeedback(view, message, question, stopped = false) {
   announcer.textContent = message;
 }
 
-form.addEventListener("submit", async event => {
-  event.preventDefault();
-  const question = input.value.trim();
+async function sendQuestion(question) {
   if (!question || activeTurn) return;
   const suffix = Date.now() + "-" + Math.random().toString(36).slice(2, 8);
   const turn = { controller: new AbortController(), stopped: false, timedOut: false,
-    turnId: "local-" + suffix, citations: [], actionItems: [], actionTurn: 0 };
+    turnId: "local-" + suffix, citations: [], actionItems: [], actionTurn: 0,
+    refund: null, orderItems: [] };
   activeTurn = turn;
   input.value = "";
   welcome.hidden = true;
   document.querySelector("#conversation-date").hidden = false;
   followBottom = true;
   messageElement("user", question);
-  for (const stale of messages.querySelectorAll(".action-button:not(:disabled)")) stale.disabled = true;
+  for (const stale of messages.querySelectorAll(".action-button:not(:disabled), .order-card:not(:disabled), .refund-form :is(select, input, button)")) {
+    stale.disabled = true;
+  }
   const view = messageElement("assistant");
   view.article.classList.add("is-writing");
   const waiting = document.createElement("span");
@@ -499,7 +595,15 @@ form.addEventListener("submit", async event => {
         waiting.remove();
         turn.citations = items;
       },
-      onActions: (items, actionTurn) => { turn.actionItems = items; turn.actionTurn = actionTurn; },
+      onActions: (items, actionTurn, refund) => {
+        turn.actionItems = items;
+        turn.actionTurn = actionTurn;
+        turn.refund = refund;
+      },
+      onOrders: items => {
+        waiting.remove();
+        turn.orderItems = items;
+      },
       onText: text => {
         if (!text) return;
         waiting.remove();
@@ -514,7 +618,8 @@ form.addEventListener("submit", async event => {
     if (finishReason === "length") throw new Error("回复因长度限制而中断，请缩短问题后重新提问。");
     if (Array.from(answer.trim()).length > 12000) throw new Error("回复过长，无法继续接续这一轮。请开启新对话。");
     renderAnswer(view, answer, turn.citations);
-    if (turn.actionItems.length) addActionButtons(view, turn.actionItems, turn.actionTurn);
+    if (turn.orderItems.length) addOrderCards(view, turn.orderItems);
+    if (turn.actionItems.length) addActionButtons(view, turn.actionItems, turn.actionTurn, turn.refund);
     addAnswerFeedback(view, turn.turnId);
     history.push({ role: "user", content: question }, { role: "assistant", content: answer.trim() });
     history = history.slice(-100);
@@ -533,6 +638,11 @@ form.addEventListener("submit", async event => {
     setBusy(false);
     scrollToLatest();
   }
+}
+
+form.addEventListener("submit", event => {
+  event.preventDefault();
+  sendQuestion(input.value.trim());
 });
 
 input.addEventListener("input", updateInput);

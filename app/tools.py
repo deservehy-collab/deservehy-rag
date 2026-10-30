@@ -74,6 +74,11 @@ MISSING_TICKET_TYPE = "售后"
 MAX_SUMMARY = 60
 
 
+def list_orders() -> list[dict]:
+    """演示数据；真实系统应按用户查订单表。"""
+    return [dict(order) for order in ORDERS.values()]
+
+
 class OrderArgs(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
