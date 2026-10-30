@@ -1,7 +1,14 @@
 from pathlib import Path
 from typing import Any, Literal, Self
 
-from pydantic import AnyHttpUrl, Field, SecretStr, field_validator, model_validator
+from pydantic import (
+    AliasChoices,
+    AnyHttpUrl,
+    Field,
+    SecretStr,
+    field_validator,
+    model_validator,
+)
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ENV_FILE = Path(__file__).resolve().parents[1] / ".env"
@@ -17,9 +24,22 @@ class Settings(BaseSettings):
     openai_model: str = Field(min_length=1)
     openai_api_key: SecretStr
     openai_extra_body: dict[str, Any] = Field(default_factory=dict)
-    context_window_tokens: int = Field(default=8192, gt=0)
+    context_window_tokens: int = Field(
+        default=32768,
+        gt=0,
+        validation_alias=AliasChoices(
+            "MODEL_CONTEXT_WINDOW", "CONTEXT_WINDOW_TOKENS", "context_window_tokens"
+        ),
+    )
     max_output_tokens: int = Field(default=1024, gt=0)
-    token_safety_margin: int = Field(default=512, ge=0)
+    max_user_input_tokens: int = Field(default=2000, gt=0)
+    tool_result_max_tokens: int = Field(default=1200, gt=0)
+    token_safety_margin: int = Field(default=316, ge=0)
+    history_keep_rounds: int = Field(default=20, ge=1, le=100)
+    history_round_tokens: int = Field(default=600, ge=100, le=4000)
+    context_summary_enabled: bool = True
+    summary_timeout_seconds: float = Field(default=20, gt=0, allow_inf_nan=False)
+    log_file: str = Field(default="log/app.log", min_length=1, max_length=255)
     request_timeout_seconds: float = Field(default=60, gt=0, allow_inf_nan=False)
     store_name: str = Field(default="本店", min_length=1, max_length=100)
     db_host: str = Field(default="127.0.0.1", min_length=1, max_length=255)
@@ -36,7 +56,12 @@ class Settings(BaseSettings):
     milvus_uri: str = Field(default="http://127.0.0.1:19530", min_length=1, max_length=255)
     milvus_collection: str = Field(default="knowledge", min_length=1, max_length=64)
     knowledge_doc_dir: str = Field(default="examples/knowledge", min_length=1, max_length=255)
-    knowledge_top_k: int = Field(default=10, ge=1, le=20)
+    knowledge_top_k: int = Field(
+        default=10,
+        ge=1,
+        le=20,
+        validation_alias=AliasChoices("RERANK_TOP_K", "KNOWLEDGE_TOP_K", "knowledge_top_k"),
+    )
     knowledge_candidates: int = Field(default=50, ge=1, le=100)
     knowledge_rrf_k: int = Field(default=60, ge=1, le=1000)
     knowledge_rerank_model: str = Field(default=".cache/models/bge-reranker-v2-m3", min_length=1, max_length=255)
@@ -52,7 +77,12 @@ class Settings(BaseSettings):
     knowledge_mining_lookback_days: int = Field(default=7, ge=1, le=365)
     knowledge_dedupe_threshold: float = Field(default=0.95, ge=0, le=1, allow_inf_nan=False)
     workflow_checkpoint_path: str = Field(default=".cache/langgraph/ch05.sqlite", min_length=1, max_length=255)
-    workflow_agent_max_steps: int = Field(default=4, ge=1, le=8)
+    workflow_agent_max_steps: int = Field(
+        default=4,
+        ge=1,
+        le=8,
+        validation_alias=AliasChoices("MAX_AGENT_STEPS", "WORKFLOW_AGENT_MAX_STEPS", "workflow_agent_max_steps"),
+    )
     workflow_agent_token_budget: int = Field(default=6000, ge=1000, le=60000)
     workflow_intent_timeout_seconds: float = Field(default=10, gt=0, allow_inf_nan=False)
     workflow_intent_min_confidence: float = Field(default=0.6, ge=0, le=1, allow_inf_nan=False)

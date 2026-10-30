@@ -27,6 +27,28 @@ class Conversation(Base):
     )
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), onupdate=func.now())
+    summary_upto_msg_id: Mapped[int | None] = mapped_column(IdType, nullable=True)
+    layer1_from_msg_id: Mapped[int | None] = mapped_column(IdType, nullable=True)
+
+
+class ConversationSummary(Base):
+    __tablename__ = "conversation_summaries"
+    # SQLite 索引名全库唯一，MySQL 允许按表重名；ORM 用加前缀的名字。
+    __table_args__ = (
+        UniqueConstraint("conversation_id", "seq", name="uk_conversation_summaries_seq"),
+        Index("idx_summaries_conversation_upto", "conversation_id", "upto_msg_id"),
+        TABLE_OPTIONS,
+    )
+
+    id: Mapped[int] = mapped_column(IdType, primary_key=True, autoincrement=True)
+    conversation_id: Mapped[int] = mapped_column(
+        IdType, ForeignKey("conversations.id", name="fk_summaries_conversation"), nullable=False
+    )
+    seq: Mapped[int] = mapped_column(CountType, nullable=False)
+    from_msg_id: Mapped[int] = mapped_column(IdType, nullable=False)
+    upto_msg_id: Mapped[int] = mapped_column(IdType, nullable=False)
+    content: Mapped[str] = mapped_column(Text, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
 
 class Message(Base):

@@ -44,7 +44,9 @@ class Scripted:
 
     async def astream(self, messages):
         self.calls += 1
-        self.prompt = messages[0].content
+        self.messages = messages
+        # system 逐轮一致，检索提示与证据挂在最后一条 user 块里，断言看拼接全文。
+        self.prompt = "\n".join(str(item.content) for item in messages)
         yield AIMessageChunk(content=self.text, response_metadata={"finish_reason": "stop"})
 
 

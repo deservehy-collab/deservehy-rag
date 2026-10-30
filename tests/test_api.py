@@ -28,18 +28,24 @@ def test_chat_streams_actual_model_chunks_and_no_tools():
         ]
         assert "response_format" not in body and "stream_options" not in body
         assert body["messages"][0]["role"] == "system"
-        assert body["messages"][-1] == {"role": "user", "content": "保温杯有货吗"}
+        assert body["messages"][-2] == {"role": "user", "content": "保温杯有货吗"}
+        # 本轮编排提示挂在当前问题之后，system 才能逐轮字节一致。
+        assert body["messages"][-1]["role"] == "user"
+        assert "本轮由工作流编排" in body["messages"][-1]["content"]
 
 
 def test_second_turn_sends_actual_previous_reply():
     with api(lambda request: streamed(("订单", "00123"))) as (client, seen):
         first = client.post("/api/chat", json={"message": "记住订单00123"})
-        answer = "".join(data["content"] for event, data in events(first) if event == "token")
-        response = client.post("/api/chat", json={"message": "刚才的订单号是什么？", "history": [
-            {"role": "user", "content": "记住订单00123"}, {"role": "assistant", "content": answer},
-        ]})
+        first_events = events(first)
+        conversation_id = first_events[0][1]["conversation_id"]
+        answer = "".join(data["content"] for event, data in first_events if event == "token")
+        assert answer == "订单00123"
+        response = client.post("/api/chat", json={"message": "刚才的订单号是什么？",
+                                                 "conversation_id": conversation_id})
         assert response.status_code == 200
-        assert seen[1][1]["messages"][1:] == [
+        # 历史来自数据库，不再依赖客户端回传的 history。
+        assert seen[1][1]["messages"][1:-1] == [
             {"role": "user", "content": "记住订单00123"}, {"role": "assistant", "content": "订单00123"},
             {"role": "user", "content": "刚才的订单号是什么？"},
         ]

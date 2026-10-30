@@ -37,6 +37,7 @@ class GatedStream(httpx.AsyncByteStream):
 def running_server(stream):
     settings = Settings(_env_file=None, openai_base_url="http://upstream.invalid/v1", openai_model="test-model",
                         openai_api_key="test", request_timeout_seconds=5, workflow_checkpoint_path=":memory:",
+                        log_file=":memory:",
                         workflow_understanding_enabled=False)
     client = httpx.AsyncClient(transport=httpx.MockTransport(lambda request: httpx.Response(200, headers={"content-type": "text/event-stream"}, stream=stream)))
     model = build_model(settings, async_client=client)

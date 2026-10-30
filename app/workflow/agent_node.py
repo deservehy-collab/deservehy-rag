@@ -2,10 +2,9 @@ import asyncio
 import json
 import logging
 
-from langchain_core.messages import HumanMessage, SystemMessage
-
 from app.agent.guards import ACTION_LABELS, AgentStream
 from app.agent.react import run_react
+from app.context import build_model_messages, estimate_tokens, summary_log_lines
 from app.knowledge.quality import REFUSAL_TEXT
 from app.prompts import AGENT_ADDENDUM, KNOWLEDGE_HINT, POLICY_HINT
 from app.tools import ToolExecutor, make_tools
@@ -14,6 +13,25 @@ from app.workflow.events import emit
 from app.workflow.knowledge_node import record_low_confidence
 
 logger = logging.getLogger(__name__)
+
+ORCHESTRATION = "【本轮编排】\n"
+
+
+def _fallback_plan(state) -> dict:
+    """没有服务层计划时（例如单元测试直接跑图），退化成「State 消息原样进层 1」。"""
+    rows = []
+    messages = [item for item in state.get("messages") or [] if item.type in ("human", "ai")]
+    if messages and messages[-1].type == "human":
+        messages = messages[:-1]
+    for index, item in enumerate(messages):
+        try:
+            row_id = int(item.id)
+        except (TypeError, ValueError):
+            row_id = index
+        rows.append({"id": row_id, "role": "user" if item.type == "human" else "assistant",
+                     "content": str(item.content)})
+    return {"summary": "", "layer2": [], "layer1": rows,
+            "current_id": state.get("current_message_id") or 0}
 
 
 def evidence_block(evidence: list[dict]) -> str:
@@ -31,6 +49,18 @@ def order_block(order: dict) -> str:
                      for item in order.get("items") or [])
     return (f"【订单信息】\n订单号：{order.get('order_id')}｜状态：{order.get('status')}｜"
             f"金额：{order.get('amount')}｜下单：{order.get('created_at')}\n商品：{items}")
+
+
+def trailing_block(route: str, state: dict) -> str:
+    """规格 §7：摘要→证据→订单→本轮编排，摘要由 build_model_messages 负责。"""
+    if route == "knowledge":
+        parts = [evidence_block(state.get("evidence") or []), ORCHESTRATION + KNOWLEDGE_HINT]
+    elif route == "policy":
+        parts = [evidence_block(state.get("evidence") or []),
+                 order_block(state.get("order") or {}), ORCHESTRATION + POLICY_HINT]
+    else:
+        parts = [ORCHESTRATION + AGENT_ADDENDUM]
+    return "\n\n".join(parts)
 
 
 def _citation(item: dict) -> dict:
@@ -83,21 +113,19 @@ def make_agent_node(deps):
             tools, timeout=deps.settings.tool_timeout_seconds, attempts=deps.settings.tool_max_attempts,
             timeouts={"query_faq": deps.settings.knowledge_tool_timeout_seconds},
         )
-        messages = list(state["messages"])
         resolved = state.get("resolved_question") or question
-        if resolved != question:
-            # 指代消解的结果必须进入模型上下文；否则选单后的「订单 1001」会被答成订单查询。
-            for index in range(len(messages) - 1, -1, -1):
-                if isinstance(messages[index], HumanMessage):
-                    messages[index] = HumanMessage(content=resolved)
-                    break
-        base = messages[0].content if messages else ""
-        extra = KNOWLEDGE_HINT + "\n" + evidence_block(state.get("evidence") or []) \
-            if route == "knowledge" else AGENT_ADDENDUM
-        if route == "policy":
-            extra = (POLICY_HINT + "\n" + order_block(state.get("order") or {}) + "\n"
-                     + evidence_block(state.get("evidence") or []))
-        messages[0] = SystemMessage(content=f"{base}\n\n{extra}")
+        plan = state.get("context_plan") or _fallback_plan(state)
+        messages = build_model_messages(plan, resolved, trailing_block(route, state), deps.settings)
+        logger.info(
+            "model_ctx conv=%s turn=%s route=%s layer2=%s layer1=%s window=%s summary_tokens=%s "
+            "total_tokens=%s summary=%s messages=%s",
+            conversation_id, state.get("turn_count"), route,
+            len(plan.get("layer2") or []), len(plan.get("layer1") or []),
+            len(plan.get("layer2") or []) + len(plan.get("layer1") or []),
+            plan.get("summary_tokens", 0), estimate_tokens(messages),
+            summary_log_lines(plan.get("summary_segments")),
+            [{"role": m.type, "content": str(m.content)} for m in messages],
+        )
 
         guard = AgentStream()
         if route in ("knowledge", "policy"):
@@ -116,6 +144,7 @@ def make_agent_node(deps):
             timeout=deps.settings.request_timeout_seconds,
             guard=guard, on_tool_outcome=hook,
             store=deps.store, conversation_id=conversation_id,
+            tool_result_max_tokens=deps.settings.tool_result_max_tokens,
         )
 
         actions = [name for name in guard.actions.actions if name in ACTION_LABELS]

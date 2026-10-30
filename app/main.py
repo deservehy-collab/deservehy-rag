@@ -4,8 +4,10 @@ import logging
 import sqlite3
 from contextlib import AsyncExitStack, asynccontextmanager
 from pathlib import Path
+from typing import Annotated
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Query, Request
+from fastapi import Path as PathParam
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
@@ -16,7 +18,7 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from app.agent.guards import DB_FAILURE_MESSAGE
 from app.config import Settings
-from app.context import ContextBudgetError
+from app.context import ContextBudget, ContextBudgetError
 from app.database import build_database_url, build_engine, build_session_factory
 from app.knowledge.embedding import BgeM3Embedder
 from app.knowledge.ingest import KnowledgeIngestor
@@ -28,6 +30,7 @@ from app.knowledge.rewrite import QueryRewriter
 from app.knowledge.scheduler import MiningScheduler
 from app.knowledge.selfcheck import EvidenceSelfCheck
 from app.knowledge.vector_store import MilvusVectorStore
+from app.logging_config import configure_file_logging
 from app.model import build_model
 from app.schemas import AfterSales, ChatRequest, ExtractRequest, RefundRequest, TicketRequest
 from app.service import CustomerService, ModelFailure
@@ -51,6 +54,10 @@ def create_app(
         except ValidationError:
             raise RuntimeError("模型配置无效，请填写项目 .env 中的地址、模型名、密钥，并检查 token 预算。") from None
         resolved_model = model or build_model(resolved_settings)
+        configure_file_logging(resolved_settings.log_file)
+        problem = ContextBudget.from_settings(resolved_settings).startup_problem()
+        if problem:
+            logger.error("启动自检：%s", problem)
         engine = None
         factory = session_factory
         if factory is None:
@@ -134,6 +141,10 @@ def create_app(
             finally:
                 if scheduler is not None:
                     scheduler.shutdown()
+                service = getattr(application.state, "service", None)
+                if service is not None and service.summary is not None:
+                    # 后台摘要可能还在写库，先排空再关连接池，免得任务落在已 dispose 的 engine 上。
+                    await service.summary.wait()
                 vector_store.close()
                 if model is None:
                     await resolved_model.root_async_client.close()
@@ -141,7 +152,7 @@ def create_app(
                 if engine is not None:
                     engine.dispose()
 
-    application = FastAPI(title="电商智能客服 · ch05", lifespan=lifespan)
+    application = FastAPI(title="电商智能客服 · ch07", lifespan=lifespan)
     # 检查点回写失败时记住 (会话, 轮次) → 工单号，同一进程内重试不会再建第二张；
     # 多进程部署需要数据库级幂等键，教学项目按单进程。
     application.state.ticket_ids: dict[tuple[int, int], str] = {}
@@ -168,10 +179,10 @@ def create_app(
     @application.post("/api/chat")
     async def chat(body: ChatRequest, request: Request):
         service = request.app.state.service
-        messages = service.prepare_chat(body)
+        service.preflight(body)
 
         async def encode_events():
-            stream = service.respond(body, messages)
+            stream = service.respond(body)
             try:
                 async for event, payload in stream:
                     yield f"event: {event}\ndata: {json.dumps(payload, ensure_ascii=False)}\n\n"
@@ -296,6 +307,34 @@ def create_app(
             except (SQLAlchemyError, sqlite3.Error):
                 logger.warning("退款申请 %s 已创建，但写回检查点失败。", refund_no, exc_info=True)
             return {"refund_no": refund_no, "status": "待处理"}
+
+    @application.get("/api/conversations")
+    async def list_conversations(
+        request: Request,
+        client_id: Annotated[str, Query(min_length=8, max_length=64, pattern=r"[A-Za-z0-9_-]+")],
+    ):
+        store = request.app.state.service.store
+        try:
+            items = await asyncio.to_thread(store.list_conversations, client_id)
+        except (SQLAlchemyError, sqlite3.Error):
+            raise ModelFailure("database_unavailable", DB_FAILURE_MESSAGE, 503) from None
+        return {"items": items}
+
+    @application.get("/api/conversations/{conversation_id}/messages")
+    async def conversation_messages(
+        request: Request,
+        conversation_id: Annotated[int, PathParam(ge=1, le=2 ** 63 - 1)],
+        client_id: Annotated[str, Query(min_length=8, max_length=64, pattern=r"[A-Za-z0-9_-]+")],
+    ):
+        store = request.app.state.service.store
+        try:
+            rows = await asyncio.to_thread(store.conversation_messages, conversation_id, client_id)
+        except (SQLAlchemyError, sqlite3.Error):
+            raise ModelFailure("database_unavailable", DB_FAILURE_MESSAGE, 503) from None
+        # 会话不存在也回 403，避免把别人的会话 id 探测出来。
+        if rows is None:
+            raise ModelFailure("forbidden", "无权访问该会话。", 403)
+        return {"conversation_id": conversation_id, "items": rows}
 
     @application.post("/api/after-sales/extract", response_model=AfterSales)
     async def extract(body: ExtractRequest, request: Request):

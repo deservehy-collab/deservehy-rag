@@ -1,7 +1,19 @@
+import os
+
 import pytest
 
 from app.config import Settings
 from app.knowledge.vector_store import MilvusVectorStore
+
+
+@pytest.fixture(autouse=True)
+def restore_environ():
+    # pymilvus 首次连接时会 load_dotenv()，把 .env 灌进 os.environ，污染同进程后续用例
+    # （例如 Settings(_env_file=None) 会读到本机窗口配置）。用完还原。
+    snapshot = dict(os.environ)
+    yield
+    os.environ.clear()
+    os.environ.update(snapshot)
 
 
 def live_store_or_skip() -> MilvusVectorStore:

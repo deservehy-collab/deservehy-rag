@@ -11,7 +11,7 @@ from app.agent.guards import (
     MAX_TOOL_CALLS,
     AgentStream,
 )
-from app.context import estimate_tokens
+from app.context import clip_text, estimate_tokens
 from app.tools import TOOL_LABELS, ToolExecutor, ToolOutcome
 
 StatusFn = Callable[[dict], None]
@@ -44,6 +44,7 @@ async def run_react(
     on_tool_outcome: OutcomeFn | None = None,
     store=None,
     conversation_id: int | None = None,
+    tool_result_max_tokens: int | None = None,
 ) -> ReActResult:
     guard = guard or AgentStream()
     bound = model.bind_tools(list(tools.values()))
@@ -126,4 +127,7 @@ async def run_react(
                 on_token(forced)
                 guard.text += forced
                 return ReActResult(guard.text, "stop", steps, total, estimate_tokens(work), "tool_refusal")
-            work.append(ToolMessage(content=outcome.content, tool_call_id=item["id"], name=item["name"]))
+            work.append(ToolMessage(
+                content=clip_text(outcome.content, tool_result_max_tokens) if tool_result_max_tokens else outcome.content,
+                tool_call_id=item["id"], name=item["name"],
+            ))

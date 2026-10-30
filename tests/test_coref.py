@@ -88,3 +88,28 @@ def test_coref_node_keeps_complete_question():
     deps = SimpleNamespace(resolver=QuestionResolver(model, timeout=5), settings=settings())
     result = asyncio.run(make_coref_node(deps)(state(question="订单 1001 的保温杯能退吗")))
     assert result["resolved_question"] == "订单 1001 的保温杯能退吗"
+
+
+def test_resolver_puts_summary_before_recent_window():
+    model = FakeModel(ResolvedQuestion(question="订单 1001 的退货后来怎么说"))
+    resolver = QuestionResolver(model, timeout=5)
+    asyncio.run(resolver.resolve("最开始那个订单后来怎么说", history=[("user", "人工几点在线")],
+                                 summary="用户反馈订单 1001 保温杯漏水，要求退货退款。"))
+    prompt = model.structured.prompts[0]
+    assert "【会话摘要】用户反馈订单 1001 保温杯漏水" in prompt
+    assert prompt.index("【会话摘要】") < prompt.index("人工几点在线")
+
+
+def test_resolver_without_summary_keeps_plain_history():
+    model = FakeModel(ResolvedQuestion(question="它能退吗"))
+    asyncio.run(QuestionResolver(model, timeout=5).resolve("它能退吗", history=[("user", "到货了")]))
+    assert "【会话摘要】" not in model.structured.prompts[0]
+
+
+def test_coref_node_passes_plan_summary_to_resolver():
+    model = FakeModel(ResolvedQuestion(question="订单 1001 的退货后来怎么说"))
+    deps = SimpleNamespace(resolver=QuestionResolver(model, timeout=5), settings=settings())
+    plan_state = state(question="最开始那个订单后来怎么说")
+    plan_state["context_plan"] = {"summary": "用户反馈订单 1001 保温杯漏水，要求退货退款。"}
+    asyncio.run(make_coref_node(deps)(plan_state))
+    assert "【会话摘要】用户反馈订单 1001" in model.structured.prompts[0]

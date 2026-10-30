@@ -35,6 +35,10 @@
       </a>
       <div class="sidebar-content">
         <div class="current-space"><svg class="icon"><use href="#icon-chat"/></svg><span>在线咨询</span><span class="space-dot"></span></div>
+        <section class="history" aria-label="最近对话">
+          <div class="history-head"><span>最近对话</span><span class="history-count" id="history-count"></span></div>
+          <div class="conversation-list" id="conversation-list"></div>
+        </section>
         <div class="sidebar-intro">
           <h2>好好聊，<br>慢慢解决。</h2>
           <p>从一个购物小问题开始，<br>一起理清接下来怎么办。</p>
@@ -55,7 +59,10 @@
           <div class="assistant-avatar"><svg class="icon"><use href="#icon-chat"/></svg></div>
           <div><h1>客服助手</h1><p id="header-status">关于购物，尽管问我</p></div>
         </div>
-        <button class="new-chat" id="new-chat" type="button" title="清空当前对话，重新开始"><svg class="icon"><use href="#icon-plus"/></svg><span>新对话</span></button>
+        <div class="header-actions">
+          <button class="history-toggle" id="history-toggle" type="button" aria-label="查看历史对话" aria-expanded="false" aria-controls="history-drawer"><svg class="icon"><use href="#icon-chat"/></svg><span>历史</span></button>
+          <button class="new-chat" id="new-chat" type="button" title="开一个新会话，历史对话会保留在列表里"><svg class="icon"><use href="#icon-plus"/></svg><span>新对话</span></button>
+        </div>
       </header>
 
       <div class="conversation-area">
@@ -108,6 +115,17 @@
         <h3>原文</h3>
         <p class="citation-answer"></p>
       </div>
+    </aside>
+  </div>
+
+  <div class="history-drawer" id="history-drawer" hidden>
+    <div class="history-scrim" data-close-history></div>
+    <aside class="history-sheet" role="dialog" aria-modal="true" aria-label="最近对话" tabindex="-1">
+      <header class="history-sheet-head">
+        <h2>最近对话</h2>
+        <button class="history-close" type="button" data-close-history aria-label="关闭历史对话">×</button>
+      </header>
+      <div class="conversation-list" id="conversation-list-mobile"></div>
     </aside>
   </div>
 

@@ -1,6 +1,6 @@
 # deservehy-rag
 
-电商智能客服：FastAPI + LangChain，SSE 流式多轮对话、售后诉求结构化提取、让模型自己决定调用业务工具的 Function Calling 链路，Milvus 原生 BM25 + BGE-M3 混合检索、bge-reranker 重排与引用拒答的知识库，以及 LangGraph 工作流编排（指代消解 + 八类意图分流 + 强制检索闸门 + 退款售后子流程 + 手写 ReAct 主 Agent）。
+电商智能客服：FastAPI + LangChain，SSE 流式多轮对话、售后诉求结构化提取、让模型自己决定调用业务工具的 Function Calling 链路，Milvus 原生 BM25 + BGE-M3 混合检索、bge-reranker 重排与引用拒答的知识库，LangGraph 工作流编排（指代消解 + 八类意图分流 + 强制检索闸门 + 退款售后子流程 + 手写 ReAct 主 Agent），以及三层上下文管理（原文 / 规则截短 / 异步梗概 + token 预算 + 多会话侧栏）。
 
 ## 功能
 
@@ -12,15 +12,23 @@
 - 评估：80 题标注集，对比 dense / BM25 / hybrid / hybrid+rerank 四策略的 Recall@5、Recall@10、MRR@10 与不可答题拒答率，并对 12 题做忠实度裁判，编造个案写入 `faith_cases`。
 - 知识库：Markdown 文档按标题层级切分入库，FAQ 与会话挖掘问答同库；MySQL 存正文与状态，Milvus 存 dense 向量、BM25 文本与过滤字段，双写可断点续跑。
 - 会话挖掘：从最近历史会话抽取可复用问答，精确 + 语义去重后入库；默认关闭，可用脚本或服务内定时器触发。
-- 八张表：`conversations`、`messages`、`faq`、`tickets`、`knowledge_chunks`、`qa_extraction_staging`、`low_confidence_questions`、`faith_cases`。
+- 九张表：`conversations`、`messages`、`conversation_summaries`、`faq`、`tickets`、`knowledge_chunks`、`qa_extraction_staging`、`low_confidence_questions`、`faith_cases`。
 - 聊天页面：`http://127.0.0.1:8000/`，支持桌面与手机宽度。
 - Workflow 编排：LangGraph 图 `coref → intent → route`。先做指代消解（「它能退吗」补成「订单 1001 的商品能退吗」，已经明确的问题原样透传），再按八类意图（物流、订单、商品咨询、退款退货、售后、投诉、其他、闲聊）强制 JSON 输出 `intent` 与 `confidence`，低于置信阈值改判「其他」。知识类强制检索后过置信闸门，业务类直连主 Agent；主 Agent 是手写 ReAct 循环（最多 4 轮工具 + 1 次收敛，token 预算 6000）。
 - 退款退货 / 售后子流程：先取订单（缺号或查无都不让模型猜，下发订单卡片让用户点选），再把「这一单能不能退」做 2–3 条问法扩写并强制检索政策，最后把订单与政策证据交给主 Agent 判断。扩写只用于退款退货与售后，且在检索侧现查现用，知识库只保留一份原文。
 - 槽位与前端：订单号只从用户消息或演示订单数据里提取；退款原因不追问，提交时从固定 6 类原因里下拉选。订单选择器是聊天流里可点选的卡片，点中后自动回填「订单 1001」续跑；退款单是简单表单，走 `POST /api/refunds` 写 `tickets`（`ticket_type` 为「售后」）。
 - 投诉回合不进 Agent、不生成正文：固定安抚话术 + 前端「转人工」「建工单」两个独立按钮；转人工是前端模拟，建工单走 `POST /api/tickets` 写 `tickets` 表，重复点击幂等。（意图分类本身仍会调用一次模型；分类失败按默认意图 `其他` 走业务路由。）
-- 状态由 LangGraph checkpointer 持久化（默认 `.cache/langgraph/ch05.sqlite`），跨轮保留轮次与待确认操作。
+- 状态由 LangGraph checkpointer 持久化（默认 `.cache/langgraph/ch05.sqlite`），跨轮保留轮次与待确认操作；`State.messages` 挂 `add_messages` reducer，节点只吐新消息，完整历史靠 checkpoint 落盘，调模型前另整理裁过带摘要的精简版。
+- 三层上下文（只管当前会话）：按离当前轮的远近切三段。层 1 最近几轮留原文一个字不压；层 2 按规则截短（用户原话不动、客服答复只留开头几十字、大块工具结果换成一行标识）；层 3 更早的异步压成一段段梗概。两个锚点 `summary_upto_msg_id`、`layer1_from_msg_id` 只挪 id、不搬数据，梗概单独存 `conversation_summaries`。
+- 异步摘要：层 2 攒到超预算就在后台起摘要任务，压成新段追加进摘要表、边界追到层 1 起点，不阻塞当前回复。一段段攒、压完不回头重写，旧梗概只作背景不参与合并；一批最多 20 条，积压超过一批时从最老的一端往后分批，**锚点只推到本批真正喂进模型的最后一行**，绝不越过摘要器没看过的消息。触发只看 token 用量，不数条数；摘要失败或超时不推进锚点，下一轮继续触发。
+- 调模型的固定顺序：system 人设 / 红线 / 工具定义打头且每轮一样（吃到前缀缓存）→ 层 2 截短对话 → 最近几轮原文 → 当前用户这句话 → 早期梗概与检索证据合成一条尾随块挂在那句之后。梗概不单独占一条 system，否则上游把 system 上提会让前缀缓存作废。
+- token 预算从窗口倒推：扣掉系统提示、检索证据、注入梗概、输出预留、安全余量、当前轮 ReAct 瞬时峰值，剩下归历史；历史预算取「想留轮数 × 每轮稳态占用」与「窗口匀得出的」较小者，再按层 1 七成 / 层 2 三成分配。启动自检，连一轮都装不下就打报警日志；中文按 1 字 ≈ 1 token、其他 3.5 字符 ≈ 1 token 折算，与预算同一口径。
+- 上下文可观测：每轮调模型前把实际上下文原样写进 `log/app.log`——主力 Agent 打 `model_ctx`（含 `messages=` 完整载荷、`window=`、`layer2=`/`layer1=`/`summary_tokens=`/`total_tokens=`），指代消解与意图共用的历史打 `history_ctx`（每轮必打，闲聊兜底轮也可见）；后台摘要的 trigger / start / done / skip / failed 全留痕，带覆盖边界与耗时。
+- 多会话侧栏：聊天页左侧列该用户全部会话（新在前、首问预览、`已摘要` 或消息条数），点击切换并回载历史原文继续聊；「新对话」只开新会话，不动历史。手机宽度改成抽屉，加载失败静默降级、不影响聊天。数据来自两个只读接口 `GET /api/conversations`、`GET /api/conversations/{id}/messages`（按 `client_id` 鉴权，别人的会话一律 403）。
 
 ch06 不做：不训练意图分类模型（用 prompt + 强制 JSON + few-shot）、不做跨会话长期记忆，也不做多级意图降级链路；不做 MCP 接入与飞轮回灌。
+
+ch07 不做：只用同会话内的三层结构，不做语义检索捞历史、不按主题重要度留关键事实；不跨会话、不存用户画像。
 
 ## 环境
 
@@ -57,6 +65,20 @@ ch06 不做：不训练意图分类模型（用 prompt + 强制 JSON + few-shot�
 | `WORKFLOW_UNDERSTANDING_TIMEOUT_SECONDS` | 指代消解与问法扩写的单次调用超时，默认 10 秒 |
 | `WORKFLOW_QUERY_EXPANSION` | 是否在退款退货 / 售后子流程做问法扩写，默认开启 |
 | `WORKFLOW_QUERY_EXPANSION_MAX` | 每次扩写最多几条问法，默认 3（范围 2–3） |
+| `MODEL_CONTEXT_WINDOW` | 模型窗口，默认 32768（兼容旧名 `CONTEXT_WINDOW_TOKENS`） |
+| `MAX_OUTPUT_TOKENS` | 输出预留，默认 1024 |
+| `TOKEN_SAFETY_MARGIN` | 安全余量，默认 316（与 System Prompt 实测 1234 合计 1550，按演示配置校准） |
+| `MAX_USER_INPUT_TOKENS` | 当前问题上限，默认 2000；超了直接 422，不启动 SSE |
+| `TOOL_RESULT_MAX_TOKENS` | 单次工具结果峰值预留，默认 1200 |
+| `MAX_AGENT_STEPS` | ReAct 步数（预算按步数 × 工具结果峰值），默认 4（兼容 `WORKFLOW_AGENT_MAX_STEPS`） |
+| `RERANK_TOP_K` | 证据条数，预算按 400/条，默认 10（兼容 `KNOWLEDGE_TOP_K`） |
+| `HISTORY_KEEP_ROUNDS` | 想留的历史轮数，默认 20 |
+| `HISTORY_ROUND_TOKENS` | 每轮稳态占用，默认 600（范围 100–4000） |
+| `CONTEXT_SUMMARY_ENABLED` | 后台摘要开关，默认开启；关闭后层 2 超预算只做层 1 降级 |
+| `SUMMARY_TIMEOUT_SECONDS` | 单次摘要调用超时，默认 20 秒；超时不推进锚点 |
+| `LOG_FILE` | 上下文日志路径，默认 `log/app.log`（自动建目录）；填 `:memory:` 关闭落盘 |
+
+预算不是配出来的一个数，是从窗口倒推：`历史预算 = min(HISTORY_KEEP_ROUNDS × HISTORY_ROUND_TOKENS, 窗口 − 输出 − 余量 − 系统 − 证据 − 梗概 − ReAct 峰值)`，再按层 1 七成 / 层 2 三成分配。演示配置（18000 / 2000 / 2000 / 3 步 / 1200 / Top-5）实算得 **历史 5650、层 1 3954、层 2 1695**；默认 32768 得 12000 / 8399 / 3600。
 
 其余检索条数、批次大小、挖掘间隔、去重阈值都有默认值。
 
@@ -84,6 +106,16 @@ docker compose up -d
 ```
 
 `scripts.init_db` 与 `scripts.ingest_knowledge` 均可重复执行：前者建库建表补 FAQ 种子，后者按内容幂等导入并在必要时补向量。
+
+### 数据迁移（ch07）
+
+新库直接 `python -m scripts.init_db`，ORM 里已带 `conversation_summaries` 表与 `conversations` 的两个锚点列。已有库要单独跑一次迁移：
+
+```bat
+docker compose exec -T mysql mysql -uroot -p%DB_PASSWORD% xiaolin_ch02 < scripts\init_sql\005_context.sql
+```
+
+这条只跑一次：`ALTER TABLE` 不加 `IF NOT EXISTS`，重复执行报 `duplicate column name`，那说明库已经升过，可以忽略。锚点列允许 NULL，老会话不用回填——第一次降级或摘要时按当前边界写进去。
 
 ## 演示与验收
 
@@ -140,6 +172,33 @@ docker compose up -d
 
 三个评估都需要真实上游，报告写 `evals/reports/ch06-*-<时间戳>.md`，不达标以非零码退出。
 
+上下文管理（ch07）：
+
+```bat
+:: 演示配置：窗口 18000，28 轮同一会话，看三层级联 + 后台摘要 + 靠梗概答题
+set MODEL_CONTEXT_WINDOW=18000&& set MAX_OUTPUT_TOKENS=2000&& set MAX_USER_INPUT_TOKENS=2000&& set MAX_AGENT_STEPS=3&& set TOOL_RESULT_MAX_TOKENS=1200&& set RERANK_TOP_K=5
+.venv\Scripts\python.exe -X utf8 -m scripts.demo_context
+
+:: 默认窗口 32768 跑 20 轮：不该出现降级与摘要
+.venv\Scripts\python.exe -X utf8 -m scripts.demo_context --default-window --turns 20
+
+:: 只对已有会话追问末问（梗概已落库时补验「靠梗概答题」，省上游额度）
+.venv\Scripts\python.exe -X utf8 -m scripts.demo_context --only-final 89
+
+:: 摘要评估集（5 例，门槛 0.90，需真实上游）
+.venv\Scripts\python.exe -X utf8 -m scripts.evaluate_summary
+```
+
+`demo_context` 每轮打印路由、层 2 / 层 1 / 滑窗条数、梗概与总 token、两个锚点 id，跑完把本轮新增的 `layer1 降级` / `summary trigger` / `summary done` 日志原文列出来，并断言末问「最开始那个订单后来怎么说？」靠梗概作答：梗概正文里必须出现 `1001`、分段首尾相接无空洞、首问那一行的 id 已落在 `summary_upto` 之前，演示模式还要求答出「退」；不满足以非零码退出。环境变量里已经给出的键优先，脚本不覆盖。
+
+日志抽查（PowerShell / Git Bash）：
+
+```bash
+grep -c "history_ctx" log/app.log   # 每轮至少一条，含闲聊兜底轮
+grep -c "model_ctx" log/app.log     # 主力 Agent 每调模型一次一条
+grep "summary trigger\|summary done\|layer1 降级" log/app.log | tail -20
+```
+
 其他命令：
 
 ```bat
@@ -177,6 +236,25 @@ ch06 分流器（模型 deepseek-flash，2026-10-30）：
 - 多轮场景覆盖「物流 → 退款 → 物流」：第三轮「那快递呢」只补回订单号，不把上一轮的退货主题拼进来。
 - 扩写只对退款退货 / 售后生效；要求正好 2–3 条，超过 3 条会解析失败并回退原问题检索（宁可少扩，不错扩）。
 
+ch07 上下文管理（模型 deepseek-flash，2026-10-30）：
+
+演示配置 `MODEL_CONTEXT_WINDOW=18000 MAX_OUTPUT_TOKENS=2000 MAX_USER_INPUT_TOKENS=2000 MAX_AGENT_STEPS=3 TOOL_RESULT_MAX_TOKENS=1200 RERANK_TOP_K=5` → 历史预算 5650 / 层 1 3954 / 层 2 1695；同一会话（conv=89）连聊 28 轮：
+
+| 项 | 实测 |
+|---|---|
+| 层 1 滑窗降级 | 6 次，锚点单向往前挪：576→578→584→592→604→610→612 |
+| 层 2 丢弃 | 0 次（降级总在预算耗尽前先把最老一轮挤出层 1） |
+| 后台摘要 | `summary trigger` 2 次；`summary done` 3 段 seq=1（0→603，361 字，2.26s）、seq=2（603→610，211 字，3.62s）、seq=3（610→612，165 字，1.36s）；积压 603 行按每批 ≤20 条从最老一端分开压，锚点只推到已喂进模型的最后一行 |
+| 送模型峰值 | 6191 tok（窗口 18000），全程无 error 帧 |
+| 靠梗概答题 | 末问「最开始那个订单后来怎么说？」答出订单 1001 的退货退款：`summary_upto=612` 已盖过首问行 576，`summary_tokens=674`，送模型 6176 tok，最近几轮里已看不到这条线索 |
+| 默认窗口对照 | 窗口 32768（conv=88）连聊 22 轮：降级 0 次、trigger 0 次，峰值 7685 tok，末问仍认得 1001 |
+| 摘要质量 | 评估集 5 例，准确率 1.000（门槛 0.90），逐例见 `evals/reports/ch07-summary-20261030-135330.md` |
+
+- 日志留痕：`history_ctx` 每轮必打（conv=89 28/28、conv=88 22/22）；`model_ctx` 在真正调生成模型的轮次打（分别 20、19 次），其余轮走固定话术或订单点选 offer，本来就不调模型。
+- 历史增速实测约 180 token/轮（寒暄与拒答轮几乎不涨），所以演示把问题换成必然多要点的复合问法，28 轮才压得出级联；默认窗口下同样的 22 轮离降级线还很远。
+- 上一版这里写的是 conv=87 / seq=1 一段 307 字「靠梗概答题成立」，代码评审推翻：那批只把 20 条喂给摘要器却把锚点推到整段末尾，最早那段历史同时离开三层，seq=1 正文里根本没有订单 1001。分批与锚点收敛后重跑，`seq=1` 正文以「用户反馈订单1001保温杯漏水，要求退货退款」开头，末问靠梗概答题才是实测而非推断。
+- 回归：`pytest` 313 passed。
+
 ## 低置信池与编造台账
 
 - `low_confidence_questions`：检索闸门（`retrieval_low_conf`）或生成前自评（`self_check`）拒绝时写入原始问题、会话、来源、原因与时间，供后续补文档或补 FAQ。
@@ -205,10 +283,12 @@ FROM faith_cases ORDER BY last_seen_at DESC;
 `POST /api/chat`，请求体：
 
 ```json
-{"message": "订单 1001 的物流到哪了", "history": [], "client_id": "web-xxxxxxxx"}
+{"message": "订单 1001 的物流到哪了", "client_id": "web-xxxxxxxx"}
 ```
 
-`history` 是完整的 user/assistant 交替问答；`client_id` 为 8–64 位字母数字下划线连字符；续接会话时再带 `conversation_id`。
+`client_id` 为 8–64 位字母、数字、下划线或连字符；不带 `conversation_id` 就开一个新会话，`meta` 帧回它的 id，接着聊把它带回去即可。历史由服务端从 `conversations` / `messages` 取并按三层裁剪，`history` 字段已废弃（保留兼容、不再参与上下文）。
+
+两个只读接口给侧栏用：`GET /api/conversations?client_id=...` 回 `{items: [{conversation_id, first_question, updated_at, summarized, message_count}]}`（新在前）；`GET /api/conversations/{conversation_id}/messages?client_id=...` 回该会话的原文消息供回载。`client_id` 非法 422，会话不属于你或不存在一律 403（不拿状态码泄露别人的会话是否存在），数据库异常 503。
 
 事件顺序：
 

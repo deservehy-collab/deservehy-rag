@@ -2,6 +2,8 @@ import asyncio
 import logging
 import time
 
+from langchain_core.messages import AIMessage
+
 from app.agent.guards import FALLBACK_PLAIN
 from app.prompts import CHITCHAT_TEXT, COMPLAINT_TEXT
 from app.workflow.actions import actions_payload, build_offer
@@ -38,8 +40,8 @@ def make_log_node(deps):
             bool(retrieval.get("low_confidence")), state.get("steps"), state.get("tool_calls"),
             state.get("tokens"), state.get("stopped_by"), elapsed,
         )
-        await asyncio.to_thread(deps.store.add_message, conversation_id, "assistant", content=reply)
+        message_id = await asyncio.to_thread(deps.store.add_message, conversation_id, "assistant", content=reply)
         emit("done", {"finish_reason": state.get("finish_reason") or "stop"})
-        return {}
+        return {"messages": [AIMessage(content=reply, id=str(message_id))]}
 
     return log_node

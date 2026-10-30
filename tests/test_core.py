@@ -16,7 +16,7 @@ def test_settings_budget_and_secret_redaction():
     from app.config import Settings
 
     settings = Settings(_env_file=None, **config_values())
-    assert settings.input_budget == 6656
+    assert settings.input_budget == 31428
     assert "test-secret-not-real" not in repr(settings)
 
 
@@ -90,7 +90,7 @@ def test_chat_normalizes_text_and_preserves_complete_history():
 def test_estimate_accounts_for_multibyte_text():
     from app.context import estimate_tokens
 
-    assert estimate_tokens([SystemMessage(content="中"), HumanMessage(content="\U0001f600")]) == 47
+    assert estimate_tokens([SystemMessage(content="中"), HumanMessage(content="\U0001f600")]) == 18
 
 
 def test_trims_oldest_complete_pair_only():
@@ -100,7 +100,7 @@ def test_trims_oldest_complete_pair_only():
     history = [{"role": role, "content": text} for role, text in [
         ("user", "old"), ("assistant", "gone"), ("user", "recent"), ("assistant", "keep")
     ]]
-    result = build_messages("s", ChatRequest(message="n", history=history), 84)
+    result = build_messages("s", ChatRequest(message="n", history=history), 50)
     assert [m.content for m in result] == ["s", "recent", "keep", "n"]
     assert [m.type for m in result] == ["system", "human", "ai", "human"]
 
@@ -110,7 +110,7 @@ def test_can_drop_all_history_at_exact_budget():
     from app.schemas import ChatRequest
 
     request = ChatRequest(message="now", history=[{"role": "user", "content": "old"}, {"role": "assistant", "content": "answer"}])
-    assert [m.content for m in build_messages("rules", request, 48)] == ["rules", "now"]
+    assert [m.content for m in build_messages("rules", request, 30)] == ["rules", "now"]
     assert len(request.history) == 2
 
 
@@ -119,7 +119,7 @@ def test_current_question_cannot_be_dropped():
     from app.schemas import ChatRequest
 
     with pytest.raises(ContextBudgetError):
-        build_messages("rules", ChatRequest(message="now"), 47)
+        build_messages("rules", ChatRequest(message="now"), 18)
 
 
 @pytest.mark.parametrize("payload", [{"description": ""}, {"description": " "}, {"description": 2}, {"description": "x" * 12001}])

@@ -6,6 +6,7 @@ from sqlalchemy import select
 
 from app.knowledge.retrieval import Evidence, RetrievalResult
 from app.models import Message
+from app.prompts import chat_system
 from app.storage import ConversationStore
 from app.workflow.graph import Workflow, WorkflowDeps
 from tests.support import FixedClassifier, _settings, sqlite_factory
@@ -33,6 +34,7 @@ class MultiRound:
         self.calls = 0
         self.tool_names = []
         self.prompt = ""
+        self.questions = []
         self.shapes = []
 
     def bind_tools(self, tools):
@@ -41,8 +43,10 @@ class MultiRound:
 
     async def astream(self, messages):
         self.calls += 1
-        self.prompt = messages[0].content
-        self.user_prompt = messages[-1].content
+        self.messages = messages
+        # system 现在逐轮字节一致，路由提示与证据挪到最后一条 user 块，断言看拼接后的全文。
+        self.prompt = "\n".join(str(item.content) for item in messages)
+        self.questions = [str(item.content) for item in messages if item.type == "human"]
         self.shapes.append([type(item).__name__ for item in messages])
         for item in self.rounds.pop(0):
             yield item
@@ -198,7 +202,7 @@ class AsyncReturn:
     def __init__(self, value):
         self.value = value
 
-    async def __call__(self, question):
+    async def expand(self, question):
         return list(self.value)
 
 
@@ -263,4 +267,6 @@ def test_agent_sees_resolved_question():
         workflow = build(factory, model, knowledge=ExpandedRetriever(), classifier="退款退货")
         workflow.deps.resolver = FixedResolver("订单 1001 的商品能退吗")
         run(workflow, conversation_id, "订单 1001")
-        assert model.user_prompt == "订单 1001 的商品能退吗"
+        assert "订单 1001 的商品能退吗" in model.questions
+        # 指代消解的结果只替换当前这句话，system 仍是逐轮一致的人设与红线。
+        assert model.messages[0].content == chat_system("本店")

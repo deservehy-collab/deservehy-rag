@@ -80,13 +80,21 @@ def streamed_tool_call(name="query_logistics", arguments=None, call_id="call_1")
 def _settings(settings_overrides):
     from app.config import Settings
 
-    # 默认关掉改写与自评，避免旧用例额外调用模型；ch04 用例按需替换对象或显式打开。
+    # 默认关掉改写、自评与后台摘要，避免旧用例额外调用模型或落日志文件。
     # 检查点走内存，避免 pytest 往 .cache 落 sqlite。
-    return Settings(_env_file=None, openai_base_url="http://upstream.invalid/v1", openai_model="test-model",
-                    openai_api_key="test-secret-not-real", knowledge_query_rewrite=False,
-                    knowledge_self_check=False, workflow_understanding_enabled=False,
-                    workflow_checkpoint_path=":memory:",
-                    **settings_overrides)
+    defaults = {
+        "openai_base_url": "http://upstream.invalid/v1",
+        "openai_model": "test-model",
+        "openai_api_key": "test-secret-not-real",
+        "knowledge_query_rewrite": False,
+        "knowledge_self_check": False,
+        "workflow_understanding_enabled": False,
+        "context_summary_enabled": False,
+        "log_file": ":memory:",
+        "workflow_checkpoint_path": ":memory:",
+    }
+    defaults.update(settings_overrides)
+    return Settings(_env_file=None, **defaults)
 
 
 class FixedClassifier:

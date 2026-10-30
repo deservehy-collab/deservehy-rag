@@ -13,10 +13,16 @@ const headerStatus = document.querySelector("#header-status");
 const announcer = document.querySelector("#announcer");
 const citationLayer = document.querySelector("#citation-layer");
 const citationPanel = citationLayer.querySelector(".citation-panel");
+const historyToggle = document.querySelector("#history-toggle");
+const historyDrawer = document.querySelector("#history-drawer");
+const historySheet = historyDrawer.querySelector(".history-sheet");
+const historyCount = document.querySelector("#history-count");
+const conversationLists = [document.querySelector("#conversation-list"),
+                           document.querySelector("#conversation-list-mobile")];
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const CLIENT_KEY = "deservehy-client-id";
 const FEEDBACK_PREFIX = "deservehy-feedback:";
-let history = [];
+let conversations = [];
 let conversationId = null;
 let cachedClientId = null;
 let activeTurn = null;
@@ -68,7 +74,7 @@ function setBusy(busy) {
   updateInput();
 }
 
-function messageElement(role, text = "", displayName = "") {
+function messageElement(role, text = "", displayName = "", at = null) {
   const article = document.createElement("article");
   article.className = "message message-" + role;
   const avatar = document.createElement("div");
@@ -85,10 +91,11 @@ function messageElement(role, text = "", displayName = "") {
   meta.className = "message-meta";
   const name = document.createElement("span");
   name.textContent = displayName || (role === "assistant" ? "小邻客服" : "你");
-  const now = new Date();
+  const now = at ? new Date(String(at).replace(" ", "T")) : new Date();
+  const stamp = Number.isNaN(now.getTime()) ? new Date() : now;
   const time = document.createElement("time");
-  time.dateTime = now.toISOString();
-  time.textContent = now.toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit", hour12: false });
+  time.dateTime = stamp.toISOString();
+  time.textContent = stamp.toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit", hour12: false });
   meta.append(name, time);
   const bubble = document.createElement("div");
   bubble.className = "bubble";
@@ -250,6 +257,98 @@ function closeCitation() {
   const delay = reducedMotion.matches ? 0 : 220;
   citationHideTimer = window.setTimeout(() => { citationLayer.hidden = true; citationHideTimer = null; }, delay);
   if (citationTrigger) { citationTrigger.focus(); citationTrigger = null; }
+}
+
+let listRevision = 0;
+
+async function loadConversations() {
+  const revision = ++listRevision;
+  let items;
+  try {
+    const response = await fetch("/api/conversations?client_id=" + encodeURIComponent(clientId()));
+    if (!response.ok) return;
+    const payload = await response.json();
+    items = Array.isArray(payload.items) ? payload.items : [];
+  } catch {
+    return;
+  }
+  // 同一轮里 onMeta 和收尾各拉一次，回得晚的可能是旧快照，只认最后一次请求的结果。
+  if (revision !== listRevision) return;
+  conversations = items;
+  renderConversations();
+}
+
+function renderConversations() {
+  for (const list of conversationLists) {
+    list.replaceChildren();
+    for (const item of conversations) {
+      const active = item.id === conversationId;
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "conversation-item" + (active ? " is-active" : "");
+      if (active) button.setAttribute("aria-current", "true");
+      const title = document.createElement("span");
+      title.className = "conversation-title";
+      title.textContent = item.title || "新对话";
+      const meta = document.createElement("span");
+      meta.className = "conversation-meta";
+      meta.textContent = item.summarized ? "已摘要" : (item.message_count || 0) + " 条";
+      button.append(title, meta);
+      button.addEventListener("click", () => openConversation(item.id));
+      list.append(button);
+    }
+    if (!conversations.length) {
+      const empty = document.createElement("p");
+      empty.className = "conversation-empty";
+      empty.textContent = "还没有历史对话";
+      list.append(empty);
+    }
+  }
+  historyCount.textContent = conversations.length ? String(conversations.length) : "";
+}
+
+async function openConversation(id) {
+  if (activeTurn) return;
+  if (id === conversationId) {
+    closeHistoryDrawer();
+    return;
+  }
+  let rows = [];
+  try {
+    const response = await fetch(`/api/conversations/${id}/messages?client_id=${encodeURIComponent(clientId())}`);
+    if (!response.ok) return;
+    const payload = await response.json();
+    rows = Array.isArray(payload.items) ? payload.items : [];
+  } catch {
+    return;
+  }
+  conversationId = id;
+  messages.replaceChildren();
+  welcome.hidden = true;
+  document.querySelector("#conversation-date").hidden = false;
+  for (const row of rows) messageElement(row.role, row.content, "", row.created_at);
+  followBottom = true;
+  jumpButton.hidden = true;
+  scrollToLatest(true);
+  closeHistoryDrawer();
+  renderConversations();
+  announcer.textContent = "已打开历史对话，可以接着问。";
+  input.focus();
+}
+
+function openHistoryDrawer() {
+  historyDrawer.hidden = false;
+  void historyDrawer.offsetWidth;
+  historyDrawer.classList.add("is-open");
+  historyToggle.setAttribute("aria-expanded", "true");
+  historySheet.focus();
+}
+
+function closeHistoryDrawer() {
+  if (historyDrawer.hidden) return;
+  historyDrawer.classList.remove("is-open");
+  historyToggle.setAttribute("aria-expanded", "false");
+  window.setTimeout(() => { historyDrawer.hidden = true; }, reducedMotion.matches ? 0 : 220);
 }
 
 function readFeedback(key) {
@@ -576,7 +675,7 @@ async function sendQuestion(question) {
   scrollToLatest(true);
   announcer.textContent = "问题已发送，正在等待回复。";
   try {
-    const body = { message: question, history: history.slice(-100), client_id: clientId() };
+    const body = { message: question, client_id: clientId() };
     if (conversationId) body.conversation_id = conversationId;
     const response = await fetch("/api/chat", {
       method: "POST",
@@ -585,7 +684,7 @@ async function sendQuestion(question) {
       signal: turn.controller.signal,
     });
     const finishReason = await readStream(response, {
-      onMeta: id => { conversationId = id; turn.turnId = id + "-" + suffix; },
+      onMeta: id => { conversationId = id; turn.turnId = id + "-" + suffix; void loadConversations(); },
       onStatus: payload => {
         waiting.remove();
         if (payload.phase === "start") beginTool(view, payload);
@@ -621,8 +720,6 @@ async function sendQuestion(question) {
     if (turn.orderItems.length) addOrderCards(view, turn.orderItems);
     if (turn.actionItems.length) addActionButtons(view, turn.actionItems, turn.actionTurn, turn.refund);
     addAnswerFeedback(view, turn.turnId);
-    history.push({ role: "user", content: question }, { role: "assistant", content: answer.trim() });
-    history = history.slice(-100);
     announcer.textContent = "小邻已回复，你可以继续追问。";
   } catch (error) {
     writer.flush();
@@ -637,6 +734,7 @@ async function sendQuestion(question) {
     activeTurn = null;
     setBusy(false);
     scrollToLatest();
+    void loadConversations();
   }
 }
 
@@ -660,7 +758,6 @@ stopButton.addEventListener("click", () => {
 });
 newChatButton.addEventListener("click", () => {
   if (activeTurn) return;
-  history = [];
   conversationId = null;
   messages.replaceChildren();
   welcome.hidden = false;
@@ -668,8 +765,17 @@ newChatButton.addEventListener("click", () => {
   jumpButton.hidden = true;
   followBottom = true;
   scrollArea.scrollTop = 0;
-  announcer.textContent = "新对话已开始。";
+  closeHistoryDrawer();
+  renderConversations();
+  announcer.textContent = "新对话已开始，历史对话还在列表里。";
   input.focus();
+});
+historyToggle.addEventListener("click", () => {
+  if (historyDrawer.hidden) openHistoryDrawer();
+  else closeHistoryDrawer();
+});
+historyDrawer.querySelectorAll("[data-close-history]").forEach(element => {
+  element.addEventListener("click", closeHistoryDrawer);
 });
 document.querySelectorAll("[data-prompt]").forEach(button => {
   button.addEventListener("click", () => {
@@ -687,6 +793,9 @@ jumpButton.addEventListener("click", () => { followBottom = true; scrollToLatest
 citationLayer.querySelector(".citation-close").addEventListener("click", closeCitation);
 citationLayer.querySelector(".citation-scrim").addEventListener("click", closeCitation);
 document.addEventListener("keydown", event => {
-  if (event.key === "Escape" && !citationLayer.hidden) closeCitation();
+  if (event.key !== "Escape") return;
+  if (!citationLayer.hidden) closeCitation();
+  else if (!historyDrawer.hidden) closeHistoryDrawer();
 });
+void loadConversations();
 updateInput();

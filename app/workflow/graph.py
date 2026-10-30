@@ -127,8 +127,10 @@ class Workflow:
     def _config(conversation_id: int) -> dict:
         return {"configurable": {"thread_id": str(conversation_id)}}
 
-    async def respond(self, conversation_id: int, question: str, messages: list):
+    async def respond(self, conversation_id: int, question: str, messages: list, *,
+                      context_plan: dict | None = None, current_message_id: int | None = None):
         payload = {"conversation_id": conversation_id, "question": question, "messages": messages,
+                   "context_plan": context_plan or {}, "current_message_id": current_message_id or 0,
                    "actions": [], "offer": None}
         stream = self.graph.astream(payload, self._config(conversation_id),
                                     stream_mode="custom", durability="sync")
