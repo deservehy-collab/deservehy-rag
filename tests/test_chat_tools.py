@@ -49,7 +49,7 @@ def test_tool_round_emits_status_frames_and_persists_every_message():
 
 def test_plain_answer_keeps_ch01_event_shape_and_persists_pair():
     with api_with_db(lambda request: streamed(("你好", "，有什么可以帮你？"))) as (client, seen, factory):
-        response = client.post("/api/chat", json={"message": "你好", "client_id": "anon-test-2"})
+        response = client.post("/api/chat", json={"message": "保温杯多少钱？", "client_id": "anon-test-2"})
         frames = events(response)
         assert [name for name, _ in frames] == ["meta", "token", "token", "done"]
         assert frames[-1][1] == {"finish_reason": "stop"}
@@ -177,7 +177,7 @@ def test_leaked_markup_after_a_valid_answer_keeps_the_valid_part():
 
 def test_leaked_markup_in_a_plain_answer_is_stripped():
     with api_with_db(lambda request: streamed(("你好", LEAKED_TOOL_MARKUP))) as (client, seen, factory):
-        response = client.post("/api/chat", json={"message": "你好", "client_id": "anon-test-9"})
+        response = client.post("/api/chat", json={"message": "保温杯多少钱？", "client_id": "anon-test-9"})
         frames = events(response)
         assert [name for name, _ in frames] == ["meta", "token", "done"]
         assert frames[1][1]["content"] == "你好"

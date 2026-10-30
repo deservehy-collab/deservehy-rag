@@ -42,3 +42,17 @@ class AfterSales(BaseModel):
     order_id: Annotated[str, Field(min_length=1, max_length=200)] | None
     request_type: Literal["refund", "return_refund", "exchange", "repair", "logistics", "other", "unknown"]
     expected_solution: Annotated[str, Field(min_length=1, max_length=1000)] | None
+
+
+class IntentResult(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True, str_strip_whitespace=True)
+
+    intent: Literal["物流", "订单", "商品咨询", "退款退货", "售后", "投诉", "闲聊"]
+
+
+class TicketRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True, str_strip_whitespace=True)
+
+    conversation_id: Annotated[int, Field(ge=1)]
+    client_id: Annotated[str, Field(min_length=8, max_length=64, pattern=r"[A-Za-z0-9_-]+")]
+    turn: Annotated[int, Field(ge=1)]

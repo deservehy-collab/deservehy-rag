@@ -10,7 +10,7 @@ import uvicorn
 from app.config import Settings
 from app.main import create_app
 from app.model import build_model
-from tests.support import chunk, sqlite_factory
+from tests.support import FixedClassifier, chunk, sqlite_factory
 
 
 class GatedStream(httpx.AsyncByteStream):
@@ -35,11 +35,13 @@ class GatedStream(httpx.AsyncByteStream):
 
 @contextmanager
 def running_server(stream):
-    settings = Settings(_env_file=None, openai_base_url="http://upstream.invalid/v1", openai_model="test-model", openai_api_key="test", request_timeout_seconds=5)
+    settings = Settings(_env_file=None, openai_base_url="http://upstream.invalid/v1", openai_model="test-model",
+                        openai_api_key="test", request_timeout_seconds=5, workflow_checkpoint_path=":memory:")
     client = httpx.AsyncClient(transport=httpx.MockTransport(lambda request: httpx.Response(200, headers={"content-type": "text/event-stream"}, stream=stream)))
     model = build_model(settings, async_client=client)
     with sqlite_factory() as factory:
-        config = uvicorn.Config(create_app(settings, model, session_factory=factory), host="127.0.0.1", port=0, log_level="error", timeout_graceful_shutdown=2)
+        config = uvicorn.Config(create_app(settings, model, session_factory=factory,
+                                           classifier=FixedClassifier("售后")), host="127.0.0.1", port=0, log_level="error", timeout_graceful_shutdown=2)
         sock = config.bind_socket()
         server = uvicorn.Server(config)
         started = threading.Event()
@@ -79,7 +81,7 @@ def read_meta(lines):
 def test_first_chunk_arrives_before_upstream_finishes():
     stream = GatedStream()
     with running_server(stream) as base_url, httpx.Client(timeout=2) as client:
-        with client.stream("POST", base_url + "/api/chat", json={"message": "hello"}) as response:
+        with client.stream("POST", base_url + "/api/chat", json={"message": "保温杯有货吗"}) as response:
             lines = response.iter_lines()
             assert read_meta(lines)["conversation_id"] >= 1
             assert next_line(lines) == "event: token"
@@ -94,7 +96,7 @@ def test_first_chunk_arrives_before_upstream_finishes():
 def test_client_disconnect_closes_waiting_upstream():
     stream = GatedStream()
     with running_server(stream) as base_url, httpx.Client(timeout=2) as client:
-        with client.stream("POST", base_url + "/api/chat", json={"message": "hello"}) as response:
+        with client.stream("POST", base_url + "/api/chat", json={"message": "保温杯有货吗"}) as response:
             lines = response.iter_lines()
             assert read_meta(lines)["conversation_id"] >= 1
             assert next_line(lines) == "event: token"
@@ -106,7 +108,7 @@ def test_client_disconnect_closes_waiting_upstream():
 def test_real_connection_keeps_error_after_partial_output():
     stream = GatedStream(fail=True)
     with running_server(stream) as base_url, httpx.Client(timeout=2) as client:
-        with client.stream("POST", base_url + "/api/chat", json={"message": "hello"}) as response:
+        with client.stream("POST", base_url + "/api/chat", json={"message": "保温杯有货吗"}) as response:
             lines = response.iter_lines()
             assert read_meta(lines)["conversation_id"] >= 1
             assert next_line(lines) == "event: token"

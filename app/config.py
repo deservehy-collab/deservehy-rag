@@ -51,6 +51,10 @@ class Settings(BaseSettings):
     knowledge_mining_interval_minutes: int = Field(default=60, ge=0)
     knowledge_mining_lookback_days: int = Field(default=7, ge=1, le=365)
     knowledge_dedupe_threshold: float = Field(default=0.95, ge=0, le=1, allow_inf_nan=False)
+    workflow_checkpoint_path: str = Field(default=".cache/langgraph/ch05.sqlite", min_length=1, max_length=255)
+    workflow_agent_max_steps: int = Field(default=4, ge=1, le=8)
+    workflow_agent_token_budget: int = Field(default=6000, ge=1000, le=60000)
+    workflow_intent_timeout_seconds: float = Field(default=10, gt=0, allow_inf_nan=False)
 
     @field_validator("openai_api_key")
     @classmethod

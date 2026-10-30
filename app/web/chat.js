@@ -68,7 +68,7 @@ function setBusy(busy) {
   updateInput();
 }
 
-function messageElement(role, text = "") {
+function messageElement(role, text = "", displayName = "") {
   const article = document.createElement("article");
   article.className = "message message-" + role;
   const avatar = document.createElement("div");
@@ -84,7 +84,7 @@ function messageElement(role, text = "") {
   const meta = document.createElement("div");
   meta.className = "message-meta";
   const name = document.createElement("span");
-  name.textContent = role === "assistant" ? "小邻客服" : "你";
+  name.textContent = displayName || (role === "assistant" ? "小邻客服" : "你");
   const now = new Date();
   const time = document.createElement("time");
   time.dateTime = now.toISOString();
@@ -270,6 +270,64 @@ function saveFeedback(key, value) {
   }
 }
 
+function systemNote(text) {
+  const note = document.createElement("p");
+  note.className = "system-note";
+  note.textContent = text;
+  const gap = document.createElement("div");
+  gap.className = "message-gap";
+  messages.append(note, gap);
+  scrollToLatest();
+}
+
+async function createTicket(turn, button, note) {
+  button.disabled = true;
+  try {
+    const response = await fetch("/api/tickets", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ conversation_id: conversationId, client_id: clientId(), turn }),
+    });
+    const payload = await response.json().catch(() => null);
+    if (!response.ok || !payload?.ticket_no) throw new Error(payload?.code || "ticket_failed");
+    note.textContent = "工单 " + payload.ticket_no + " 已创建，客服会尽快跟进。";
+    announcer.textContent = "工单已创建。";
+  } catch {
+    button.disabled = false;
+    note.textContent = "工单暂时没建成，请稍后再试。";
+  }
+}
+
+function addActionButtons(view, items, turn) {
+  if (!items.length) return;
+  const row = document.createElement("div");
+  row.className = "action-row";
+  const note = document.createElement("p");
+  note.className = "action-note";
+  for (const item of items) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "action-button";
+    button.textContent = item.label;
+    if (item.id === "human") {
+      button.addEventListener("click", () => {
+        button.disabled = true;
+        systemNote("已转接人工客服");
+        messageElement("assistant", "您好，我是客服小猫，请问有什么可以帮您的？", "客服小猫");
+        announcer.textContent = "已转接人工客服，客服小猫已接入。";
+      });
+    } else if (item.id === "ticket") {
+      button.addEventListener("click", () => createTicket(turn, button, note));
+    } else {
+      button.hidden = true;
+    }
+    row.append(button);
+  }
+  row.append(note);
+  view.stack.append(row);
+  scrollToLatest();
+}
+
 function addAnswerFeedback(view, turnId) {
   const row = document.createElement("div");
   row.className = "answer-feedback";
@@ -347,6 +405,11 @@ async function readStream(response, handlers) {
         if (event === "citations") {
           if (Array.isArray(payload?.items)) handlers.onCitations(payload.items);
         }
+        if (event === "actions") {
+          if (Array.isArray(payload?.items) && Number.isInteger(payload?.turn)) {
+            handlers.onActions(payload.items, payload.turn);
+          }
+        }
         if (event === "token") {
           if (typeof payload?.content !== "string") throw new Error("收到的回复格式不正确，请重新提问。");
           handlers.onText(payload.content);
@@ -390,13 +453,14 @@ form.addEventListener("submit", async event => {
   if (!question || activeTurn) return;
   const suffix = Date.now() + "-" + Math.random().toString(36).slice(2, 8);
   const turn = { controller: new AbortController(), stopped: false, timedOut: false,
-    turnId: "local-" + suffix, citations: [] };
+    turnId: "local-" + suffix, citations: [], actionItems: [], actionTurn: 0 };
   activeTurn = turn;
   input.value = "";
   welcome.hidden = true;
   document.querySelector("#conversation-date").hidden = false;
   followBottom = true;
   messageElement("user", question);
+  for (const stale of messages.querySelectorAll(".action-button:not(:disabled)")) stale.disabled = true;
   const view = messageElement("assistant");
   view.article.classList.add("is-writing");
   const waiting = document.createElement("span");
@@ -435,6 +499,7 @@ form.addEventListener("submit", async event => {
         waiting.remove();
         turn.citations = items;
       },
+      onActions: (items, actionTurn) => { turn.actionItems = items; turn.actionTurn = actionTurn; },
       onText: text => {
         if (!text) return;
         waiting.remove();
@@ -449,6 +514,7 @@ form.addEventListener("submit", async event => {
     if (finishReason === "length") throw new Error("回复因长度限制而中断，请缩短问题后重新提问。");
     if (Array.from(answer.trim()).length > 12000) throw new Error("回复过长，无法继续接续这一轮。请开启新对话。");
     renderAnswer(view, answer, turn.citations);
+    if (turn.actionItems.length) addActionButtons(view, turn.actionItems, turn.actionTurn);
     addAnswerFeedback(view, turn.turnId);
     history.push({ role: "user", content: question }, { role: "assistant", content: answer.trim() });
     history = history.slice(-100);

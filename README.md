@@ -1,6 +1,6 @@
 # deservehy-rag
 
-电商智能客服：FastAPI + LangChain，SSE 流式多轮对话、售后诉求结构化提取、让模型自己决定调用业务工具的 Function Calling 链路，以及 Milvus 原生 BM25 + BGE-M3 混合检索、bge-reranker 重排与引用拒答的知识库。
+电商智能客服：FastAPI + LangChain，SSE 流式多轮对话、售后诉求结构化提取、让模型自己决定调用业务工具的 Function Calling 链路，Milvus 原生 BM25 + BGE-M3 混合检索、bge-reranker 重排与引用拒答的知识库，以及 LangGraph 工作流编排（意图分流 + 强制检索闸门 + 手写 ReAct 主 Agent）。
 
 ## 功能
 
@@ -14,8 +14,11 @@
 - 会话挖掘：从最近历史会话抽取可复用问答，精确 + 语义去重后入库；默认关闭，可用脚本或服务内定时器触发。
 - 八张表：`conversations`、`messages`、`faq`、`tickets`、`knowledge_chunks`、`qa_extraction_staging`、`low_confidence_questions`、`faith_cases`。
 - 聊天页面：`http://127.0.0.1:8000/`，支持桌面与手机宽度。
+- Workflow 编排：LangGraph 图负责意图分流（七意图 → 知识/业务/投诉/闲聊四出口），知识类强制检索后过置信闸门，业务类直连主 Agent；主 Agent 是手写 ReAct 循环（最多 4 轮工具 + 1 次收敛，token 预算 6000）。
+- 投诉回合不进 Agent、不生成正文：固定安抚话术 + 前端「转人工」「建工单」两个独立按钮；转人工是前端模拟，建工单走 `POST /api/tickets` 写 `tickets` 表，重复点击幂等。（意图分类本身仍会调用一次模型；分类失败按默认意图 `售后` 走业务路由。）
+- 状态由 LangGraph checkpointer 持久化（默认 `.cache/langgraph/ch05.sqlite`），跨轮保留轮次与待确认操作。
 
-仍不做指代消解与多轮 Query 改写；工具调用仍是单轮（一次工具结果后收敛）。
+不做正式意图识别与指代消解的工程化（coref 直通、指代靠模型在 prompt 里自己看历史）；不做 MCP 接入与飞轮回灌。
 
 ## 环境
 
@@ -43,6 +46,10 @@
 | `KNOWLEDGE_SELF_CHECK` | 生成前证据自评，默认开启；自评失败按可用放行 |
 | `KNOWLEDGE_TOOL_TIMEOUT_SECONDS` | `query_faq` 专属超时，默认 20 秒 |
 | `KNOWLEDGE_MINING_ENABLED` | 是否在服务内启动会话挖掘定时器，默认关闭 |
+| `WORKFLOW_CHECKPOINT_PATH` | LangGraph 检查点路径，默认 `.cache/langgraph/ch05.sqlite`；填 `:memory:` 则只在进程内保存 |
+| `WORKFLOW_AGENT_MAX_STEPS` | 主 Agent 最多几轮生成（含工具往返），默认 4 |
+| `WORKFLOW_AGENT_TOKEN_BUDGET` | 单轮 token 预算，超预算提前收敛，默认 6000 |
+| `WORKFLOW_INTENT_TIMEOUT_SECONDS` | 意图分类单次调用超时，超时按默认意图 `售后` 兜底，默认 10 秒 |
 
 其余检索条数、批次大小、挖掘间隔、去重阈值都有默认值。
 
@@ -105,6 +112,16 @@ docker compose up -d
 ```
 
 报告写到 `evals/reports/ch04-<时间戳>.json/.md`，含总表、分桶与逐题明细。
+
+工作流与主 Agent（ch05）：
+
+```bat
+.venv\Scripts\python.exe -X utf8 -m scripts.demo_agent_loop    :: 不用框架的手写 ReAct 循环（祛魅对照）
+.venv\Scripts\python.exe -X utf8 -m scripts.demo_workflow      :: 5 条验收场景，打印 SSE 事件；节点轨迹看日志里的 workflow node=
+.venv\Scripts\python.exe -X utf8 -m scripts.evaluate_intent    :: 43 题意图标注集，报告写 evals/reports/ch05-intent-<时间戳>.md
+```
+
+`demo_workflow` 的 5 句分别是：知识类（强制检索 + 角标）、物流（Agent 自调工具）、投诉（两个操作按钮）、闲聊（不调模型）、多步（连查订单与物流）。
 
 其他命令：
 
@@ -170,15 +187,18 @@ FROM faith_cases ORDER BY last_seen_at DESC;
 - `status`：工具开始/结束（`phase`、`tool`、`label`，结束帧带 `ok`、`summary`、`duration_ms`）；
 - `citations`：`query_faq` 成功后、第二轮正文前下发，`items` 含 `n`、`chunk_id`、`question`、`answer`、`category`、`section_path`；
 - `token`：正文增量；
+- `actions`：待用户决定的操作（投诉回合的 `{"items":[{"id":"human","label":"转人工"},{"id":"ticket","label":"建工单"}],"turn":1}`）；按钮只在当轮消息下生效；
 - `done`：`finish_reason`；
 - `error`：`code`、`message`（例如 `database_unavailable`）。
 
-拒答或自评不通过时不会下发 `citations`，直接返回固定拒答正文并以 `done` 结束。
+检索低置信或检索异常时不下发 `citations`，直接返回固定拒答正文并以 `done` 结束。`query_faq` 成功后会先下发 `citations` 再做证据自评（规格 §4.6），因此自评不通过的拒答仍带着已发出的来源；前端只在正文出现 `[n]` 时渲染来源，不影响阅读。
+
+`POST /api/tickets`，请求体 `{"conversation_id": 12, "client_id": "web-xxxxxxxx", "turn": 1}`：只能对当轮投诉 `offer` 建单（`turn` 来自 `actions` 帧，原样带回）；他人会话 403，offer 失效或轮次不符 409，建单失败 502，重复点击直接返回同一工单号。成功后写 `tickets` 表，`ticket_type` 为 `投诉`，描述以 `用户投诉：` 开头。
 
 ## 目录
 
 ```
-app/          配置、模型、提示词、SSE 服务、工具、存储、ORM 模型、知识库模块、网页
+app/          配置、模型、提示词、SSE 服务、工具、存储、ORM 模型、知识库模块、workflow 图与主 Agent 循环、网页
 scripts/      初始化数据库、知识导入/挖掘/演示、评估、初始化 SQL
 examples/     知识库示例文档
 evals/        80 题标注集与四策略评估报告

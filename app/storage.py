@@ -43,6 +43,11 @@ class ConversationStore:
             session.commit()
             return message.id
 
+    def owner(self, conversation_id: int) -> str | None:
+        with self.session_factory() as session:
+            conversation = session.get(Conversation, conversation_id)
+            return conversation.user_id if conversation else None
+
     def create_ticket(self, conversation_id: int, description: str, ticket_type: str) -> str:
         day = date.today().strftime("%Y%m%d")
         for _ in range(3):

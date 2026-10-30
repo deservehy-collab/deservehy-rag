@@ -38,8 +38,8 @@ def test_faq_answer_emits_citations_and_drops_out_of_range_markers():
         return streamed(("G500 不适用 B750[1]。", "普通地区满 99 元包邮[9]。"))
 
     with api_with_db(handler) as (client, seen, factory):
-        client.app.state.service.knowledge = FakeKnowledge()
-        client.app.state.service.selfcheck = FakeSelfCheck(True)
+        client.app.state.workflow.knowledge = FakeKnowledge()
+        client.app.state.workflow.selfcheck = FakeSelfCheck(True)
         response = client.post("/api/chat", json={"message": "G500 能装在 B750 上吗", "client_id": "anon-ch04-1"})
         frames = events(response)
         names = [name for name, _ in frames]
@@ -65,8 +65,8 @@ def test_self_check_rejection_writes_pool_and_skips_second_generation():
         raise AssertionError("自评拒绝时不应发起第二轮生成")
 
     with api_with_db(handler) as (client, seen, factory):
-        client.app.state.service.knowledge = FakeKnowledge()
-        client.app.state.service.selfcheck = FakeSelfCheck(False, "证据没有到账时间")
+        client.app.state.workflow.knowledge = FakeKnowledge()
+        client.app.state.workflow.selfcheck = FakeSelfCheck(False, "证据没有到账时间")
         frames = events(client.post("/api/chat", json={"message": "退款几天到账", "client_id": "anon-ch04-2"}))
         tokens = "".join(payload["content"] for name, payload in frames if name == "token")
         assert tokens.startswith("这个问题我在店铺知识库里没有找到可靠依据")
@@ -82,7 +82,7 @@ def test_retrieval_gate_rejection_writes_pool():
         return streamed_tool_call("query_faq", {"keyword": "支持货到付款吗"})
 
     with api_with_db(handler) as (client, seen, factory):
-        client.app.state.service.knowledge = FakeKnowledge(low=True)
+        client.app.state.workflow.knowledge = FakeKnowledge(low=True)
         frames = events(client.post("/api/chat", json={"message": "你们支持货到付款吗", "client_id": "anon-ch04-3"}))
         tokens = "".join(payload["content"] for name, payload in frames if name == "token")
         assert tokens.startswith("这个问题我在店铺知识库里没有找到可靠依据")

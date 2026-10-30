@@ -81,9 +81,19 @@ def _settings(settings_overrides):
     from app.config import Settings
 
     # 默认关掉改写与自评，避免旧用例额外调用模型；ch04 用例按需替换对象或显式打开。
+    # 检查点走内存，避免 pytest 往 .cache 落 sqlite。
     return Settings(_env_file=None, openai_base_url="http://upstream.invalid/v1", openai_model="test-model",
                     openai_api_key="test-secret-not-real", knowledge_query_rewrite=False,
-                    knowledge_self_check=False, **settings_overrides)
+                    knowledge_self_check=False, workflow_checkpoint_path=":memory:",
+                    **settings_overrides)
+
+
+class FixedClassifier:
+    def __init__(self, intent: str = "售后"):
+        self.intent = intent
+
+    async def classify(self, question, previous_question=None):
+        return self.intent
 
 
 @contextmanager
@@ -100,7 +110,7 @@ def sqlite_factory():
 
 
 @contextmanager
-def api_with_db(handler, **settings_overrides):
+def api_with_db(handler, *, classifier=None, **settings_overrides):
     from app.main import create_app
     from app.model import build_model
 
@@ -115,7 +125,8 @@ def api_with_db(handler, **settings_overrides):
         async_client = httpx.AsyncClient(transport=httpx.MockTransport(capture))
         model = build_model(settings, async_client=async_client)
         try:
-            with TestClient(create_app(settings, model, session_factory=factory)) as client:
+            with TestClient(create_app(settings, model, session_factory=factory,
+                                       classifier=classifier or FixedClassifier("售后"))) as client:
                 yield client, seen, factory
         finally:
             asyncio.run(model.root_async_client.close())
@@ -123,8 +134,8 @@ def api_with_db(handler, **settings_overrides):
 
 
 @contextmanager
-def api(handler, **settings_overrides):
-    with api_with_db(handler, **settings_overrides) as (client, seen, _):
+def api(handler, *, classifier=None, **settings_overrides):
+    with api_with_db(handler, classifier=classifier, **settings_overrides) as (client, seen, _):
         yield client, seen
 
 

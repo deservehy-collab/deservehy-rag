@@ -116,6 +116,13 @@ button:focus-visible, a:focus-visible { outline: 3px solid #79a78c; outline-offs
 .feedback-button:disabled { opacity: .8; cursor: default; }
 .feedback-note { font-size: 11px; color: var(--muted); }
 .feedback-note:empty { display: none; }
+.action-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
+.action-button { min-height: 38px; padding: 7px 15px; border: 1px solid #b9cbbb; border-radius: 9px; background: #eef4ee; color: var(--green); font-size: 13px; transition: background .18s, border-color .18s; }
+.action-button:hover:not(:disabled) { background: #e2eee3; border-color: #9eb7a3; }
+.action-button:disabled { opacity: .5; }
+.action-note { margin: 0; color: var(--muted); font-size: 12px; }
+.system-note { margin: 0 auto 12px; padding: 6px 14px; width: fit-content; border-radius: 999px; background: #eaf0e9; color: var(--muted); font-size: 12px; }
+.message-gap { height: 6px; }
 .citation-layer { position: fixed; inset: 0; z-index: 60; }
 .citation-scrim { position: absolute; inset: 0; background: #14332d66; opacity: 0; transition: opacity .22s ease; }
 .citation-panel { position: absolute; top: 0; right: 0; display: flex; flex-direction: column; width: min(430px, 94vw); height: 100%; padding: 26px 26px 30px; background: var(--surface); box-shadow: -18px 0 50px #14332d33; transform: translateX(100%); transition: transform .24s ease; overflow-y: auto; }
