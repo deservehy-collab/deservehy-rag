@@ -9,7 +9,7 @@ from app.models import Message
 from app.prompts import chat_system
 from app.storage import ConversationStore
 from app.workflow.graph import Workflow, WorkflowDeps
-from tests.support import FixedClassifier, _settings, sqlite_factory
+from tests.support import FakeMcp, FixedClassifier, _settings, mcp_logistics_spec, sqlite_factory
 
 
 class FakeRetriever:
@@ -77,10 +77,10 @@ class SelfCheck:
         return self.useful, "证据没有到账时间"
 
 
-def build(factory, model, knowledge=None, pool=None, selfcheck=None, classifier="物流"):
+def build(factory, model, knowledge=None, pool=None, selfcheck=None, classifier="物流", mcp=None):
     deps = WorkflowDeps(model=model, settings=_settings({}), store=ConversationStore(factory),
                         knowledge=knowledge, pool=pool, selfcheck=selfcheck,
-                        classifier=FixedClassifier(classifier))
+                        classifier=FixedClassifier(classifier), mcp=mcp)
     return Workflow(deps=deps, checkpointer=InMemorySaver())
 
 
@@ -99,10 +99,24 @@ def test_business_route_keeps_all_tools_and_no_evidence_block():
         conversation_id = store.start_turn(user_id="a1", message="订单 1001 的物流到哪了")
         workflow = build(factory, model)
         frames = run(workflow, conversation_id, "订单 1001 的物流到哪了")
-        assert model.tool_names == ["query_order", "query_product", "query_logistics", "query_faq", "create_ticket"]
+        assert model.tool_names == ["query_order", "query_product", "query_faq", "create_ticket"]
         assert [name for name, _ in frames] == ["token", "done"]
         assert "【知识库证据】" not in model.prompt
         assert "本轮由工作流编排" in model.prompt
+
+
+def test_mcp_specs_join_the_bound_tool_list():
+    """MCP 清单接上就与内置合成一份表：模型这轮能看见的业务工具是五个。"""
+    model = MultiRound([[chunk("包裹在上海。")]])
+    with sqlite_factory() as factory:
+        store = ConversationStore(factory)
+        conversation_id = store.start_turn(user_id="a1b", message="订单 1001 的物流到哪了")
+        workflow = build(factory, model, mcp=FakeMcp([mcp_logistics_spec()]))
+        frames = run(workflow, conversation_id, "订单 1001 的物流到哪了")
+        assert set(model.tool_names) == {"query_order", "query_product", "query_logistics",
+                                         "query_faq", "create_ticket"}
+        assert len(model.tool_names) == 5
+        assert [name for name, _ in frames][-1] == "done"
 
 
 def test_actions_marker_is_stripped_and_event_has_turn():

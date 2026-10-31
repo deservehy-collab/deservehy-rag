@@ -138,13 +138,18 @@ function endTool(view, payload) {
   if (!entry) return;
   view.tools.delete(name);
   const ok = payload.ok === true;
+  const waiting = payload.code === "confirm_required";
   const summary = typeof payload.summary === "string" ? payload.summary : "";
   entry.badge.classList.remove("is-running");
-  entry.badge.classList.add(ok ? "is-ok" : "is-failed");
-  entry.badge.querySelector(".tool-glyph").replaceChildren(svgIcon(ok ? "#icon-check" : "#icon-alert"));
-  entry.badge.querySelector(".tool-label").textContent = ok ? "已" + entry.label : entry.label + "失败";
+  entry.badge.classList.add(ok ? "is-ok" : waiting ? "is-waiting" : "is-failed");
+  entry.badge.querySelector(".tool-glyph").replaceChildren(
+    ...(ok ? [svgIcon("#icon-check")] : waiting ? [] : [svgIcon("#icon-alert")]));
+  entry.badge.querySelector(".tool-label").textContent =
+    ok ? "已" + entry.label : waiting ? entry.label + "待确认" : entry.label + "失败";
   entry.badge.title = summary;
-  announcer.textContent = ok ? "已" + entry.label : entry.label + "失败，可以稍后重试。";
+  announcer.textContent = ok ? "已" + entry.label
+    : waiting ? entry.label + "已生成预览卡片，等你在卡片上确认。"
+    : entry.label + "失败，可以稍后重试。";
 }
 
 function interruptTools(view) {
@@ -203,6 +208,7 @@ function readableError(payload) {
     invalid_model_output: "这次没有收到完整、有效的回复，请重新提问。",
     upstream_error: "客服暂时无法回复，请稍后重试；持续出现时请联系服务维护者。",
     database_unavailable: "会话存储暂时不可用，请稍后重新提问。",
+    no_pending_confirm: "这张确认卡片已经失效了，请重新说一次你的需求。",
   };
   return messagesByCode[payload?.code] || "暂时无法完成回复，请稍后重新提问。";
 }
@@ -519,6 +525,122 @@ function addRefundForm(view, refund, turn) {
   scrollToLatest();
 }
 
+function addConfirmCard(view, card) {
+  const box = document.createElement("div");
+  box.className = "confirm-card";
+  box.setAttribute("role", "group");
+  box.setAttribute("aria-label", "写操作确认");
+  const title = document.createElement("p");
+  title.className = "confirm-title";
+  title.textContent = "确认" + (card.label || "这次操作") + "？";
+  const note = document.createElement("p");
+  note.className = "confirm-note";
+  note.textContent = card.note || "点「确认提交」才会真正执行。";
+  const list = document.createElement("dl");
+  list.className = "confirm-fields";
+  for (const field of card.fields) {
+    const dt = document.createElement("dt");
+    dt.textContent = field.label;
+    const dd = document.createElement("dd");
+    dd.textContent = field.value;
+    list.append(dt, dd);
+  }
+  const row = document.createElement("div");
+  row.className = "confirm-actions";
+  const submit = document.createElement("button");
+  submit.type = "button";
+  submit.className = "confirm-submit";
+  submit.textContent = "确认提交";
+  const cancel = document.createElement("button");
+  cancel.type = "button";
+  cancel.className = "confirm-cancel";
+  cancel.textContent = "取消";
+  const status = document.createElement("p");
+  status.className = "confirm-status";
+  row.append(submit, cancel);
+  box.append(title, note, list, row, status);
+  const click = decision => {
+    if (activeTurn) return;
+    submit.disabled = cancel.disabled = true;
+    status.textContent = decision === "accept" ? "正在提交……" : "正在取消……";
+    resumeConfirm(card, decision, status);
+  };
+  submit.addEventListener("click", () => click("accept"));
+  cancel.addEventListener("click", () => click("cancel"));
+  view.stack.append(box);
+  scrollToLatest();
+}
+
+// 键名对应后端 done 帧里的 stopped_by；空键是「确认成功、没有异常」。
+const RESUME_OUTCOMES = {
+  "": { status: "已提交。", say: "工单已提交。" },
+  cancelled: { status: "已取消，什么都没动。", say: "这次操作已取消。" },
+  write_timeout: { status: "提交结果未确认，先别再点一次。", say: "提交结果未确认，请查看回复。" },
+  write_failed: { status: "没有提交成功。", say: "工单没有提交成功。" },
+};
+
+async function resumeConfirm(card, decision, status) {
+  const turn = { controller: new AbortController(), stopped: false, timedOut: false,
+    turnId: conversationId + "-resume-" + Date.now(), answer: "", stoppedBy: "" };
+  activeTurn = turn;
+  setBusy(true);
+  const view = messageElement("assistant");
+  view.article.classList.add("is-writing");
+  const writer = typewriter(view.textNode);
+  turn.writer = writer;
+  const timeout = window.setTimeout(() => {
+    turn.timedOut = true;
+    turn.controller.abort();
+  }, 90000);
+  announcer.textContent = decision === "accept" ? "正在提交工单。" : "正在取消这次操作。";
+  try {
+    const response = await fetch("/api/chat/resume", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ conversation_id: conversationId, client_id: clientId(),
+                             decision, pending_id: card.pending_id }),
+      signal: turn.controller.signal,
+    });
+    const finishReason = await readStream(response, {
+      onStatus: payload => (payload.phase === "start" ? beginTool(view, payload) : endTool(view, payload)),
+      onText: text => {
+        if (!text) return;
+        turn.answer += text;
+        writer.push(text);
+      },
+      onDone: frame => { turn.stoppedBy = frame.stopped_by || ""; },
+    });
+    window.clearTimeout(timeout);
+    await writer.drain();
+    if (turn.stopped) throw new Error("stopped");
+    if (!turn.answer.trim()) throw new Error("这次没有收到正文，请重新发起。");
+    if (finishReason === "length") throw new Error("回复因长度限制而中断，请重新说一次你的需求。");
+    renderAnswer(view, turn.answer, []);
+    addAnswerFeedback(view, turn.turnId);
+    // 卡片页脚不能只看用户点了哪个键：后端说「超时/失败」时还写「已提交。」就是骗人。
+    const outcome = RESUME_OUTCOMES[decision === "accept" ? turn.stoppedBy : "cancelled"]
+      || RESUME_OUTCOMES[""];
+    status.textContent = outcome.status;
+    announcer.textContent = outcome.say;
+    void loadConversations();
+  } catch (error) {
+    writer.flush();
+    interruptTools(view);
+    if (!turn.answer) view.textNode.data = turn.stopped ? "已停止。" : "这一步暂时没走完。";
+    status.textContent = turn.timedOut ? "等候回应超时，可以重新点一次。" : "这一步没走完，可以重新发起或直接说需求。";
+    showFeedback(view, turn.stopped ? "这一步未完成，可以重新发起。"
+      : turn.timedOut ? "等候回复超时了，请重新发起。"
+      : error instanceof TypeError ? "连接失败，请检查网络或确认客服服务已启动。" : error.message,
+      card.question || "", turn.stopped);
+  } finally {
+    window.clearTimeout(timeout);
+    view.article.classList.remove("is-writing");
+    activeTurn = null;
+    setBusy(false);
+    scrollToLatest();
+  }
+}
+
 function addAnswerFeedback(view, turnId) {
   const row = document.createElement("div");
   row.className = "answer-feedback";
@@ -587,29 +709,33 @@ async function readStream(response, handlers) {
         try { payload = JSON.parse(data.join("\n")); }
         catch { throw new Error("收到的回复不完整，请重新提问。"); }
         if (event === "error") throw new Error(readableError(payload));
-        if (event === "meta") {
-          if (Number.isInteger(payload?.conversation_id) && payload.conversation_id > 0) handlers.onMeta(payload.conversation_id);
+        if (event === "meta" && Number.isInteger(payload?.conversation_id) && payload.conversation_id > 0) {
+          handlers.onMeta?.(payload.conversation_id);
         }
         if (event === "status") {
-          if (payload && (payload.phase === "start" || payload.phase === "end")) handlers.onStatus(payload);
+          if (payload && (payload.phase === "start" || payload.phase === "end")) handlers.onStatus?.(payload);
         }
         if (event === "citations") {
-          if (Array.isArray(payload?.items)) handlers.onCitations(payload.items);
+          if (Array.isArray(payload?.items)) handlers.onCitations?.(payload.items);
         }
         if (event === "actions") {
           if (Array.isArray(payload?.items) && Number.isInteger(payload?.turn)) {
-            handlers.onActions(payload.items, payload.turn, payload.refund || null);
+            handlers.onActions?.(payload.items, payload.turn, payload.refund || null);
           }
         }
         if (event === "orders") {
-          if (Array.isArray(payload?.items)) handlers.onOrders(payload.items);
+          if (Array.isArray(payload?.items)) handlers.onOrders?.(payload.items);
+        }
+        if (event === "confirm") {
+          if (typeof payload?.pending_id === "string" && Array.isArray(payload?.fields)) handlers.onConfirm?.(payload);
         }
         if (event === "token") {
           if (typeof payload?.content !== "string") throw new Error("收到的回复格式不正确，请重新提问。");
-          handlers.onText(payload.content);
+          handlers.onText?.(payload.content);
         }
         if (event === "done") {
           if (!["stop", "length"].includes(payload?.finish_reason)) throw new Error("回复没有完整结束，请重新提问。");
+          handlers.onDone?.(payload);
           return payload.finish_reason;
         }
       }
@@ -646,14 +772,15 @@ async function sendQuestion(question) {
   const suffix = Date.now() + "-" + Math.random().toString(36).slice(2, 8);
   const turn = { controller: new AbortController(), stopped: false, timedOut: false,
     turnId: "local-" + suffix, citations: [], actionItems: [], actionTurn: 0,
-    refund: null, orderItems: [] };
+    refund: null, orderItems: [], confirm: null };
   activeTurn = turn;
   input.value = "";
   welcome.hidden = true;
   document.querySelector("#conversation-date").hidden = false;
   followBottom = true;
   messageElement("user", question);
-  for (const stale of messages.querySelectorAll(".action-button:not(:disabled), .order-card:not(:disabled), .refund-form :is(select, input, button)")) {
+  for (const stale of messages.querySelectorAll(
+      ".action-button:not(:disabled), .order-card:not(:disabled), .refund-form :is(select, input, button), .confirm-card button")) {
     stale.disabled = true;
   }
   const view = messageElement("assistant");
@@ -703,6 +830,10 @@ async function sendQuestion(question) {
         waiting.remove();
         turn.orderItems = items;
       },
+      onConfirm: payload => {
+        waiting.remove();
+        turn.confirm = payload;
+      },
       onText: text => {
         if (!text) return;
         waiting.remove();
@@ -719,6 +850,7 @@ async function sendQuestion(question) {
     renderAnswer(view, answer, turn.citations);
     if (turn.orderItems.length) addOrderCards(view, turn.orderItems);
     if (turn.actionItems.length) addActionButtons(view, turn.actionItems, turn.actionTurn, turn.refund);
+    if (turn.confirm) addConfirmCard(view, turn.confirm);
     addAnswerFeedback(view, turn.turnId);
     announcer.textContent = "小邻已回复，你可以继续追问。";
   } catch (error) {

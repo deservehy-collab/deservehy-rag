@@ -4,7 +4,8 @@ import logging
 import re
 import time
 
-from app.tools import ToolExecutor, list_orders, make_tools
+from app.tools import list_orders
+from app.tools.wiring import build_engine, build_registry
 from app.workflow.events import emit
 
 logger = logging.getLogger(__name__)
@@ -37,14 +38,16 @@ def make_order_node(deps):
         order_id = extract_order_id(resolved)
         started = time.perf_counter()
         if order_id:
-            emit("status", {"phase": "start", "tool": "query_order", "label": "查询订单"})
-            tools = make_tools(deps.store, conversation_id, deps.knowledge)
-            executor = ToolExecutor(
-                tools, timeout=deps.settings.tool_timeout_seconds,
-                attempts=deps.settings.tool_max_attempts,
-                timeouts={"query_faq": deps.settings.knowledge_tool_timeout_seconds},
-            )
-            outcome = await executor.execute("query_order", {"order_id": order_id})
+            registry = build_registry(deps.store, conversation_id, deps.knowledge, settings=deps.settings)
+            spec = registry.get("query_order")
+            emit("status", {"phase": "start", "tool": "query_order",
+                            "label": spec.label if spec else "查询订单",
+                            "source": spec.source if spec else "builtin",
+                            "mcp_server": spec.mcp_server if spec else None})
+            engine = build_engine(registry, settings=deps.settings,
+                                  session_factory=deps.store.session_factory)
+            outcome = await engine.run(name="query_order", args={"order_id": order_id},
+                                       conversation_id=conversation_id)
             try:
                 payload = json.loads(outcome.content)
             except (TypeError, ValueError):
@@ -52,7 +55,8 @@ def make_order_node(deps):
             order = payload.get("data") if payload.get("ok") else None
             emit("status", {"phase": "end", "tool": "query_order", "label": "查询订单",
                             "ok": bool(order), "summary": outcome.summary,
-                            "duration_ms": int((time.perf_counter() - started) * 1000)})
+                            "duration_ms": int((time.perf_counter() - started) * 1000),
+                            "source": outcome.source, "mcp_server": outcome.mcp_server})
             if order:
                 logger.info("workflow policy_order conv=%s order_id=%s found=1", conversation_id, order_id)
                 return {"order": order}

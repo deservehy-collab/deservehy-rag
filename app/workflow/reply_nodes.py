@@ -41,7 +41,12 @@ def make_log_node(deps):
             state.get("tokens"), state.get("stopped_by"), elapsed,
         )
         message_id = await asyncio.to_thread(deps.store.add_message, conversation_id, "assistant", content=reply)
-        emit("done", {"finish_reason": state.get("finish_reason") or "stop"})
+        done = {"finish_reason": state.get("finish_reason") or "stop"}
+        # 只在真的非正常收尾时才多带一个 stopped_by：前端和既有用例都把 done 当「正常结束」的判据，
+        # 空值多发一个 None 键会让「这一步到底成没成」在页面上糊掉。
+        if state.get("stopped_by"):
+            done["stopped_by"] = state["stopped_by"]
+        emit("done", done)
         return {"messages": [AIMessage(content=reply, id=str(message_id))]}
 
     return log_node

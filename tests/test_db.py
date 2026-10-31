@@ -33,6 +33,7 @@ def test_schema_has_the_business_and_knowledge_tables(sqlite_factory):
             "low_confidence_questions",
             "faith_cases",
             "conversation_summaries",
+            "tool_audit_logs",
         }
 
 

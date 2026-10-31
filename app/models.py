@@ -1,6 +1,18 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, Enum, ForeignKey, Index, Integer, JSON, String, Text, UniqueConstraint, func
+from sqlalchemy import (
+    DateTime,
+    Enum,
+    ForeignKey,
+    Index,
+    Integer,
+    JSON,
+    String,
+    Text,
+    UniqueConstraint,
+    func,
+    text,
+)
 from sqlalchemy.dialects import mysql
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -92,6 +104,35 @@ class Ticket(Base):
     status: Mapped[str] = mapped_column(
         Enum("待处理", "已处理", name="ticket_status"), nullable=False, default="待处理", server_default="待处理"
     )
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+
+class ToolAuditLog(Base):
+    __tablename__ = "tool_audit_logs"
+    # 审计表不挂外键：conversation_id 只是线索，约束不能反过来拦住留痕（规格 §5）。
+    # 注意：SQLite 索引名全库唯一，而 `idx_conversation_id`／`idx_status` 这两个裸名
+    # 已被本表占用（规格 §5 与 006_tools.sql 定死，不改名）——后续新表请照 KnowledgeChunk 那样加表前缀，别再用同名。
+    __table_args__ = (
+        Index("idx_conversation_id", "conversation_id"),
+        Index("idx_tool_name", "tool_name"),
+        Index("idx_status", "status"),
+        TABLE_OPTIONS,
+    )
+
+    id: Mapped[int] = mapped_column(IdType, primary_key=True, autoincrement=True)
+    conversation_id: Mapped[int | None] = mapped_column(IdType)
+    tool_call_id: Mapped[str | None] = mapped_column(String(64))
+    tool_name: Mapped[str] = mapped_column(String(128), nullable=False)
+    tool_source: Mapped[str] = mapped_column(Enum("builtin", "mcp", name="tool_source"), nullable=False)
+    mcp_server: Mapped[str | None] = mapped_column(String(64))
+    arguments: Mapped[dict | None] = mapped_column(JSON)
+    result_summary: Mapped[str | None] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(
+        Enum("成功", "失败", "超时", "校验拦下", "权限拒绝", name="tool_audit_status"), nullable=False
+    )
+    error_message: Mapped[str | None] = mapped_column(String(512))
+    retry_count: Mapped[int] = mapped_column(default=0, server_default=text("0"), nullable=False)
+    duration_ms: Mapped[int] = mapped_column(default=0, server_default=text("0"), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
 

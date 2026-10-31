@@ -67,7 +67,7 @@ def streamed(parts=("hello", " world"), finish_reason="stop"):
     return httpx.Response(200, headers={"content-type": "text/event-stream"}, stream=stream)
 
 
-def streamed_tool_call(name="query_logistics", arguments=None, call_id="call_1"):
+def streamed_tool_call(name="query_order", arguments=None, call_id="call_1"):
     payload = json.dumps(arguments or {"order_id": "1001"}, ensure_ascii=False)
     parts = [
         tool_call_chunk(name=name, arguments=payload, call_id=call_id),
@@ -92,6 +92,8 @@ def _settings(settings_overrides):
         "context_summary_enabled": False,
         "log_file": ":memory:",
         "workflow_checkpoint_path": ":memory:",
+        # 单测默认不连真进程 MCP Server；要验清单就把 deps.mcp 换成 FakeMcp。
+        "mcp_servers": "",
     }
     defaults.update(settings_overrides)
     return Settings(_env_file=None, **defaults)
@@ -158,3 +160,98 @@ def events(response):
         lines = frame.splitlines()
         result.append((lines[0].removeprefix("event: "), json.loads(lines[1].removeprefix("data: "))))
     return result
+
+
+def msg_chunk(text="", finish="stop", tool_calls=None):
+    from langchain_core.messages import AIMessageChunk
+
+    return AIMessageChunk(content=text, tool_calls=tool_calls or [],
+                          response_metadata={"finish_reason": finish})
+
+
+def call(name, args, call_id="call_1"):
+    return {"name": name, "args": args, "id": call_id, "type": "tool_call"}
+
+
+class FakeKnowledge:
+    def __init__(self):
+        self.error = None
+        self.low = False
+
+    def retrieve(self, query, category=None):
+        from app.knowledge.retrieval import Evidence, RetrievalResult
+
+        if self.error is not None:
+            raise self.error
+        if self.low:
+            return RetrievalResult("hybrid_rerank", query, low_confidence=True, reason="top1=0.1<0.30")
+        if "邮费" in query:
+            item = Evidence(1, "普通地区邮费", "单笔订单实付满 99 元免运费，未满 99 元收取 8 元邮费。",
+                            "配送与运费 › 运费标准", "配送与运费 › 运费标准 › 普通地区邮费", "policy", {"rerank": 0.9}, 1)
+            return RetrievalResult("hybrid_rerank", "普通地区邮费标准", [item], [item])
+        return RetrievalResult("hybrid_rerank", query, low_confidence=True, reason="no_hits")
+
+
+class FakeMcp:
+    """替身 McpDiscovery：清单直接给，不握手。"""
+
+    def __init__(self, specs=()):
+        self._specs = list(specs)
+
+    async def specs(self, *, force=False):
+        return list(self._specs)
+
+
+def mcp_logistics_spec():
+    from langchain_core.tools import StructuredTool
+
+    from app.tools.registry import spec_from_tool
+
+    def query_logistics(order_id):
+        return {"ok": True, "data": {
+            "order_id": order_id, "carrier": "顺丰速运", "tracking_no": "SF1234567890",
+            "status": "IN_TRANSIT",
+            "nodes": [{"time": "2026-10-26 09:20", "text": "快件已到达【杭州转运中心】"},
+                      {"time": "2026-10-27 08:05", "text": "快件已到达【上海分拨中心】，准备派送"}],
+        }}
+
+    tool = StructuredTool(name="query_logistics", description="按订单号查询承运商、运单号和物流节点。",
+                          func=query_logistics,
+                          args_schema={"type": "object", "properties": {"order_id": {"type": "string"}},
+                                       "required": ["order_id"]})
+    return spec_from_tool(tool, source="mcp", mcp_server="logistics", label="查询物流")
+
+
+class BoundModel:
+    def __init__(self, model):
+        self.model = model
+
+    async def astream(self, messages):
+        self.model.bound_calls += 1
+        async for item in self.model._next():
+            yield item
+
+
+class ScriptedModel:
+    def __init__(self, rounds):
+        self.rounds = list(rounds)
+        self.calls = 0
+        self.bound_calls = 0
+        self.tool_names = []
+
+    def bind_tools(self, tools):
+        self.tool_names = [tool.name for tool in tools]
+        return BoundModel(self)
+
+    async def _next(self):
+        self.calls += 1
+        item = self.rounds.pop(0)
+        if isinstance(item, Exception):
+            raise item
+        for part in item:
+            await asyncio.sleep(0)
+            yield part
+
+    async def astream(self, messages):
+        async for part in self._next():
+            yield part

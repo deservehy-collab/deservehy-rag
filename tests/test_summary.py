@@ -1,9 +1,11 @@
 import asyncio
 import logging
 
+import httpx
+
 from app.summary import Summarizer, SummaryService
 from app.storage import ConversationStore
-from tests.support import _settings, api, events, sqlite_factory, streamed
+from tests.support import ChunkStream, _settings, api, chunk, events, sqlite_factory, streamed
 
 SETTINGS = {"context_summary_enabled": True}
 TEXT = "用户报订单 1001，保温杯漏水，要求退货退款，留下电话，问题尚未解决。"
@@ -220,6 +222,50 @@ def test_service_triggers_summary_after_reply_when_layer2_over_budget(caplog):
     # 测试夹具默认关掉后台摘要：只应看到 skip，不应对上游发起摘要调用。
     assert any("summary skip" in item and "reason=disabled" in item for item in logged)
     assert not any(item.startswith("summary start") for item in logged)
+
+
+def test_error_round_does_not_schedule_a_summary(caplog):
+    """出错那一轮不压摘要：历史边界不可信，宁可下一轮再补（`app/service.py` 里那句 `not failed`）。
+
+    差分写法：同一套设置连跑两遍，第二遍只把最后一轮换成了半途炸掉的流。
+    摘要关闭时锚点不前进，层 2 只会越堆越厚，所以「第 4 轮超预算」在两遍里都成立——
+    少掉的那一条 trigger 只能来自失败轮。变异（去掉 `not failed`）两遍计数相等，本条即红。
+    """
+    settings = {"context_window_tokens": 4000, "max_output_tokens": 200, "max_user_input_tokens": 200,
+                "knowledge_top_k": 1, "workflow_agent_max_steps": 1, "tool_result_max_tokens": 100,
+                "history_keep_rounds": 1, "history_round_tokens": 200}
+    caplog.set_level(logging.INFO)
+
+    def run(fail_last: bool):
+        caplog.clear()
+        counter = {"n": 0}
+
+        def handler(request):
+            counter["n"] += 1
+            if fail_last and counter["n"] == 4:
+                stream = ChunkStream([chunk("好的。")], httpx.ReadError("boom"))
+                return httpx.Response(200, headers={"content-type": "text/event-stream"}, stream=stream)
+            return streamed(("好的。" + "补" * 60,))
+
+        with api(handler, **settings) as (client, _):
+            conversation_id = None
+            frames = []
+            for question in ["第一问", "第二问", "第三问", "第四问"]:
+                payload = {"message": question}
+                if conversation_id:
+                    payload["conversation_id"] = conversation_id
+                response = events(client.post("/api/chat", json=payload))
+                conversation_id = response[0][1]["conversation_id"]
+                frames = response
+        triggers = sum(1 for record in caplog.records
+                       if record.getMessage().startswith("summary trigger"))
+        return triggers, [name for name, _ in frames]
+
+    ok_triggers, ok_frames = run(fail_last=False)
+    assert ok_triggers >= 1 and "error" not in ok_frames
+    bad_triggers, bad_frames = run(fail_last=True)
+    assert "error" in bad_frames
+    assert bad_triggers == ok_triggers - 1
 
 
 class Structured:

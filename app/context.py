@@ -8,7 +8,7 @@ from langchain_core.messages.utils import trim_messages
 
 from app.prompts import chat_system
 from app.schemas import ChatRequest
-from app.tools import FaqArgs, OrderArgs, ProductArgs, TicketArgs
+from app.tools.builtin import builtin_json_schemas
 
 logger = logging.getLogger(__name__)
 
@@ -57,9 +57,9 @@ def clip_text(text: str, max_tokens: int) -> str:
     return text[:low]
 
 
-def tool_schema_tokens() -> int:
-    schemas = [item.model_json_schema() for item in (OrderArgs, ProductArgs, FaqArgs, TicketArgs, OrderArgs)]
-    return estimate_text_tokens(json.dumps(schemas, ensure_ascii=False))
+def tool_schema_tokens(reserve: int = 0) -> int:
+    schemas = builtin_json_schemas()
+    return max(0, reserve) + estimate_text_tokens(json.dumps(schemas, ensure_ascii=False))
 
 
 @dataclass(frozen=True)
@@ -80,7 +80,8 @@ class ContextBudget:
 
     @classmethod
     def from_settings(cls, settings, *, summaries_tokens: int = 0) -> "ContextBudget":
-        system = estimate_text_tokens(chat_system(settings.store_name)) + tool_schema_tokens()
+        system = (estimate_text_tokens(chat_system(settings.store_name))
+                  + tool_schema_tokens(settings.tool_schema_reserve_tokens))
         evidence = settings.knowledge_top_k * 400
         react_peak = settings.workflow_agent_max_steps * (settings.tool_result_max_tokens + 400)
         available = (

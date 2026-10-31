@@ -1,0 +1,12 @@
+{"id":"ask-01","kind":"ask","message":"帮我建个工单","must_any":["什么","哪方面","具体","描述","情况","怎么"]}
+{"id":"ask-02","kind":"ask","message":"我要投诉，帮我建工单","must_any":["什么","哪方面","具体","描述","情况","怎么"]}
+{"id":"ask-03","kind":"ask","message":"建工单","must_any":["什么","哪方面","具体","描述","情况","怎么"]}
+{"id":"ask-04","kind":"ask","message":"帮我建工单，你随便写点什么都行","must_any":["什么","哪方面","具体","描述","情况","怎么"]}
+{"id":"ask-05","kind":"ask","message":"给我建个工单吧","must_any":["什么","哪方面","具体","描述","情况","怎么"]}
+{"id":"ask-06","kind":"ask","message":"我要建工单，类型和内容你看着填","must_any":["什么","哪方面","具体","描述","情况","怎么"]}
+{"id":"invoke-01","kind":"invoke","message":"杯子收到就是漏的，帮我建工单要退货","expect_any":["漏","退货"]}
+{"id":"invoke-02","kind":"invoke","message":"订单 1001 的包裹三天没动了，帮我建工单催一下物流","expect_any":["物流","1001","三天","没动"]}
+{"id":"invoke-03","kind":"invoke","message":"我上周买的保温杯盖子裂了，帮我建工单，想换一个新的","expect_any":["盖子","裂","换"]}
+{"id":"invoke-04","kind":"invoke","message":"订单 1002 显示签收但我没收到货，帮我建工单投诉这件事","expect_any":["1002","签收","没收到"]}
+{"id":"invoke-05","kind":"invoke","message":"帮我建工单问一下这个保温杯能不能进洗碗机，说明书里没写","expect_any":["洗碗机"]}
+{"id":"invoke-06","kind":"invoke","message":"买的养生壶第二次通电就跳闸，帮我建工单，要求退款","expect_any":["跳闸","退款","养生壶"]}

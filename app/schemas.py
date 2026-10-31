@@ -30,6 +30,17 @@ class ChatRequest(BaseModel):
         return self
 
 
+class ResumeRequest(BaseModel):
+    """确认卡片的一次性凭据：`pending_id` 是 T13 生成的 nonce，过期或重放都拿不到执行权。"""
+
+    model_config = ConfigDict(extra="forbid", strict=True, str_strip_whitespace=True)
+
+    conversation_id: Annotated[int, Field(ge=1)]
+    client_id: Annotated[str, Field(min_length=8, max_length=64, pattern=r"[A-Za-z0-9_-]+")]
+    decision: Literal["accept", "cancel"]
+    pending_id: Annotated[str, Field(min_length=8, max_length=64, pattern=r"[a-f0-9]+")]
+
+
 class ExtractRequest(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True, str_strip_whitespace=True)
 

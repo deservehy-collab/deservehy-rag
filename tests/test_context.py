@@ -17,9 +17,13 @@ def test_demo_budget_matches_acceptance_numbers():
         "context_window_tokens": 18000, "max_output_tokens": 2000,
         "max_user_input_tokens": 2000, "workflow_agent_max_steps": 3,
         "tool_result_max_tokens": 1200, "knowledge_top_k": 5,
+        "tool_schema_reserve_tokens": 400,
     })
     budget = ContextBudget.from_settings(settings)
-    assert (budget.history, budget.layer1, budget.layer2) == (5650, 3954, 1695)
+    # ch08/T4 起 `TicketArgs.ticket_type` 的 JSON Schema 带上合法取值名单；ch08/T9 起
+    # system 再扣 `tool_schema_reserve_tokens`（默认 400，给 MCP 动态 schema 留位），
+    # 同时旧实现把 `OrderArgs` 数了两遍的 bug 被 `builtin_json_schemas()` 修掉（约 −70）。
+    assert (budget.history, budget.layer1, budget.layer2) == (5308, 3715, 1592)
 
 
 def test_default_budget_leaves_twenty_rounds_room():

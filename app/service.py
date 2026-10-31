@@ -25,6 +25,7 @@ from app.prompts import chat_system, extraction_system
 from app.schemas import AfterSales, ChatRequest, ExtractRequest
 from app.storage import ConversationStore
 from app.summary import SummaryService
+from app.tools.mcp import McpDiscovery
 from app.workflow.classifier import IntentClassifier
 from app.workflow.coref import QuestionResolver
 from app.workflow.graph import Workflow, WorkflowDeps
@@ -70,6 +71,7 @@ class CustomerService:
                         model, enabled=settings.workflow_query_expansion,
                         max_queries=settings.workflow_query_expansion_max,
                         timeout=settings.workflow_understanding_timeout_seconds),
+                    mcp=McpDiscovery(settings),
                 ),
                 checkpointer=checkpointer,
             )
@@ -82,7 +84,8 @@ class CustomerService:
         question_tokens = estimate_text_tokens(request.message)
         if question_tokens > self.settings.max_user_input_tokens:
             raise ContextBudgetError("当前问题过长，请缩短后重试。")
-        system = estimate_text_tokens(chat_system(self.settings.store_name)) + tool_schema_tokens()
+        system = (estimate_text_tokens(chat_system(self.settings.store_name))
+                  + tool_schema_tokens(self.settings.tool_schema_reserve_tokens))
         if system + question_tokens > self.settings.input_budget:
             raise ContextBudgetError("当前问题超过上下文预算，请缩短后重试。")
 
@@ -123,19 +126,62 @@ class CustomerService:
             yield "error", model_failure(exc).payload()
             return
 
-        # 节点跑在 LangGraph 自己的任务上。Starlette 的 StreamingResponse 用 anyio 任务组监听
-        # 断连，取消信号会在每个 await 点反复重投，图内 finally 的 aclose() 因此排不完、上游
-        # 连接和节点任务一起被孤儿化。把消费放进独立任务，断开时只对它做一次干净 Task.cancel()。
-        # 同一会话的建工单接口用同一把锁（Workflow.lock），避免工单回写与新一轮 coref 互相覆盖 offer。
+        # 节点跑在 LangGraph 自己的任务上，同一会话串行；断连处理与摘要调度见 _stream／下面的收尾。
+        stream = self.workflow.respond(conversation_id, request.message, messages,
+                                       context_plan=plan.as_dict() if plan else None,
+                                       current_message_id=current_id)
+        failed = False
+        async for event, payload in self._stream(conversation_id, stream):
+            if event == "error":
+                failed = True
+            yield event, payload
+        # 摘要只在本轮正常收尾后调度：异常轮的历史边界不可信，宁可下一轮再压。
+        if not failed and plan is not None and plan.layer2_over and self.summary is not None:
+            logger.info("summary trigger conv=%s layer2_raw_tokens=%s layer2_budget=%s "
+                        "from=%s upto=%s", conversation_id, plan.layer2_raw_tokens,
+                        plan.layer2_budget, plan.summary_upto, plan.layer1_from)
+            self.summary.schedule(conversation_id, from_msg_id=plan.summary_upto,
+                                  upto_msg_id=plan.layer1_from)
+
+    async def respond_resume(self, request) -> AsyncIterator[tuple[str, dict]]:
+        """确认接口：查卡片与 resume 必须落在同一把会话锁里，否则「检查通过 → 别人插一轮
+        → resume 打到新卡片」的窗口关不掉。"""
+        if self.workflow is None:
+            yield "error", ModelFailure("database_unavailable", DB_FAILURE_MESSAGE, 503).payload()
+            return
+
+        async def drive():
+            try:
+                snapshot = await self.workflow.get_state(request.conversation_id)
+            except (SQLAlchemyError, sqlite3.Error):
+                yield "error", ModelFailure("database_unavailable", DB_FAILURE_MESSAGE, 503).payload()
+                return
+            pending = (snapshot.values or {}).get("pending_write") or {}
+            if pending.get("pending_id") != request.pending_id:
+                # 错误帧而不是 409：这条流已经在 SSE 里了，用户语言就是帧里的中文。
+                yield "error", ModelFailure("no_pending_confirm",
+                                            "这张确认卡片已经失效了，请重新发起。", 409).payload()
+                return
+            async for item in self.workflow.resume(request.conversation_id, request.decision):
+                yield item
+
+        async for item in self._stream(request.conversation_id, drive()):
+            yield item
+
+    async def _stream(self, conversation_id: int, stream) -> AsyncIterator[tuple[str, dict]]:
+        """消费一条图流：锁内跑，异常翻成 error 帧。
+
+        节点跑在 LangGraph 自己的任务上。Starlette 的 StreamingResponse 用 anyio 任务组监听
+        断连，取消信号会在每个 await 点反复重投，图内 finally 的 aclose() 因此排不完、上游
+        连接和节点任务一起被孤儿化。把消费放进独立任务，断开时只对它做一次干净 Task.cancel()。
+        同一会话的建工单接口用同一把锁（Workflow.lock），避免工单回写与新一轮 coref 互相覆盖 offer。
+        """
         lock = self.workflow.lock(conversation_id)
         held = False
         feeder: asyncio.Task | None = None
         try:
             await lock.acquire()
             held = True
-            stream = self.workflow.respond(conversation_id, request.message, messages,
-                                           context_plan=plan.as_dict() if plan else None,
-                                           current_message_id=current_id)
             queue: asyncio.Queue = asyncio.Queue()
 
             async def pump() -> None:
@@ -156,13 +202,6 @@ class CustomerService:
                     continue
                 if kind == "failure":
                     raise data
-                # 摘要只在本轮正常收尾后调度：异常轮的历史边界不可信，宁可下一轮再压。
-                if plan is not None and plan.layer2_over and self.summary is not None:
-                    logger.info("summary trigger conv=%s layer2_raw_tokens=%s layer2_budget=%s "
-                                "from=%s upto=%s", conversation_id, plan.layer2_raw_tokens,
-                                plan.layer2_budget, plan.summary_upto, plan.layer1_from)
-                    self.summary.schedule(conversation_id, from_msg_id=plan.summary_upto,
-                                          upto_msg_id=plan.layer1_from)
                 return
         except (OpenAIError, httpx.HTTPError, SQLAlchemyError, sqlite3.Error, ValueError, TimeoutError,
                 IndexError, TypeError, AttributeError) as exc:
@@ -170,10 +209,16 @@ class CustomerService:
             logger.warning("回复生成失败：%s", failure.code, exc_info=True)
             yield "error", failure.payload()
         finally:
-            if feeder is not None:
-                feeder.cancel()
-            if held:
-                lock.release()
+            try:
+                if feeder is not None:
+                    feeder.cancel()
+                    # 放锁前先等 feeder 把栈解完：断连那一瞬间图还在收尾，这时候放锁，同一会话的
+                    # 下一个请求就能和这一轮叠着跑（评审 I4：同一次确认可能被执行两遍）。
+                    # asyncio.wait 不会因为「被等的任务取消了」而抛 CancelledError，5 秒是兜底上限。
+                    await asyncio.wait({feeder}, timeout=5)
+            finally:
+                if held:
+                    lock.release()
 
     async def stream_chat(self, messages: list[BaseMessage]) -> AsyncIterator[tuple[str, dict]]:
         stream = self.model.astream(messages)

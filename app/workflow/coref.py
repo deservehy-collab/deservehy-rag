@@ -125,6 +125,9 @@ def make_coref_node(deps):
             "tool_calls": 0,
             "tokens": 0,
             "stopped_by": None,
+            # 卡片的两半都必须每轮复位：只清 pending_write 会留下一枚上一轮的 "accept"。
+            "pending_write": None,
+            "write_decision": "",
             "started_at": time.time(),
         }
 

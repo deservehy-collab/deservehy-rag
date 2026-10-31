@@ -1,37 +1,15 @@
-import asyncio
-import json
 import re
-import time
 from datetime import date
 
 import pytest
-from langchain_core.tools import tool
 from sqlalchemy import create_engine
-from sqlalchemy.exc import OperationalError
 
 from app.database import build_session_factory
-from app.knowledge.retrieval import Evidence, RetrievalResult
 from app.models import Base, Ticket
 from app.seed import seed_faq
 from app.storage import ConversationStore
-from app.tools import OrderArgs, TOOL_LABELS, ToolExecutor, make_tools
-
-
-class FakeKnowledge:
-    def __init__(self):
-        self.error = None
-        self.low = False
-
-    def retrieve(self, query, category=None):
-        if self.error is not None:
-            raise self.error
-        if self.low:
-            return RetrievalResult("hybrid_rerank", query, low_confidence=True, reason="top1=0.1<0.30")
-        if "邮费" in query:
-            item = Evidence(1, "普通地区邮费", "单笔订单实付满 99 元免运费，未满 99 元收取 8 元邮费。",
-                            "配送与运费 › 运费标准", "配送与运费 › 运费标准 › 普通地区邮费", "policy", {"rerank": 0.9}, 1)
-            return RetrievalResult("hybrid_rerank", "普通地区邮费标准", [item], [item])
-        return RetrievalResult("hybrid_rerank", query, low_confidence=True, reason="no_hits")
+from app.tools import TOOL_LABELS, make_tools
+from tests.support import FakeKnowledge
 
 
 @pytest.fixture()
@@ -48,11 +26,12 @@ def toolchain(tmp_path):
     engine.dispose()
 
 
-def test_registry_exposes_the_five_business_tools(toolchain):
+def test_registry_exposes_the_four_builtin_business_tools(toolchain):
     *_, tools = toolchain
-    assert list(tools) == ["query_order", "query_product", "query_logistics", "query_faq", "create_ticket"]
+    assert list(tools) == ["query_order", "query_product", "query_faq", "create_ticket"]
+    # 物流已移交 MCP Server，但徽章中文名还留在这里给同名工具用。
     assert TOOL_LABELS["query_logistics"] == "查询物流"
-    assert set(TOOL_LABELS) == set(tools)
+    assert set(tools) <= set(TOOL_LABELS)
 
 
 def test_query_order_returns_known_order(toolchain):
@@ -70,15 +49,6 @@ def test_query_order_reports_missing_order(toolchain):
     assert result["ok"] is False
     assert result["error"] == "not_found"
     assert "9999" in result["message"]
-
-
-def test_query_logistics_returns_nodes(toolchain):
-    *_, tools = toolchain
-    result = tools["query_logistics"].invoke({"order_id": "1001"})
-    assert result["ok"] is True
-    assert result["data"]["carrier"] == "顺丰速运"
-    assert len(result["data"]["nodes"]) == 2
-    assert "上海" in result["data"]["nodes"][-1]["text"]
 
 
 def test_query_product_matches_by_id_and_keyword(toolchain):
@@ -126,81 +96,6 @@ def test_create_ticket_writes_row_with_server_side_conversation(toolchain):
         ticket = session.get(Ticket, ticket_no)
         assert ticket.conversation_id == conversation_id
         assert ticket.status == "待处理"
-
-
-def test_executor_rejects_unknown_tool_and_bad_arguments(toolchain):
-    *_, tools = toolchain
-    executor = ToolExecutor(tools, timeout=1, attempts=2)
-    unknown = asyncio.run(executor.execute("query_weather", {}))
-    invalid = asyncio.run(executor.execute("query_order", {"order_id": ""}))
-    missing = asyncio.run(executor.execute("query_product", {}))
-    assert unknown.ok is False and unknown.code == "unknown_tool"
-    assert invalid.ok is False and invalid.code == "invalid_arguments"
-    assert missing.ok is False and missing.code == "invalid_arguments"
-
-
-def test_executor_summarizes_success_for_the_badge(toolchain):
-    *_, tools = toolchain
-    executor = ToolExecutor(tools, timeout=1, attempts=2)
-    outcome = asyncio.run(executor.execute("query_logistics", {"order_id": "1001"}))
-    assert outcome.ok is True
-    assert "2 条物流记录" in outcome.summary
-    assert "上海" in outcome.summary
-    assert outcome.duration_ms >= 0
-    assert json.loads(outcome.content)["data"]["carrier"] == "顺丰速运"
-
-
-def test_executor_retries_transient_failures(toolchain):
-    *_, tools = toolchain
-    calls = []
-
-    @tool("query_order", args_schema=OrderArgs)
-    def flaky(order_id: str) -> dict:
-        """测试用：第一次失败，第二次成功。"""
-        calls.append(order_id)
-        if len(calls) == 1:
-            raise OperationalError("select 1", {}, Exception("数据库忙"))
-        return {"ok": True, "data": {"order_id": order_id}}
-
-    executor = ToolExecutor({**tools, "query_order": flaky}, timeout=1, attempts=2)
-    outcome = asyncio.run(executor.execute("query_order", {"order_id": "1001"}))
-    assert outcome.ok is True
-    assert calls == ["1001", "1001"]
-
-
-def test_executor_times_out_and_retries_reads_only(toolchain):
-    *_, tools = toolchain
-    reads = []
-    writes = []
-
-    @tool("query_order", args_schema=OrderArgs)
-    def slow_read(order_id: str) -> dict:
-        """测试用：慢查询。"""
-        reads.append(order_id)
-        time.sleep(0.3)
-        return {"ok": True, "data": {"order_id": order_id}}
-
-    @tool("create_ticket")
-    def slow_write(description: str, ticket_type: str) -> dict:
-        """测试用：慢写入。"""
-        writes.append(description)
-        time.sleep(0.3)
-        return {"ok": True, "data": {"ticket_no": "T1"}}
-
-    executor = ToolExecutor({**tools, "query_order": slow_read, "create_ticket": slow_write}, timeout=0.05, attempts=3)
-    read_outcome = asyncio.run(executor.execute("query_order", {"order_id": "1001"}))
-    write_outcome = asyncio.run(executor.execute("create_ticket", {"description": "杯子碎了", "ticket_type": "售后"}))
-    assert read_outcome.ok is False and read_outcome.code == "tool_timeout"
-    assert len(reads) == 3
-    assert write_outcome.ok is False and write_outcome.code == "tool_timeout"
-    assert len(writes) == 1
-
-
-def test_faq_uses_its_own_timeout(toolchain):
-    *_, tools = toolchain
-    executor = ToolExecutor(tools, timeout=0.01, attempts=1, timeouts={"query_faq": 2})
-    outcome = asyncio.run(executor.execute("query_faq", {"keyword": "邮费"}))
-    assert outcome.ok is True
 
 
 def test_category_reaches_the_retriever(toolchain):

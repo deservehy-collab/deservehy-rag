@@ -1,23 +1,25 @@
 # deservehy-rag
 
-电商智能客服：FastAPI + LangChain，SSE 流式多轮对话、售后诉求结构化提取、让模型自己决定调用业务工具的 Function Calling 链路，Milvus 原生 BM25 + BGE-M3 混合检索、bge-reranker 重排与引用拒答的知识库，LangGraph 工作流编排（指代消解 + 八类意图分流 + 强制检索闸门 + 退款售后子流程 + 手写 ReAct 主 Agent），以及三层上下文管理（原文 / 规则截短 / 异步梗概 + token 预算 + 多会话侧栏）。
+电商智能客服：FastAPI + LangChain，SSE 流式多轮对话、售后诉求结构化提取、让模型自己决定调用业务工具的 Function Calling 链路，Milvus 原生 BM25 + BGE-M3 混合检索、bge-reranker 重排与引用拒答的知识库，LangGraph 工作流编排（指代消解 + 八类意图分流 + 强制检索闸门 + 退款售后子流程 + 手写 ReAct 主 Agent），以及三层上下文管理（原文 / 规则截短 / 异步梗概 + token 预算 + 多会话侧栏），以及即插即用的工具系统（注册中心＋JSON Schema 校验＋权限把门＋统一执行引擎＋审计留痕，物流与售后各一个自建 MCP Server，建工单要页面确认）。
 
 ## 功能
 
 - `POST /api/chat`：SSE 流式客服对话。普通问题一次流式返回；需要查数据时，模型先调工具，页面显示工具徽章，再用工具结果收敛回答。
 - `POST /api/after-sales/extract`：从售后描述里提取订单号、诉求类型和期望方案。
-- 五个业务工具：查订单、查商品、查物流（内置 mock 数据）、查知识库、建工单（写库）。
+- 七个工具登记在同一张表里：内置查订单、查商品、查知识库、建工单（写库，必须先页面确认）；MCP 查物流轨迹、查是否在保、查退款进度（两个独立进程的 Server，内部按入参确定性生成 mock）。内置 `query_logistics` 已下线，物流统一走 MCP，不留重名。
 - 知识库检索：Query 改写 + 检索侧同义词 → dense 与 Milvus 原生 BM25 各取 Top-50 → RRF 融合 → bge-reranker-v2-m3 重排 Top-10 → 证据首尾编排并编号；支持 `category` 元数据过滤。
 - 生成控制：回答用 `[n]` 标注来源并随 SSE 下发 `citations`；证据不足时固定拒答；生成前自评不过也拒答，并把原始问题写入 `low_confidence_questions`；System Prompt 明确负面知识（不承诺到账日期、必达时间、审核必过等）。
 - 评估：80 题标注集，对比 dense / BM25 / hybrid / hybrid+rerank 四策略的 Recall@5、Recall@10、MRR@10 与不可答题拒答率，并对 12 题做忠实度裁判，编造个案写入 `faith_cases`。
 - 知识库：Markdown 文档按标题层级切分入库，FAQ 与会话挖掘问答同库；MySQL 存正文与状态，Milvus 存 dense 向量、BM25 文本与过滤字段，双写可断点续跑。
 - 会话挖掘：从最近历史会话抽取可复用问答，精确 + 语义去重后入库；默认关闭，可用脚本或服务内定时器触发。
-- 九张表：`conversations`、`messages`、`conversation_summaries`、`faq`、`tickets`、`knowledge_chunks`、`qa_extraction_staging`、`low_confidence_questions`、`faith_cases`。
+- 十张表：`conversations`、`messages`、`conversation_summaries`、`faq`、`tickets`、`knowledge_chunks`、`qa_extraction_staging`、`low_confidence_questions`、`faith_cases`、`tool_audit_logs`。
 - 聊天页面：`http://127.0.0.1:8000/`，支持桌面与手机宽度。
 - Workflow 编排：LangGraph 图 `coref → intent → route`。先做指代消解（「它能退吗」补成「订单 1001 的商品能退吗」，已经明确的问题原样透传），再按八类意图（物流、订单、商品咨询、退款退货、售后、投诉、其他、闲聊）强制 JSON 输出 `intent` 与 `confidence`，低于置信阈值改判「其他」。知识类强制检索后过置信闸门，业务类直连主 Agent；主 Agent 是手写 ReAct 循环（最多 4 轮工具 + 1 次收敛，token 预算 6000）。
 - 退款退货 / 售后子流程：先取订单（缺号或查无都不让模型猜，下发订单卡片让用户点选），再把「这一单能不能退」做 2–3 条问法扩写并强制检索政策，最后把订单与政策证据交给主 Agent 判断。扩写只用于退款退货与售后，且在检索侧现查现用，知识库只保留一份原文。
 - 槽位与前端：订单号只从用户消息或演示订单数据里提取；退款原因不追问，提交时从固定 6 类原因里下拉选。订单选择器是聊天流里可点选的卡片，点中后自动回填「订单 1001」续跑；退款单是简单表单，走 `POST /api/refunds` 写 `tickets`（`ticket_type` 为「售后」）。
 - 投诉回合不进 Agent、不生成正文：固定安抚话术 + 前端「转人工」「建工单」两个独立按钮；转人工是前端模拟，建工单走 `POST /api/tickets` 写 `tickets` 表，重复点击幂等。（意图分类本身仍会调用一次模型；分类失败按默认意图 `其他` 走业务路由。）
+- 工具系统：新工具只做注册动作就能被主 Agent 用上（`TOOL_EXTRA_MODULES` 动态模块，或 MCP 连上现问现拿）；执行前统一按 JSON Schema 校验，拦下的错误包成一条工具结果回灌模型，不抛异常了事；只读／写两分类由我们这侧的规则定，外部 Server 的用途声明不算数；所有调用走同一个引擎，统一超时／重试／错误分诊／结果格式化（读最多 `TOOL_MAX_ATTEMPTS` 次，写恒为 1 次）；放行过的调用（含被拒、被拦、超时、失败）都落一行 `tool_audit_logs`，只有两种不落：模型幻觉出的未知工具名，和写操作挂起等用户确认的那一次——这两种情况调用根本没发生。
+- 建工单确认流：只有客户明确要求才发起，信息不足先追问、不许拿编的参数提交；LangGraph `interrupt` 把预览推到页面卡片，点「确认提交」才真执行并回工单号，点「取消」一张单都不建、按「权限拒绝」留痕。第 5 章投诉回合那两个前端按钮那条路保持原样，不接这条流。
 - 状态由 LangGraph checkpointer 持久化（默认 `.cache/langgraph/ch05.sqlite`），跨轮保留轮次与待确认操作；`State.messages` 挂 `add_messages` reducer，节点只吐新消息，完整历史靠 checkpoint 落盘，调模型前另整理裁过带摘要的精简版。
 - 三层上下文（只管当前会话）：按离当前轮的远近切三段。层 1 最近几轮留原文一个字不压；层 2 按规则截短（用户原话不动、客服答复只留开头几十字、大块工具结果换成一行标识）；层 3 更早的异步压成一段段梗概。两个锚点 `summary_upto_msg_id`、`layer1_from_msg_id` 只挪 id、不搬数据，梗概单独存 `conversation_summaries`。
 - 异步摘要：层 2 攒到超预算就在后台起摘要任务，压成新段追加进摘要表、边界追到层 1 起点，不阻塞当前回复。一段段攒、压完不回头重写，旧梗概只作背景不参与合并；一批最多 20 条，积压超过一批时从最老的一端往后分批，**锚点只推到本批真正喂进模型的最后一行**，绝不越过摘要器没看过的消息。触发只看 token 用量，不数条数；摘要失败或超时不推进锚点，下一轮继续触发。
@@ -67,7 +69,7 @@ ch07 不做：只用同会话内的三层结构，不做语义检索捞历史、
 | `WORKFLOW_QUERY_EXPANSION_MAX` | 每次扩写最多几条问法，默认 3（范围 2–3） |
 | `MODEL_CONTEXT_WINDOW` | 模型窗口，默认 32768（兼容旧名 `CONTEXT_WINDOW_TOKENS`） |
 | `MAX_OUTPUT_TOKENS` | 输出预留，默认 1024 |
-| `TOKEN_SAFETY_MARGIN` | 安全余量，默认 316（与 System Prompt 实测 1234 合计 1550，按演示配置校准） |
+| `TOKEN_SAFETY_MARGIN` | 安全余量，默认 316（与「系统」那一项实测 1576 合计 1892，按演示配置校准） |
 | `MAX_USER_INPUT_TOKENS` | 当前问题上限，默认 2000；超了直接 422，不启动 SSE |
 | `TOOL_RESULT_MAX_TOKENS` | 单次工具结果峰值预留，默认 1200 |
 | `MAX_AGENT_STEPS` | ReAct 步数（预算按步数 × 工具结果峰值），默认 4（兼容 `WORKFLOW_AGENT_MAX_STEPS`） |
@@ -77,8 +79,20 @@ ch07 不做：只用同会话内的三层结构，不做语义检索捞历史、
 | `CONTEXT_SUMMARY_ENABLED` | 后台摘要开关，默认开启；关闭后层 2 超预算只做层 1 降级 |
 | `SUMMARY_TIMEOUT_SECONDS` | 单次摘要调用超时，默认 20 秒；超时不推进锚点 |
 | `LOG_FILE` | 上下文日志路径，默认 `log/app.log`（自动建目录）；填 `:memory:` 关闭落盘 |
+| `MCP_SERVERS` | 要接的 MCP Server 名单，逗号分隔，默认 `logistics,aftersale` |
+| `MCP_LOGISTICS_URL` | 物流 Server 的 Streamable HTTP 地址，默认 `http://127.0.0.1:8931/mcp` |
+| `MCP_LOGISTICS_PERMISSION` | 物流工具的权限（我们这侧说了算），默认 `read` |
+| `MCP_AFTERSALE_URL` | 售后 Server 地址，默认 `http://127.0.0.1:8932/mcp` |
+| `MCP_AFTERSALE_PERMISSION` | 售后工具权限，默认 `read` |
+| `TOOL_WRITE_ALLOWLIST` | 允许执行的写操作名单，默认 `create_ticket`；名单外的写操作直接「权限拒绝」 |
+| `TOOL_EXTRA_MODULES` | 动态工具模块（逗号分隔点分路径），空＝不加载；启动时读取，改了要重启客服服务 |
+| `TOOL_AUDIT_ENABLED` | 是否落审计，默认 `true`；设 `0` 完全停掉留痕 |
+| `TOOL_DISCOVERY_CACHE_SECONDS` | MCP 工具表缓存秒数，默认 `60`；设 `0` 每轮现取 |
+| `TOOL_SCHEMA_RESERVE_TOKENS` | 工具 JSON Schema 在预算里的预留，默认 `400` |
+| `TOOL_TIMEOUT_SECONDS` | 单次工具调用超时，默认 5 秒；ch08 起由统一引擎执行，且同一个值也管着与 MCP Server 的握手 |
+| `TOOL_MAX_ATTEMPTS` | 最多试几次，默认 2；**只对只读工具重试，写操作恒为一次** |
 
-预算不是配出来的一个数，是从窗口倒推：`历史预算 = min(HISTORY_KEEP_ROUNDS × HISTORY_ROUND_TOKENS, 窗口 − 输出 − 余量 − 系统 − 证据 − 梗概 − ReAct 峰值)`，再按层 1 七成 / 层 2 三成分配。演示配置（18000 / 2000 / 2000 / 3 步 / 1200 / Top-5）实算得 **历史 5650、层 1 3954、层 2 1695**；默认 32768 得 12000 / 8399 / 3600。
+预算不是配出来的一个数，是从窗口倒推：`历史预算 = min(HISTORY_KEEP_ROUNDS × HISTORY_ROUND_TOKENS, 窗口 − 输出 − 余量 − 系统 − 证据 − 梗概 − ReAct 峰值)`，再按层 1 七成 / 层 2 三成分配。ch08 起「系统」这一项里多了工具 schema：`chat_system` 实测 704 ＋ 预留 400 ＋ 四个内置工具的 schema 实测 472 ＝ **1576**。演示配置（18000 / 2000 / 2000 / 3 步 / 1200 / Top-5）实算得 **历史 5308、层 1 3715、层 2 1592**；默认 32768 仍是 12000 / 8399 / 3600（被「想留轮数」封顶，匀得出的还剩 19452）。
 
 其余检索条数、批次大小、挖掘间隔、去重阈值都有默认值。
 
@@ -96,26 +110,38 @@ ch07 不做：只用同会话内的三层结构，不做语义检索捞历史、
 
 双击 `start.bat`：建虚拟环境、装依赖、`docker compose up -d`、初始化数据库、导入知识库，然后启动服务。
 
+要用物流与售后那两个 MCP 工具（查物流轨迹、查是否在保、查退款进度），再双击一次：
+
+```bat
+start-mcp.bat        :: 起物流(8931)与售后(8932)两个 MCP Server；要停就关掉那两个窗口
+```
+
+不想起也行：连不上的 Server 本轮就不进工具表（只打一条 warning，服务照常），问物流会答「暂时查不到」。想彻底不去握手，把 `MCP_SERVERS` 置空。
+
 手动等价命令：
 
 ```bat
 docker compose up -d
 .venv\Scripts\python.exe -X utf8 -m scripts.init_db
 .venv\Scripts\python.exe -X utf8 -m scripts.ingest_knowledge
+.venv\Scripts\python.exe -X utf8 -m mcp_servers.logistics_server
+.venv\Scripts\python.exe -X utf8 -m mcp_servers.aftersale_server
 .venv\Scripts\python.exe -X utf8 -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
 `scripts.init_db` 与 `scripts.ingest_knowledge` 均可重复执行：前者建库建表补 FAQ 种子，后者按内容幂等导入并在必要时补向量。
 
-### 数据迁移（ch07）
+### 数据迁移（ch07／ch08）
 
-新库直接 `python -m scripts.init_db`，ORM 里已带 `conversation_summaries` 表与 `conversations` 的两个锚点列。已有库要单独跑一次迁移：
+新库直接 `python -m scripts.init_db`，ORM 里已带 `conversation_summaries` 表、`conversations` 的两个锚点列与 `tool_audit_logs` 表。已有库要单独跑一次迁移：
 
 ```bat
 docker compose exec -T mysql mysql -uroot -p%DB_PASSWORD% xiaolin_ch02 < scripts\init_sql\005_context.sql
 ```
 
 这条只跑一次：`ALTER TABLE` 不加 `IF NOT EXISTS`，重复执行报 `duplicate column name`，那说明库已经升过，可以忽略。锚点列允许 NULL，老会话不用回填——第一次降级或摘要时按当前边界写进去。
+
+ch08 的 `tool_audit_logs`（`scripts\init_sql\006_tools.sql`）更省事的做法是再跑一次 `python -m scripts.init_db`——`create_all` 只建缺的表，不动已有数据。**这张表没建也不会报错**：审计写失败按设计只打日志、不拦工具执行，所以缺表时建工单照样「成功」、页面照样出工单号，只有查审计行才能发现。演示与验收前务必先补表。
 
 ## 演示与验收
 
@@ -127,11 +153,23 @@ docker compose exec -T mysql mysql -uroot -p%DB_PASSWORD% xiaolin_ch02 < scripts
 
 依次问五句并检查工具调用：
 
-- 「订单 1001 的物流到哪了？」→ 调 `query_logistics`，回答里有顺丰运单和上海分拨中心节点；
+- 「订单 1001 的物流到哪了？」→ 调 `query_logistics`（ch08 起由 MCP Server 提供），承运商、运单号与节点都按订单号确定性生成，1001 这单固定是京东物流、末节点「已签收」；
 - 「退货政策是什么？」→ 调 `query_faq`，命中退换货文档；
 - 「邮费是多少？」→ 调 `query_faq`，混合检索命中配送与运费文档；
 - 「G500 杯盖能装在 B750 上吗？」→ 调 `query_faq`，BM25 命中型号条款，回答含 G500 与 B750；
 - 「你们支持货到付款吗？」→ 调 `query_faq` 失败，回答为固定拒答文案。
+
+工具系统与建工单确认流（ch08，六条验收逐条给证据）：
+
+```bat
+.venv\Scripts\python.exe -X utf8 -m scripts.demo_tools_mcp --case all      :: 六条验收：register／logistics／hot-discover／confirm／cancel／timeout
+.venv\Scripts\python.exe -X utf8 -m scripts.evaluate_ticket_confirm        :: 12 例追问／发起标注集，报告写 evals/reports/ch08-ticket-confirm-<时间戳>.md
+```
+
+`demo_tools_mcp` 的前置条件：先起 uvicorn（`start.bat`）、`start-mcp.bat` 起两个 Server、`.env` 的模型与数据库可用（服务与脚本读同一个库才看得到同一条审计）。其中 `--case register`／`timeout` 不依赖服务，`timeout` 自己在 8942 起一个必定超时的慢 Server，`hot-discover` 自己在 8941 前后各起一台做对照。任一硬判据不满足就打印「验收未通过」并以非零码退出；④⑤两条会真调模型，④还会真落一张演示工单（mock 数据，留在库里）。页面版的同一条流：对着聊天页说一句「订单 1001 快递在转运中心停了五天，帮我建工单跟进」，出卡片 → 点「确认提交」回工单号，说「帮我建个工单」则只会被追问。
+
+mock 数据是确定性的：同一个订单号永远查出同一条轨迹。为了让演示能稳定造出超时、失败重试和「Server 侧新加工具」，`mcp_servers/` 读了四个**只服务演示、不属于产品行为**的环境变量——`LOGISTICS_SLOW_SECONDS`／`AFTERSALE_SLOW_SECONDS`（工具内 sleep，造超时）、`LOGISTICS_FAIL_TIMES`（前 N 次抛错，造重试）、`LOGISTICS_EXTRA_TOOLS=query_station_info`／`AFTERSALE_EXTRA_TOOLS`（逗号分隔的额外工具名）。日常起服务不用管它们，`start-mcp.bat` 不带任何夹具默认值。
+
 
 知识库单独验收与维护：
 
@@ -238,8 +276,7 @@ ch06 分流器（模型 deepseek-flash，2026-10-30）：
 
 ch07 上下文管理（模型 deepseek-flash，2026-10-30）：
 
-演示配置 `MODEL_CONTEXT_WINDOW=18000 MAX_OUTPUT_TOKENS=2000 MAX_USER_INPUT_TOKENS=2000 MAX_AGENT_STEPS=3 TOOL_RESULT_MAX_TOKENS=1200 RERANK_TOP_K=5` → 历史预算 5650 / 层 1 3954 / 层 2 1695；同一会话（conv=89）连聊 28 轮：
-
+演示配置 `MODEL_CONTEXT_WINDOW=18000 MAX_OUTPUT_TOKENS=2000 MAX_USER_INPUT_TOKENS=2000 MAX_AGENT_STEPS=3 TOOL_RESULT_MAX_TOKENS=1200 RERANK_TOP_K=5` → 历史预算 5650 / 层 1 3954 / 层 2 1695（这是 ch07 当场的实测数；ch08 起「系统」里多了工具 schema 预留，同一配置现在是 **5308 / 3715 / 1592**，见「配置」小节。下面的 28 轮跑批是 ch07 代码下做的，保留原值）；同一会话（conv=89）连聊 28 轮：
 | 项 | 实测 |
 |---|---|
 | 层 1 滑窗降级 | 6 次，锚点单向往前挪：576→578→584→592→604→610→612 |
@@ -254,6 +291,19 @@ ch07 上下文管理（模型 deepseek-flash，2026-10-30）：
 - 历史增速实测约 180 token/轮（寒暄与拒答轮几乎不涨），所以演示把问题换成必然多要点的复合问法，28 轮才压得出级联；默认窗口下同样的 22 轮离降级线还很远。
 - 上一版这里写的是 conv=87 / seq=1 一段 307 字「靠梗概答题成立」，代码评审推翻：那批只把 20 条喂给摘要器却把锚点推到整段末尾，最早那段历史同时离开三层，seq=1 正文里根本没有订单 1001。分批与锚点收敛后重跑，`seq=1` 正文以「用户反馈订单1001保温杯漏水，要求退货退款」开头，末问靠梗概答题才是实测而非推断。
 - 回归：`pytest` 313 passed。
+
+ch08 建工单确认流（模型 deepseek-flash，2026-10-31）：
+
+| 评估 | 样本 | 结果 | 门槛 |
+|---|---|---|---|
+| 信息不足时先追问、不编参数 | 6 例 | `ask_rate` 1.000 | 1.00 |
+| 说清楚了就直接出卡片 | 6 例 | `invoke_rate` 1.000 | 0.90 |
+| 评估过程中误落的工单 | — | 0 张 | 必须为 0（卡片只预览） |
+
+- `invoke_rate` 那个 0.90 在 6 条样本上没有粒度：5/6=0.833 就红，**实际等于「6/6 才能过」**，比门槛数字看起来更严。
+- 首跑 `invoke_rate` 只有 0.500（`evals/reports/ch08-ticket-confirm-20261031-154945.md` 留着当证据），三条失败各有原因，全部按「改提示词句子」处理——门槛、样本、判据一条没动；改完复跑 1.000，报告 `evals/reports/ch08-ticket-confirm-20261031-182506.md`，12 例原文都留在报告里。
+- 这一集把意图分类钉成「其他」直连主 Agent（脚本自带 8 行桩，不 import `tests/`）：要测的是「该不该发起写操作」，路由抖动有第 6 章评估与 `tests/test_intent.py` 兜着。
+- 回归：`pytest` 453 passed（ch08 收尾时的全量数，含第八次评审修复新增的 5 条）。
 
 ## 低置信池与编造台账
 
@@ -293,27 +343,41 @@ FROM faith_cases ORDER BY last_seen_at DESC;
 事件顺序：
 
 - `meta`：新会话号；
-- `status`：工具开始/结束（`phase`、`tool`、`label`，结束帧带 `ok`、`summary`、`duration_ms`）；
+- `status`：工具开始/结束（`phase`、`tool`、`label`，结束帧带 `ok`、`summary`、`duration_ms`；ch08 起还带 `source`（`builtin`／`mcp`）与 `mcp_server`）；
 - `citations`：`query_faq` 成功后、第二轮正文前下发，`items` 含 `n`、`chunk_id`、`question`、`answer`、`category`、`section_path`；
 - `token`：正文增量；
 - `actions`：待用户决定的操作（投诉回合的 `{"items":[{"id":"human","label":"转人工"},{"id":"ticket","label":"建工单"}],"turn":1}`；退款回合额外带 `refund`：`{"order_id":"1001","reasons":["商品破损或质量问题", "..."]}`）；按钮只在当轮消息下生效；
 - `orders`：退款子流程拿不到订单号或查无订单时下发 `{"items":[{"order_id":"1001","status":"...","amount":...,"created_at":"...","items":[...]}],"reason":"missing_order"}`，前端渲染成可点选卡片；
+- `confirm`：写操作预览卡片 `{"pending_id","tool","tool_call_id","label","turn","question","fields":[{"label","value"}],"note"}`。出现这一帧时本轮**没有**执行任何东西，`pending_id` 是这张卡片的 nonce，点卡片时原样带回；
 - `done`：`finish_reason`；
 - `error`：`code`、`message`（例如 `database_unavailable`）。
 
+暂停一轮的帧序是 `meta → status → status → [token] → confirm → done`；`done` 由服务层从 LangGraph 的 `__interrupt__` 翻出来，好让前端把这条流收干净。恢复一轮（`/api/chat/resume`）没有 `meta`，确认是 `status → status → token → done`，取消是 `token → done`。
+
 检索低置信或检索异常时不下发 `citations`，直接返回固定拒答正文并以 `done` 结束。`query_faq` 成功后会先下发 `citations` 再做证据自评（规格 §4.6），因此自评不通过的拒答仍带着已发出的来源；前端只在正文出现 `[n]` 时渲染来源，不影响阅读。
 
-`POST /api/tickets`，请求体 `{"conversation_id": 12, "client_id": "web-xxxxxxxx", "turn": 1}`：只能对当轮投诉 `offer` 建单（`turn` 来自 `actions` 帧，原样带回）；他人会话 403，offer 失效或轮次不符 409，建单失败 502，重复点击直接返回同一工单号。成功后写 `tickets` 表，`ticket_type` 为 `投诉`，描述以 `用户投诉：` 开头。
+`POST /api/tickets`，请求体 `{"conversation_id": 12, "client_id": "web-xxxxxxxx", "turn": 1}`：只能对当轮投诉 `offer` 建单（`turn` 来自 `actions` 帧，原样带回）；他人会话 403，offer 失效或轮次不符 409，建单失败 502，重复点击直接返回同一工单号。成功后写 `tickets` 表，`ticket_type` 为 `投诉`，描述以 `用户投诉：` 开头。这条按钮路径不接 MCP、不走确认卡片，ch05/ch06 的校验与幂等口径原样保留。
 
-`POST /api/refunds`，请求体 `{"conversation_id": 12, "client_id": "web-xxxxxxxx", "turn": 2, "reason": "商品破损或质量问题", "note": "可选，最多 200 字"}`：同样只对当轮退款 `offer` 生效。`reason` 必须是固定 6 类原因之一（否则 422），他人会话 403，offer 失效或轮次不符 409，建单失败 502；`offer.refund_no` 与进程内缓存双保险，重复提交返回同一单号。成功后写 `tickets` 表，`ticket_type` 为 `售后`，描述以 `退款申请：订单 <号>｜原因：<原因>` 开头。
+`POST /api/refunds`，请求体 `{"conversation_id": 12, "client_id": "web-xxxxxxxx", "turn": 2, "reason": "商品破损或质量问题", "note": "可选，最多 200 字"}`：同样只对当轮退款 `offer` 生效。`reason` 必须是固定 6 类原因之一（否则 422），他人会话 403，offer 失效或轮次不符 409，建单失败 502；`offer.refund_no` 与进程内缓存双保险，重复提交返回同一单号。成功后写 `tickets` 表，`ticket_type` 为 `售后`，描述以 `退款申请：订单 <号>｜原因：<原因>` 开头。这条按钮路径不接 MCP、不走确认卡片，ch05/ch06 的校验与幂等口径原样保留。
+
+`POST /api/chat/resume`，请求体 `{"conversation_id": 12, "client_id": "web-xxxxxxxx", "decision": "accept", "pending_id": "3f9c3f9c3f9c"}`：`decision` 只能是 `accept`／`cancel`，`pending_id` 必须是这一轮 `confirm` 帧里给的那个。卡片已失效（会话没挂在确认点上、或已被别的卡片顶掉）回一帧 `error`（`code="no_pending_confirm"`）；他人会话 403，参数不合法 422。`accept` 才执行 `create_ticket` 并写 `tickets` 表，`cancel` 不执行任何东西、只按「权限拒绝」落一行审计。查 `pending_id` 与执行 resume 在同一把会话锁里，所以不存在「检查通过后被别人插一轮」的窗口。
+
+## 审计与隐私
+
+`tool_audit_logs` 每次**放行过**的工具调用落一行（被拒、被拦、超时同样落；未知工具名与「等用户确认」那一次不落——这两种情况调用根本没发生）：`conversation_id`、`tool_call_id`、`tool_name`、`tool_source`、`mcp_server`、`arguments`、`result_summary`、`status`（成功／失败／超时／校验拦下／权限拒绝）、`error_message`、`retry_count`、`duration_ms`、`created_at`。这张表**不挂外键**——审计是流水账，会话删了记录要留着；写审计失败也只打日志，绝不反过来拦工具执行。`arguments` 存的是模型给出的参数原文，可能含用户描述过的问题细节；本项目所有演示数据都是 mock，不含真实姓名、电话、地址，`.env` 与数据库口令不入库。要完全停掉留痕把 `TOOL_AUDIT_ENABLED=0`。
+
+权限分类由**我们这侧的配置**说了算，外部 MCP Server 自己声明的 `readOnlyHint` 一律不读。反面得写清楚：`MCP_LOGISTICS_PERMISSION`／`MCP_AFTERSALE_PERMISSION` 默认 `read`，也就是**不经确认卡片直接执行**；改成 `write` 才会先出卡片，而且还要在 `TOOL_WRITE_ALLOWLIST` 里才真跑得起来。所以给外部 Server 新增工具时，先想清楚它到底改不改数据——标错成 `read` 就等于多开一个免确认的写口。
+
+正因为「写失败只打日志」，缺表时工具调用不会报错、建工单照样回工单号——升级后记得先补 `tool_audit_logs`（见上面「数据迁移」）。
 
 ## 目录
 
 ```
-app/          配置、模型、提示词、SSE 服务、工具、存储、ORM 模型、知识库模块、workflow 图与主 Agent 循环、网页
+app/          配置、模型、提示词、SSE 服务、工具（注册中心／校验／权限／格式化／审计／引擎／MCP 发现）、存储、ORM 模型、知识库模块、workflow 图与主 Agent 循环、网页
+mcp_servers/  两个自建 MCP Server（物流、售后）与确定性 mock
+examples/     知识库示例文档；tools/ 下是动态注册与超时演示用的示例工具
 scripts/      初始化数据库、知识导入/挖掘/演示、评估、初始化 SQL
-examples/     知识库示例文档
-evals/        80 题检索标注集、ch06 意图/多轮/扩写标注集与评估报告
+evals/        80 题检索标注集、ch06 意图/多轮/扩写标注集、ch08 追问/发起标注集与评估报告
 tests/        SQLite 自动测试 + MySQL/Milvus 集成检查（不可用时跳过）
 dev-notes/    分阶段开发留痕
 docs/         规格与实施计划

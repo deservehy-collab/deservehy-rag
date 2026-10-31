@@ -6,8 +6,8 @@ from app.agent.guards import ACTION_LABELS, AgentStream
 from app.agent.react import run_react
 from app.context import build_model_messages, estimate_tokens, summary_log_lines
 from app.knowledge.quality import REFUSAL_TEXT
-from app.prompts import AGENT_ADDENDUM, KNOWLEDGE_HINT, POLICY_HINT
-from app.tools import ToolExecutor, make_tools
+from app.prompts import AGENT_ADDENDUM, KNOWLEDGE_HINT, POLICY_HINT, TICKET_CONFIRM_TEXT
+from app.tools.wiring import build_engine, build_registry, fetch_mcp_specs
 from app.workflow.actions import actions_payload, build_offer
 from app.workflow.events import emit
 from app.workflow.knowledge_node import record_low_confidence
@@ -106,13 +106,12 @@ def make_agent_node(deps):
         conversation_id = state["conversation_id"]
         question = state["question"]
         route = state.get("route") or "agent"
-        tools = make_tools(deps.store, conversation_id, deps.knowledge)
-        if route in ("knowledge", "policy"):
-            tools.pop("query_faq", None)
-        executor = ToolExecutor(
-            tools, timeout=deps.settings.tool_timeout_seconds, attempts=deps.settings.tool_max_attempts,
-            timeouts={"query_faq": deps.settings.knowledge_tool_timeout_seconds},
-        )
+        mcp = getattr(deps, "mcp", None)
+        registry = build_registry(deps.store, conversation_id, deps.knowledge, settings=deps.settings,
+                                  mcp_specs=await fetch_mcp_specs(mcp),
+                                  exclude={"query_faq"} if route in ("knowledge", "policy") else ())
+        engine = build_engine(registry, settings=deps.settings,
+                              session_factory=deps.store.session_factory)
         resolved = state.get("resolved_question") or question
         plan = state.get("context_plan") or _fallback_plan(state)
         messages = build_model_messages(plan, resolved, trailing_block(route, state), deps.settings)
@@ -136,7 +135,7 @@ def make_agent_node(deps):
             return await on_tool_outcome(name, outcome, guard, conversation_id, question)
 
         result = await run_react(
-            model=deps.model, tools=tools, executor=executor, messages=messages,
+            model=deps.model, registry=registry, engine=engine, messages=messages,
             on_token=lambda text: emit("token", {"content": text}),
             on_status=lambda payload: emit("status", payload),
             max_steps=deps.settings.workflow_agent_max_steps,
@@ -146,6 +145,19 @@ def make_agent_node(deps):
             store=deps.store, conversation_id=conversation_id,
             tool_result_max_tokens=deps.settings.tool_result_max_tokens,
         )
+
+        if result.pending_write:
+            # 图马上在 confirm_ticket 挂起，log 节点本轮跑不到：这一轮的正文由这里落库。
+            text = result.reply or TICKET_CONFIRM_TEXT
+            await asyncio.to_thread(deps.store.add_message, conversation_id, "assistant", content=text)
+            if not result.reply:
+                emit("token", {"content": text})
+            logger.info("workflow node=agent conv=%s paused=confirm_write tool=%s",
+                        conversation_id, result.pending_write["tool"])
+            return {"reply": text, "actions": [], "offer": None,
+                    "finish_reason": result.finish_reason, "steps": result.steps,
+                    "tool_calls": result.tool_calls, "tokens": result.tokens,
+                    "stopped_by": result.stopped_by, "pending_write": result.pending_write}
 
         actions = [name for name in guard.actions.actions if name in ACTION_LABELS]
         if "refund" in actions and not (route == "policy" and state.get("order")):
@@ -159,6 +171,6 @@ def make_agent_node(deps):
         return {"reply": result.reply, "actions": actions, "offer": offer,
                 "finish_reason": result.finish_reason, "steps": result.steps,
                 "tool_calls": result.tool_calls, "tokens": result.tokens,
-                "stopped_by": result.stopped_by}
+                "stopped_by": result.stopped_by, "pending_write": result.pending_write}
 
     return agent_node

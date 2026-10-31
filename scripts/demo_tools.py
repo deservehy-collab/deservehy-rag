@@ -6,7 +6,7 @@ import httpx
 CLIENT_ID = "demo-tools"
 CASES = (
     {"label": "订单物流", "question": "订单 1001 的物流到哪了？", "tool": "query_logistics", "ok": True,
-     "must": ("1001",), "any": ("顺丰", "上海分拨中心", "运输中")},
+     "needs_mcp": True, "must": ("1001",), "any": ("顺丰", "上海分拨中心", "运输中")},
     {"label": "FAQ 命中", "question": "退货政策是什么？", "tool": "query_faq", "ok": True,
      "must": ("退货",), "any": ("7 天", "7天", "七天")},
     {"label": "知识库检索运费", "question": "邮费是多少？", "tool": "query_faq", "ok": True,
@@ -57,13 +57,15 @@ def ask(client: httpx.Client, message: str) -> dict:
 
 
 def check(client: httpx.Client, case: dict) -> None:
+    hint = "（这条用例的工具由 MCP Server 提供，先双击 start-mcp.bat）" if case.get("needs_mcp") else ""
     outcome = ask(client, case["question"])
     tool_states = [event for event in outcome["events"] if case["tool"] in event]
     if not tool_states:
-        raise DemoFailure(f"{case['label']}：模型没有调用 {case['tool']}。事件：{' → '.join(outcome['events'])}")
+        raise DemoFailure(f"{case['label']}：模型没有调用 {case['tool']}{hint}。事件：{' → '.join(outcome['events'])}")
     called_ok = "成功" in tool_states[-1]
     if called_ok != case["ok"]:
-        raise DemoFailure(f"{case['label']}：{case['tool']} 结果与预期不符（{tool_states[-1]}）。回答：{outcome['answer']}")
+        raise DemoFailure(f"{case['label']}：{case['tool']} 结果与预期不符（{tool_states[-1]}）{hint}。"
+                          f"回答：{outcome['answer']}")
     missing = [word for word in case["must"] if word not in outcome["answer"]]
     if missing:
         raise DemoFailure(f"{case['label']}：回答没有体现工具结果 {missing}。回答：{outcome['answer']}")
@@ -81,6 +83,8 @@ def main() -> int:
     try:
         with httpx.Client(base_url=args.base_url, timeout=120) as client:
             for case in CASES:
+                if case.get("needs_mcp"):
+                    print("提示：订单物流的工具来自 MCP Server，先双击 start-mcp.bat；没起也能跑其余四条。")
                 check(client, case)
     except (DemoFailure, httpx.HTTPError, ValueError) as exc:
         message = str(exc) if isinstance(exc, DemoFailure) else "服务不可用或返回格式无效，请检查服务、数据库与上游配置。"

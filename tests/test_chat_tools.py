@@ -5,7 +5,7 @@ from sqlalchemy.exc import OperationalError
 
 from app.models import Conversation, Message
 from app.storage import ConversationStore
-from tests.support import api_with_db, events, streamed, streamed_tool_call
+from tests.support import FakeMcp, api_with_db, events, mcp_logistics_spec, streamed, streamed_tool_call
 
 
 def test_tool_round_emits_status_frames_and_persists_every_message():
@@ -18,12 +18,15 @@ def test_tool_round_emits_status_frames_and_persists_every_message():
         return streamed(("包裹", "已到上海分拨中心，准备派送。"))
 
     with api_with_db(handler) as (client, seen, factory):
+        client.app.state.service.workflow.deps.mcp = FakeMcp([mcp_logistics_spec()])
         response = client.post("/api/chat", json={"message": "订单 1001 的物流到哪了", "client_id": "anon-test-1"})
         assert response.status_code == 200
         frames = events(response)
         assert [name for name, _ in frames] == ["meta", "status", "status", "token", "token", "done"]
         assert frames[0][1]["conversation_id"] >= 1
-        assert frames[1][1] == {"phase": "start", "tool": "query_logistics", "label": "查询物流"}
+        assert frames[1][1]["tool"] == "query_logistics"
+        assert frames[1][1]["label"] == "查询物流" and frames[1][1]["phase"] == "start"
+        assert frames[1][1]["source"] == "mcp" and frames[1][1]["mcp_server"] == "logistics"
         assert frames[2][1]["ok"] is True
         assert "2 条物流记录" in frames[2][1]["summary"]
         assert frames[2][1]["label"] == "查询物流"

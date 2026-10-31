@@ -1,6 +1,9 @@
 import asyncio
+import json
+import logging
 from dataclasses import dataclass
 from typing import Awaitable, Callable
+from uuid import uuid4
 
 from langchain_core.messages import AIMessage, AIMessageChunk, ToolMessage
 
@@ -12,11 +15,20 @@ from app.agent.guards import (
     AgentStream,
 )
 from app.context import clip_text, estimate_tokens
-from app.tools import TOOL_LABELS, ToolExecutor, ToolOutcome
+from app.tools.engine import ToolEngine, ToolOutcome
+from app.tools.registry import ToolRegistry
 
 StatusFn = Callable[[dict], None]
 TokenFn = Callable[[str], None]
 OutcomeFn = Callable[[str, ToolOutcome], Awaitable[str | None]]
+
+logger = logging.getLogger(__name__)
+
+NOT_EXECUTED_CONTENT = json.dumps(
+    {"ok": False, "error": "not_executed",
+     "message": "本轮因等待用户确认而暂停，这次调用没有执行。"},
+    ensure_ascii=False,
+)
 
 
 @dataclass
@@ -27,13 +39,14 @@ class ReActResult:
     tool_calls: int
     tokens: int
     stopped_by: str | None
+    pending_write: dict | None = None
 
 
 async def run_react(
     *,
     model,
-    tools: dict,
-    executor: ToolExecutor,
+    registry: ToolRegistry,
+    engine: ToolEngine,
     messages: list,
     on_token: TokenFn,
     on_status: StatusFn,
@@ -47,7 +60,7 @@ async def run_react(
     tool_result_max_tokens: int | None = None,
 ) -> ReActResult:
     guard = guard or AgentStream()
-    bound = model.bind_tools(list(tools.values()))
+    bound = model.bind_tools(registry.langchain_tools())
     work = list(messages)
     steps = total = 0
     finish_reason = None
@@ -109,15 +122,42 @@ async def run_react(
             await asyncio.to_thread(store.add_message, conversation_id, "assistant", tool_calls=stored)
         work.append(AIMessage(content="".join(raw_parts), tool_calls=stored))
 
-        for item in stored:
-            label = TOOL_LABELS.get(item["name"], item["name"])
-            on_status({"phase": "start", "tool": item["name"], "label": label})
-            outcome = await executor.execute(item["name"], item["args"])
-            if store is not None and conversation_id is not None:
-                await asyncio.to_thread(store.add_message, conversation_id, "tool",
-                                        content=outcome.content, tool_call_id=item["id"])
+        for position, item in enumerate(stored):
+            spec = registry.get(item["name"])
+            label = spec.label if spec else item["name"]
+            source = spec.source if spec else "unknown"
+            server = spec.mcp_server if spec else None
+            on_status({"phase": "start", "tool": item["name"], "label": label,
+                       "source": source, "mcp_server": server})
+            outcome = await engine.run(name=item["name"], args=item["args"], tool_call_id=item["id"],
+                                       conversation_id=conversation_id)
+            if outcome.code == "confirm_required":
+                # 引擎没有执行这次调用；把「等用户确认」如实写成工具结果。
+                await _store_tool_row(store, conversation_id, item["id"], outcome.content)
+                on_status({"phase": "end", "tool": item["name"], "label": label, "ok": False,
+                           "code": outcome.code,
+                           "summary": outcome.summary, "duration_ms": outcome.duration_ms,
+                           "source": source, "mcp_server": server})
+                # assistant 行已经带上了本轮全部 tool_calls，缺对应 tool 行下一轮历史就不成对，
+                # 所以剩余调用各补一条 not_executed，但不入引擎、不发 status、不落审计。
+                rest = stored[position + 1:]
+                if rest:
+                    logger.warning("确认暂停：本轮另有 %d 个工具调用未执行（%s）",
+                                   len(rest), ", ".join(row["name"] for row in rest))
+                    for row in rest:
+                        await _store_tool_row(store, conversation_id, row["id"], NOT_EXECUTED_CONTENT)
+                tail = guard.finish()
+                if tail:
+                    on_token(tail)
+                return ReActResult(guard.text, "stop", steps, total + 1, estimate_tokens(work),
+                                   "await_confirm",
+                                   pending_write={"tool": item["name"], "args": item["args"],
+                                                  "tool_call_id": item["id"], "label": label,
+                                                  "pending_id": uuid4().hex})
+            await _store_tool_row(store, conversation_id, item["id"], outcome.content)
             on_status({"phase": "end", "tool": item["name"], "label": label, "ok": outcome.ok,
-                       "summary": outcome.summary, "duration_ms": outcome.duration_ms})
+                       "summary": outcome.summary, "duration_ms": outcome.duration_ms,
+                       "source": source, "mcp_server": server})
             total += 1
             forced = await on_tool_outcome(item["name"], outcome) if on_tool_outcome else None
             if forced is not None:
@@ -131,3 +171,9 @@ async def run_react(
                 content=clip_text(outcome.content, tool_result_max_tokens) if tool_result_max_tokens else outcome.content,
                 tool_call_id=item["id"], name=item["name"],
             ))
+
+
+async def _store_tool_row(store, conversation_id, tool_call_id, content) -> None:
+    if store is not None and conversation_id is not None:
+        await asyncio.to_thread(store.add_message, conversation_id, "tool",
+                                content=content, tool_call_id=tool_call_id)

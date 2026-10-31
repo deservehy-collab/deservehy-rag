@@ -32,10 +32,10 @@ from app.knowledge.selfcheck import EvidenceSelfCheck
 from app.knowledge.vector_store import MilvusVectorStore
 from app.logging_config import configure_file_logging
 from app.model import build_model
-from app.schemas import AfterSales, ChatRequest, ExtractRequest, RefundRequest, TicketRequest
+from app.schemas import AfterSales, ChatRequest, ExtractRequest, RefundRequest, ResumeRequest, TicketRequest
 from app.service import CustomerService, ModelFailure
 from app.storage import ConversationStore
-from app.tools import ToolExecutor, make_tools
+from app.tools.wiring import build_engine as build_tool_engine, build_registry
 from app.workflow.graph import open_checkpointer
 
 logger = logging.getLogger(__name__)
@@ -191,6 +191,27 @@ def create_app(
 
         return StreamingResponse(encode_events(), media_type="text/event-stream", headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
+    @application.post("/api/chat/resume")
+    async def resume_chat(body: ResumeRequest, request: Request):
+        service = request.app.state.service
+        try:
+            owner = await asyncio.to_thread(service.store.owner, body.conversation_id)
+        except (SQLAlchemyError, AttributeError):
+            raise ModelFailure("database_unavailable", DB_FAILURE_MESSAGE, 503) from None
+        if owner != body.client_id:
+            raise ModelFailure("forbidden", "无权操作该会话。", 403)
+
+        async def encode_events():
+            stream = service.respond_resume(body)
+            try:
+                async for event, payload in stream:
+                    yield f"event: {event}\ndata: {json.dumps(payload, ensure_ascii=False)}\n\n"
+            finally:
+                await stream.aclose()
+
+        return StreamingResponse(encode_events(), media_type="text/event-stream",
+                                 headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
     @application.post("/api/tickets")
     async def create_ticket(body: TicketRequest, request: Request):
         service = request.app.state.service
@@ -225,15 +246,15 @@ def create_app(
             description = (ticket.get("description") or f"会话 {body.conversation_id} 用户反馈")[:500]
             if len(description) < 5:
                 description = (description + "（用户提交工单）")[:500]
-            tools = make_tools(store, body.conversation_id, workflow.knowledge)
-            executor = ToolExecutor(
-                tools, timeout=service.settings.tool_timeout_seconds,
-                attempts=service.settings.tool_max_attempts,
-                timeouts={"query_faq": service.settings.knowledge_tool_timeout_seconds},
-            )
-            outcome = await executor.execute(
-                "create_ticket", {"description": description,
-                                  "ticket_type": ticket.get("type") or "售后"})
+            registry = build_registry(store, body.conversation_id, workflow.knowledge,
+                                      settings=service.settings)
+            engine = build_tool_engine(registry, settings=service.settings,
+                                       session_factory=store.session_factory)
+            # 页面按钮本身就是用户确认，confirmed=True 只跳过确认卡；写白名单之外照样被拒。
+            outcome = await engine.run(
+                name="create_ticket", args={"description": description,
+                                            "ticket_type": ticket.get("type") or "售后"},
+                confirmed=True, conversation_id=body.conversation_id)
             if not outcome.ok:
                 logger.warning("工单创建失败：%s", outcome.code)
                 raise ModelFailure("ticket_failed", "工单暂时创建失败，请稍后重试。", 502)
@@ -284,14 +305,14 @@ def create_app(
             description = f"退款申请：订单 {refund.get('order_id')}｜原因：{body.reason}"
             if body.note:
                 description += f"｜补充：{body.note}"
-            tools = make_tools(store, body.conversation_id, workflow.knowledge)
-            executor = ToolExecutor(
-                tools, timeout=service.settings.tool_timeout_seconds,
-                attempts=service.settings.tool_max_attempts,
-                timeouts={"query_faq": service.settings.knowledge_tool_timeout_seconds},
-            )
-            outcome = await executor.execute(
-                "create_ticket", {"description": description[:500], "ticket_type": "售后"})
+            registry = build_registry(store, body.conversation_id, workflow.knowledge,
+                                      settings=service.settings)
+            engine = build_tool_engine(registry, settings=service.settings,
+                                       session_factory=store.session_factory)
+            # 同上：退款表单的提交动作即用户确认，白名单仍是硬闸门。
+            outcome = await engine.run(
+                name="create_ticket", args={"description": description[:500], "ticket_type": "售后"},
+                confirmed=True, conversation_id=body.conversation_id)
             if not outcome.ok:
                 logger.warning("退款申请创建失败：%s", outcome.code)
                 raise ModelFailure("ticket_failed", "退款申请暂时提交失败，请稍后重试。", 502)

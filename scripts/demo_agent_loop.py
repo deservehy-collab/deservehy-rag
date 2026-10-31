@@ -13,7 +13,7 @@ from app.model import build_model
 from app.models import Base
 from app.prompts import chat_system
 from app.storage import ConversationStore
-from app.tools import ToolExecutor, make_tools
+from app.tools.wiring import build_engine, build_registry
 
 QUESTION = "订单 1001 现在是什么状态？它的包裹到哪了？"
 
@@ -21,20 +21,20 @@ QUESTION = "订单 1001 现在是什么状态？它的包裹到哪了？"
 async def main() -> None:
     settings = Settings.from_env()
     model = build_model(settings)
-    engine = create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
-    Base.metadata.create_all(engine)
-    store = ConversationStore(build_session_factory(engine))
+    db_engine = create_engine("sqlite://", connect_args={"check_same_thread": False},
+                              poolclass=StaticPool)
+    Base.metadata.create_all(db_engine)
+    store = ConversationStore(build_session_factory(db_engine))
     conversation_id = store.start_turn(user_id="demo", message=QUESTION)
-    tools = make_tools(store, conversation_id, knowledge=None)
-    executor = ToolExecutor(tools, timeout=settings.tool_timeout_seconds,
-                            attempts=settings.tool_max_attempts)
+    registry = build_registry(store, conversation_id, None, settings=settings)
+    engine = build_engine(registry, settings=settings, session_factory=store.session_factory)
 
     messages = [SystemMessage(content=chat_system(settings.store_name)), HumanMessage(content=QUESTION)]
     print(f"用户：{QUESTION}\n")
     result = await run_react(
         model=model,
-        tools=tools,
-        executor=executor,
+        registry=registry,
+        engine=engine,
         messages=messages,
         on_token=lambda text: print(text, end="", flush=True),
         on_status=lambda payload: print(
@@ -51,7 +51,7 @@ async def main() -> None:
 
     await model.root_async_client.close()
     model.root_client.close()
-    engine.dispose()
+    db_engine.dispose()
 
 
 if __name__ == "__main__":

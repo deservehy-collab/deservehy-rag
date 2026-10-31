@@ -24,7 +24,7 @@ def test_chat_streams_actual_model_chunks_and_no_tools():
         assert body["stream"] is True
         assert body["max_completion_tokens"] == 1024
         assert [item["function"]["name"] for item in body["tools"]] == [
-            "query_order", "query_product", "query_logistics", "query_faq", "create_ticket",
+            "query_order", "query_product", "query_faq", "create_ticket",
         ]
         assert "response_format" not in body and "stream_options" not in body
         assert body["messages"][0]["role"] == "system"

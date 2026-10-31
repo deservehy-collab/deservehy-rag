@@ -16,3 +16,8 @@ apscheduler>=3.11,<4
 langgraph==1.2.18
 langgraph-checkpoint-sqlite==3.1.2
 aiosqlite>=0.20
+# ch08 即插即用工具系统：MCP Client 适配层与官方 SDK（Server 侧也用它）
+mcp==1.30.0
+langchain-mcp-adapters==0.3.2
+# 参数校验直接 import jsonschema（app/tools/validate.py），不能只当 mcp 的传递依赖
+jsonschema==4.26.0

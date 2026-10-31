@@ -29,6 +29,8 @@ class WorkflowState(TypedDict, total=False):
     tool_calls: int
     tokens: int
     stopped_by: str | None
+    pending_write: dict | None
+    write_decision: str
     offer: dict | None
     turn_count: Annotated[int, operator.add]
     last_intent: str

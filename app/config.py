@@ -50,6 +50,16 @@ class Settings(BaseSettings):
     db_name_test: str = Field(default="xiaolin_ch02_test", min_length=1, max_length=64)
     tool_timeout_seconds: float = Field(default=5, gt=0, allow_inf_nan=False)
     tool_max_attempts: int = Field(default=2, ge=1, le=3)
+    mcp_servers: str = Field(default="logistics,aftersale", min_length=0, max_length=255)
+    mcp_logistics_url: str = Field(default="http://127.0.0.1:8931/mcp", min_length=1, max_length=255)
+    mcp_logistics_permission: Literal["read", "write"] = "read"
+    mcp_aftersale_url: str = Field(default="http://127.0.0.1:8932/mcp", min_length=1, max_length=255)
+    mcp_aftersale_permission: Literal["read", "write"] = "read"
+    tool_write_allowlist: str = Field(default="create_ticket", min_length=0, max_length=255)
+    tool_extra_modules: str = Field(default="", min_length=0, max_length=512)
+    tool_audit_enabled: bool = True
+    tool_discovery_cache_seconds: int = Field(default=60, ge=0, le=3600)
+    tool_schema_reserve_tokens: int = Field(default=400, ge=0, le=8000)
     embedding_model: str = Field(default="BAAI/bge-m3", min_length=1, max_length=255)
     embedding_device: str = Field(default="cuda", min_length=1, max_length=16)
     embedding_batch_size: int = Field(default=16, ge=1, le=128)
