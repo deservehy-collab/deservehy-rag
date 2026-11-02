@@ -76,6 +76,7 @@ class Message(Base):
     content: Mapped[str | None] = mapped_column(Text)
     tool_calls: Mapped[list[dict] | None] = mapped_column(JSON)
     tool_call_id: Mapped[str | None] = mapped_column(String(64))
+    retrieval_snapshot: Mapped[list[dict] | None] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
 
@@ -196,6 +197,7 @@ class LowConfidenceQuestion(Base):
     __table_args__ = (
         Index("idx_low_confidence_source", "source"),
         Index("idx_low_confidence_created_at", "created_at"),
+        Index("idx_lcq_matched_review_id", "matched_review_id"),
         TABLE_OPTIONS,
     )
 
@@ -208,6 +210,10 @@ class LowConfidenceQuestion(Base):
         Enum("retrieval_low_conf", "self_check", "user_feedback", name="low_confidence_source"), nullable=False
     )
     reason: Mapped[str | None] = mapped_column(Text)
+    retrieved_chunks: Mapped[list[dict] | None] = mapped_column(JSON)
+    matched_review_id: Mapped[int | None] = mapped_column(
+        IdType, ForeignKey("review_queue.id", name="fk_lcq_review", ondelete="SET NULL"), nullable=True
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=True, server_default=func.now())
 
 
@@ -238,3 +244,39 @@ class FaithCase(Base):
     last_seen_at: Mapped[datetime] = mapped_column(DateTime, nullable=True, server_default=func.now())
     resolution: Mapped[str | None] = mapped_column(String(300))
     resolved_at: Mapped[datetime | None] = mapped_column(DateTime)
+
+
+class ReviewQueue(Base):
+    """ch09 飞轮待审队列：一行一个去重后的知识缺口。"""
+
+    __tablename__ = "review_queue"
+    __table_args__ = (Index("idx_review_queue_status", "review_status"), TABLE_OPTIONS)
+
+    id: Mapped[int] = mapped_column(IdType, primary_key=True, autoincrement=True)
+    normalized_question: Mapped[str] = mapped_column(String(512), nullable=False)
+    ai_suggested_answer: Mapped[str | None] = mapped_column(Text)
+    occurrence_count: Mapped[int] = mapped_column(
+        CountType, nullable=False, default=1, server_default="1"
+    )
+    review_status: Mapped[str] = mapped_column(
+        Enum("待审", "通过", "驳回", name="review_queue_status"),
+        nullable=False, default="待审", server_default="待审",
+    )
+    approved_answer: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), onupdate=func.now())
+
+
+class EvalRun(Base):
+    """每轮评估一行；metrics 存整份指标 JSON，趋势报告只读它。"""
+
+    __tablename__ = "eval_runs"
+    __table_args__ = (Index("idx_eval_runs_created_at", "created_at"), TABLE_OPTIONS)
+
+    id: Mapped[int] = mapped_column(IdType, primary_key=True, autoincrement=True)
+    triggered_by: Mapped[str] = mapped_column(
+        Enum("定时", "手动", name="eval_run_trigger"), nullable=False, default="定时", server_default="定时"
+    )
+    dataset_size: Mapped[int] = mapped_column(CountType, nullable=False)
+    metrics: Mapped[dict | None] = mapped_column(JSON)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())

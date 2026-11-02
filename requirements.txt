@@ -21,3 +21,5 @@ mcp==1.30.0
 langchain-mcp-adapters==0.3.2
 # 参数校验直接 import jsonschema（app/tools/validate.py），不能只当 mcp 的传递依赖
 jsonschema==4.26.0
+# ch09 可观测性：自部署 Langfuse v4（http://127.0.0.1:3000），版本与 SDK 严格对齐，勿随意升级
+langfuse==5.1.0

@@ -55,7 +55,9 @@ def test_plain_answer_keeps_ch01_event_shape_and_persists_pair():
         response = client.post("/api/chat", json={"message": "保温杯多少钱？", "client_id": "anon-test-2"})
         frames = events(response)
         assert [name for name, _ in frames] == ["meta", "token", "token", "done"]
-        assert frames[-1][1] == {"finish_reason": "stop"}
+        # done 的形状是 T10 认领轮次的契约：finish_reason + message_id，不许有第三个键。
+        assert set(frames[-1][1]) == {"finish_reason", "message_id"}
+        assert frames[-1][1]["finish_reason"] == "stop"
         with factory() as session:
             rows = session.scalars(select(Message).order_by(Message.id)).all()
             assert [row.role for row in rows] == ["user", "assistant"]

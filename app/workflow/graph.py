@@ -36,6 +36,10 @@ class WorkflowDeps:
     resolver: object = None
     expander: object = None
     mcp: object = None
+    # Langfuse 客户端而不是 handler：handler 要 trace_id，只有进了 turn_trace 才知道（T4）。
+    langfuse: object = None
+    # 低置信入池后的自动排空触发器（FlywheelTrigger）；None＝不触发，池行留待脚本排空。
+    flywheel: object = None
 
 
 def _traced(name, node):
@@ -141,21 +145,48 @@ class Workflow:
     def _config(conversation_id: int) -> dict:
         return {"configurable": {"thread_id": str(conversation_id)}}
 
-    async def _drive(self, graph_input, config):
-        stream = self.graph.astream(graph_input, config, stream_mode=CUSTOM_UPDATES, durability="sync")
-        try:
-            async for mode, data in stream:
-                for event, payload in unwrap(mode, data):
-                    yield event, payload
-        finally:
-            await stream.aclose()
+    async def _drive(self, conversation_id: int, graph_input, config, *, turn_intent=None):
+        """一轮对话 = 一条 trace：这里开根 span、把 turn.config 并进 LangGraph config。
+
+        handler 绑在**本轮** trace_id 上，所以它只能在 `turn_trace` 里现建；`_config` 因此保持
+        只拼 thread_id（`get_state` / `update_state` 不该带 callbacks）。观测关闭时 turn 为
+        None，config 一个键都不加——不许出现「开观测 / 关观测」两种 config 形状。
+
+        `turn_intent`（`(intent, confidence)`）只由 `resume` 传：从 interrupt 续跑时 intent 节点
+        不会重跑，这一轮的根行否则就没有 intent，T16 按 traceId 归 token 时那笔（往往整段对话
+        最大的一笔）就成了「未归因」。checkpoint 里没有 intent 就传 None——**不编默认值**，
+        空着比假数据好；T16 会把这类根行单列为未归因。
+        """
+        from app.observability.tracing import set_intent_on_trace, turn_trace
+
+        # 根 span 的生命周期 = 这个异步生成器的生命周期：`with` 要等生成器收尾（耗尽 / aclose /
+        # 被取消）才退出。所以调用方必须关闭或取消它，否则根 span 永不结束、trace 永不导出；
+        # `CustomerService._stream` 的泵任务在 finally 里 cancel 并等它收尾，已守住这条不变量。
+        with turn_trace(self.deps.langfuse, conversation_id) as turn:
+            if turn is not None:
+                config = {**config, **turn.config}
+                if turn_intent is not None:
+                    # 必须在这里调：此刻 contextvar 指向本轮根 span，写进去的就是这一轮的根行。
+                    # 返回值不参与判据（best-effort，tracing 内部已兜住异常）。
+                    set_intent_on_trace(*turn_intent)
+            stream = self.graph.astream(graph_input, config,
+                                        stream_mode=CUSTOM_UPDATES, durability="sync")
+            try:
+                async for mode, data in stream:
+                    for event, payload in unwrap(mode, data):
+                        yield event, payload
+            finally:
+                await stream.aclose()
 
     async def respond(self, conversation_id: int, question: str, messages: list, *,
                       context_plan: dict | None = None, current_message_id: int | None = None):
         payload = {"conversation_id": conversation_id, "question": question, "messages": messages,
                    "context_plan": context_plan or {}, "current_message_id": current_message_id or 0,
-                   "actions": [], "offer": None}
-        async for item in self._drive(payload, self._config(conversation_id)):
+                   "actions": [], "offer": None,
+                   # 每轮清空：否则业务路由没检索时，回复行会写上上一轮知识路由的快照，
+                   # 👎 事后回捞到的就是别人的证据。
+                   "retrieval_snapshot": []}
+        async for item in self._drive(conversation_id, payload, self._config(conversation_id)):
             yield item
 
     async def resume(self, conversation_id: int, decision: str):
@@ -167,7 +198,14 @@ class Workflow:
         if not parked and not interrupted:
             logger.info("workflow resume conv=%s 没有待确认的卡片，空操作", conversation_id)
             return
-        async for item in self._drive(Command(resume=decision), self._config(conversation_id)):
+        # 这一轮不会重跑 intent 节点，所以把上一轮定下的意图从 checkpoint 里带过来写回本轮根行。
+        # `if intent` 是给旧 checkpoint 的：没有就传 None（本轮根行留空 = T16 的「未归因」），
+        # 绝不编一个默认意图——那会让报表凭空多出一笔假归因。
+        intent = snapshot.values.get("intent")
+        confidence = snapshot.values.get("intent_confidence")
+        turn_intent = (intent, float(confidence)) if intent else None
+        async for item in self._drive(conversation_id, Command(resume=decision),
+                                      self._config(conversation_id), turn_intent=turn_intent):
             yield item
 
     async def get_state(self, conversation_id: int):

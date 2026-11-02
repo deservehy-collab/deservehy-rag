@@ -92,6 +92,10 @@ def _settings(settings_overrides):
         "context_summary_enabled": False,
         "log_file": ":memory:",
         "workflow_checkpoint_path": ":memory:",
+        # 默认关掉飞轮自动排空：api_with_db 建的 app 一落池就会触发后台 drain，
+        # 拿同一个 MockTransport 的 model 发一次预期外的请求（计数型用例会随机失败）。
+        # 需要触发器的用例显式 flywheel_auto_drain=True，或把 app.state.service.flywheel 换成计数器。
+        "flywheel_auto_drain": False,
         # 单测默认不连真进程 MCP Server；要验清单就把 deps.mcp 换成 FakeMcp。
         "mcp_servers": "",
     }
@@ -188,7 +192,11 @@ class FakeKnowledge:
         if "邮费" in query:
             item = Evidence(1, "普通地区邮费", "单笔订单实付满 99 元免运费，未满 99 元收取 8 元邮费。",
                             "配送与运费 › 运费标准", "配送与运费 › 运费标准 › 普通地区邮费", "policy", {"rerank": 0.9}, 1)
-            return RetrievalResult("hybrid_rerank", "普通地区邮费标准", [item], [item])
+            return RetrievalResult("hybrid_rerank", "普通地区邮费标准", [item], [item],
+                                   snapshot=[{"n": 1, "chunk_id": item.id, "question": item.question,
+                                              "answer": item.answer,
+                                              "section_path": item.section_path,
+                                              "scores": dict(item.scores)}])
         return RetrievalResult("hybrid_rerank", query, low_confidence=True, reason="no_hits")
 
 
@@ -255,3 +263,10 @@ class ScriptedModel:
     async def astream(self, messages):
         async for part in self._next():
             yield part
+
+    async def ainvoke(self, messages):
+        from langchain_core.messages import AIMessage
+
+        self.prompt = "\n".join(str(getattr(message, "content", "")) for message in messages)
+        parts = [part async for part in self._next()]
+        return AIMessage(content="".join(str(getattr(part, "content", "")) for part in parts))

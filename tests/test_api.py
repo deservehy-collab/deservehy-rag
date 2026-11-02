@@ -17,7 +17,8 @@ def test_chat_streams_actual_model_chunks_and_no_tools():
         assert response.headers["content-type"].startswith("text/event-stream")
         output = events(response)
         assert output[0][0] == "meta" and output[0][1]["conversation_id"] >= 1
-        assert output[1:] == [("token", {"content": "你\n好"}), ("token", {"content": "\"欢迎\""}), ("done", {"finish_reason": "stop"})]
+        assert output[1:-1] == [("token", {"content": "你\n好"}), ("token", {"content": "\"欢迎\""})]
+        assert output[-1][0] == "done" and output[-1][1]["finish_reason"] == "stop"
         path, body = seen[0]
         assert path == "/v1/chat/completions"
         assert body["model"] == "test-model"
@@ -26,7 +27,10 @@ def test_chat_streams_actual_model_chunks_and_no_tools():
         assert [item["function"]["name"] for item in body["tools"]] == [
             "query_order", "query_product", "query_faq", "create_ticket",
         ]
-        assert "response_format" not in body and "stream_options" not in body
+        assert "response_format" not in body
+        # ch09 T3 起流式请求必须带 stream_options，否则上游不回 usage 帧、Langfuse 的 token 全是 0。
+        # （旧断言写的是 `"stream_options" not in body`，锁的是 `stream_usage=False` 那会儿的行为。）
+        assert body["stream_options"] == {"include_usage": True}
         assert body["messages"][0]["role"] == "system"
         assert body["messages"][-2] == {"role": "user", "content": "保温杯有货吗"}
         # 本轮编排提示挂在当前问题之后，system 才能逐轮字节一致。
@@ -110,14 +114,14 @@ def test_incomplete_stream_is_not_success():
 def test_empty_stream_gets_fallback_text_and_done():
     with api(lambda request: streamed(())) as (client, _):
         output = events(client.post("/api/chat", json={"message": "保温杯有货吗"}))
-        assert output[-1] == ("done", {"finish_reason": "stop"})
+        assert output[-1][0] == "done" and output[-1][1]["finish_reason"] == "stop"
         assert output[-2][1]["content"].startswith("抱歉，刚才没能生成有效回答")
 
 
 def test_truncated_chat_is_explicit():
     with api(lambda request: streamed(("partial",), finish_reason="length")) as (client, _):
         output = events(client.post("/api/chat", json={"message": "保温杯有货吗"}))
-        assert output[-1] == ("done", {"finish_reason": "length"})
+        assert output[-1][0] == "done" and output[-1][1]["finish_reason"] == "length"
 
 
 def test_extract_uses_json_mode_and_validates_result():

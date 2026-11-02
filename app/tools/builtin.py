@@ -125,12 +125,14 @@ def make_tools(
             return {"ok": False, "error": "knowledge_unavailable", "message": "知识库暂时不可用，请稍后重试。"}
         if result.low_confidence:
             return {"ok": False, "error": "low_confidence",
-                    "message": "知识库没有足够依据回答这个问题。", "reason": result.reason}
+                    "message": "知识库没有足够依据回答这个问题。", "reason": result.reason,
+                    # 私有字段，format_content 对 query_faq 会剥掉；落池要的「当时召回了什么」在这里。
+                    "_snapshot": result.snapshot}
         return {"ok": True, "data": {
             "items": [item.item() for item in result.evidence],
             "canonical_query": result.canonical_query,
             "low_confidence": False,
-        }}
+        }, "_snapshot": result.snapshot}
 
     @tool("create_ticket", args_schema=TicketArgs, description="用户的问题需要人工跟进时创建工单。服务端会自动关联当前会话，只需填写问题描述和类型。")
     def create_ticket(description: str, ticket_type: str) -> dict:

@@ -1,0 +1,26 @@
+{
+  "generated_at": "2026-11-02T16:01:46",
+  "cases": {
+    "验收① Langfuse 链路": {
+      "checks": 1,
+      "passed": 1
+    },
+    "验收②③ 答不上→审核→答得上": {
+      "checks": 9,
+      "passed": 9
+    },
+    "验收④ 👎 入池": {
+      "checks": 4,
+      "passed": 4
+    },
+    "验收⑤ token 按意图": {
+      "checks": 2,
+      "passed": 2
+    },
+    "验收⑥ 评估趋势": {
+      "checks": 2,
+      "passed": 2
+    }
+  },
+  "failed": []
+}

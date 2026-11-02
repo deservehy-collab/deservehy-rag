@@ -10,6 +10,7 @@ from sqlalchemy import select
 from app.config import Settings
 from app.database import build_database_url, build_engine, build_session_factory
 from app.knowledge.embedding import BgeM3Embedder
+from app.knowledge.evalstore import TRIGGERS, record_eval_run
 from app.knowledge.llm_json import extract_json_object
 from app.knowledge.metrics import recall_at, reciprocal_rank, summarize
 from app.knowledge.pool import FaithCaseLedger
@@ -132,43 +133,62 @@ def run_faithfulness(model, settings, retriever, cases, ledger, retrieval):
             "faithful": faithful_count, "rate": faithful_count / judged if judged else 0.0, "rows": rows}
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser(description="ch04 四策略检索评估与忠实度抽检。")
-    parser.add_argument("--no-faith", action="store_true", help="只跑检索指标，不调用生成与裁判")
-    parser.add_argument("--report-dir", default="evals/reports", help="报告输出目录")
-    args = parser.parse_args()
-    settings = Settings.from_env()
+def run_eval(settings, *, trigger: str = "手动", no_faith: bool = False,
+             report_dir: str = "evals/reports", factory=None, retriever=None, model=None) -> dict:
+    """跑一轮评估、写报告、落 eval_runs。
+
+    factory/retriever/model 传进来就复用（服务进程内定时评估走这条，避免把 2.3GB 的重排模型
+    再加载一遍挤爆 6GB 显存）；不传就自己建并在结束时释放。
+    """
+    if trigger not in TRIGGERS:
+        raise ValueError(f"trigger 只能是 {'/'.join(TRIGGERS)}，收到 {trigger!r}")
     cases = json.loads((ROOT / "evals/retrieval_qa.json").read_text(encoding="utf-8"))
-    engine = build_engine(build_database_url(settings))
-    factory = build_session_factory(engine)
-    store = MilvusVectorStore(settings.milvus_uri, settings.milvus_collection)
-    embedder = BgeM3Embedder(settings.embedding_model, device=settings.embedding_device,
-                             batch_size=settings.embedding_batch_size)
-    model = build_model(settings)
-    reranker = BgeReranker(settings.knowledge_rerank_model, device=settings.knowledge_rerank_device,
-                           batch_size=settings.knowledge_rerank_batch_size)
-    retriever = KnowledgeRetriever(
-        factory, embedder, store, candidates=settings.knowledge_candidates, top_k=settings.knowledge_top_k,
-        rrf_k=settings.knowledge_rrf_k, rewrite=QueryRewriter(model), reranker=reranker,
-        strategy=settings.knowledge_strategy, rerank_min_score=settings.knowledge_rerank_min_score,
-    )
+    engine = store = None
+    owns_model = model is None
+    # 构造也放进 try：engine 建好、模型加载到一半再抛异常时，finally 仍会把已经建出来的资源收掉，
+    # 不会留下悬空的连接池或显存占用。注入的对象（factory/retriever/model）不在这里释放。
     try:
+        if factory is None:
+            engine = build_engine(build_database_url(settings))
+            factory = build_session_factory(engine)
+        if model is None:
+            model = build_model(settings)
+        if retriever is None:
+            store = MilvusVectorStore(settings.milvus_uri, settings.milvus_collection)
+            embedder = BgeM3Embedder(settings.embedding_model, device=settings.embedding_device,
+                                     batch_size=settings.embedding_batch_size)
+            reranker = BgeReranker(settings.knowledge_rerank_model, device=settings.knowledge_rerank_device,
+                                   batch_size=settings.knowledge_rerank_batch_size)
+            retriever = KnowledgeRetriever(
+                factory, embedder, store, candidates=settings.knowledge_candidates, top_k=settings.knowledge_top_k,
+                rrf_k=settings.knowledge_rrf_k, rewrite=QueryRewriter(model), reranker=reranker,
+                strategy=settings.knowledge_strategy,
+                confidence_min=settings.confidence_min,
+                confidence_effective_floor=settings.confidence_effective_floor,
+                confidence_w_top1=settings.confidence_w_top1,
+                confidence_w_count=settings.confidence_w_count,
+                confidence_w_margin=settings.confidence_w_margin,
+                snapshot_top_n=settings.snapshot_top_n,
+            )
         with factory() as session:
             known = {row for row in session.scalars(select(KnowledgeChunk.section_path)) if row}
         validate(cases, known)
         retrieval = run_retrieval(retriever, cases)
         report = {
             "generated_at": datetime.now().isoformat(timespec="seconds"),
-            "config": settings.model_dump(mode="json", exclude={"openai_api_key", "db_password"}),
+            # ch09 起 Settings 多了 langfuse 两个 key；报告是要提交进 git 的，一并排除。
+            "config": settings.model_dump(mode="json", exclude={
+                "openai_api_key", "db_password",
+                "langfuse_public_key", "langfuse_secret_key"}),
             "dataset": {"total": len(cases), "buckets": dict(Counter(case["bucket"] for case in cases))},
             "retrieval": {strategy: summarize_all(cases, retrieval, strategy) for strategy in STRATEGIES},
             "cases": retrieval,
         }
-        if not args.no_faith:
+        if not no_faith:
             report["faithfulness"] = run_faithfulness(model, settings, retriever, cases,
                                                       FaithCaseLedger(factory), retrieval)
         stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-        directory = Path(args.report_dir)
+        directory = Path(report_dir)
         if not directory.is_absolute():
             directory = ROOT / directory
         directory.mkdir(parents=True, exist_ok=True)
@@ -187,13 +207,52 @@ def main() -> int:
             overall = data["overall"]
             print(f"{strategy:14s} R@5={overall['recall@5']:.3f} R@10={overall['recall@10']:.3f} "
                   f"MRR={overall['mrr@10']:.3f} 拒答={overall['refusal_rate']:.3f}")
-        print(f"报告：evals/reports/ch04-{stamp}.json|md")
-        return 0
+        shown_dir = directory.relative_to(ROOT).as_posix() if directory.is_relative_to(ROOT) else str(directory)
+        print(f"报告：{shown_dir}/ch04-{stamp}.json|md")
+        metrics = _metrics_of(report, settings)
+        run_id = record_eval_run(factory, triggered_by=trigger, dataset_size=len(cases), metrics=metrics)
+        print(f"已写入 eval_runs #{run_id}（触发：{trigger}）")
+        return {"stamp": stamp, "run_id": run_id, "metrics": metrics, "report_dir": str(directory)}
     finally:
-        store.close()
-        if model is not None:
+        if store is not None:
+            store.close()
+        if owns_model and model is not None:
             model.root_client.close()
-        engine.dispose()
+        if engine is not None:
+            engine.dispose()
+
+
+def _metrics_of(report: dict, settings) -> dict:
+    """固定跟 hybrid_rerank：闸门只在这个策略上有 rerank 分，也是生产默认策略。
+
+    faithfulness 写 None 而不是 0.0，区分「这轮没测」（含 --no-faith、以及裁判一行都没判出结果）。
+    """
+    overall = report["retrieval"]["hybrid_rerank"]["overall"]
+    faith = report.get("faithfulness")
+    faithfulness = None
+    if faith is not None and faith["judged"] > 0:
+        faithfulness = faith["rate"]
+    return {
+        "strategy": "hybrid_rerank",
+        "recall@5": overall["recall@5"],
+        "recall@10": overall["recall@10"],
+        "mrr@10": overall["mrr@10"],
+        "refusal_rate": overall["refusal_rate"],
+        "faithfulness": faithfulness,
+        "confidence_min": settings.confidence_min,
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="ch04 四策略检索评估与忠实度抽检。")
+    parser.add_argument("--no-faith", action="store_true", help="只跑检索指标，不调用生成与裁判")
+    parser.add_argument("--report-dir", default="evals/reports", help="报告输出目录")
+    parser.add_argument("--trigger", choices=["定时", "手动"], default="手动",
+                        help="写进 eval_runs.triggered_by")
+    args = parser.parse_args()
+    run_eval(Settings.from_env(), trigger=args.trigger, no_faith=args.no_faith,
+             report_dir=args.report_dir)
+    return 0
 
 
 if __name__ == "__main__":

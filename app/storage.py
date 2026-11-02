@@ -51,6 +51,7 @@ class ConversationStore:
         content: str | None = None,
         tool_calls: list[dict] | None = None,
         tool_call_id: str | None = None,
+        retrieval_snapshot: list[dict] | None = None,
     ) -> int:
         with self.session_factory() as session:
             message = Message(
@@ -59,6 +60,7 @@ class ConversationStore:
                 content=content,
                 tool_calls=tool_calls,
                 tool_call_id=tool_call_id,
+                retrieval_snapshot=retrieval_snapshot,
             )
             session.add(message)
             session.commit()
@@ -68,6 +70,22 @@ class ConversationStore:
         with self.session_factory() as session:
             conversation = session.get(Conversation, conversation_id)
             return conversation.user_id if conversation else None
+
+    def message(self, message_id: int) -> dict | None:
+        with self.session_factory() as session:
+            row = session.get(Message, message_id)
+            if row is None:
+                return None
+            return {"id": row.id, "conversation_id": row.conversation_id, "role": row.role,
+                    "content": row.content, "retrieval_snapshot": row.retrieval_snapshot}
+
+    def user_question_before(self, conversation_id: int, message_id: int) -> str | None:
+        with self.session_factory() as session:
+            row = session.scalars(
+                select(Message).where(Message.conversation_id == conversation_id,
+                                      Message.role == "user", Message.id < message_id)
+                .order_by(Message.id.desc()).limit(1)).first()
+            return row.content if row else None
 
     def context_messages(self, conversation_id: int) -> list[dict]:
         with self.session_factory() as session:

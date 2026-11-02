@@ -332,7 +332,13 @@ async function openConversation(id) {
   messages.replaceChildren();
   welcome.hidden = true;
   document.querySelector("#conversation-date").hidden = false;
-  for (const row of rows) messageElement(row.role, row.content, "", row.created_at);
+  for (const row of rows) {
+    const view = messageElement(row.role, row.content, "", row.created_at);
+    // 历史消息拿不到 message_id，反馈只记本地；给旧回复也补上按钮，行为和新回复一致。
+    if (row.role === "assistant") {
+      addAnswerFeedback(view, { turnId: "history-" + row.id, messageId: null });
+    }
+  }
   followBottom = true;
   jumpButton.hidden = true;
   scrollToLatest(true);
@@ -581,7 +587,7 @@ const RESUME_OUTCOMES = {
 
 async function resumeConfirm(card, decision, status) {
   const turn = { controller: new AbortController(), stopped: false, timedOut: false,
-    turnId: conversationId + "-resume-" + Date.now(), answer: "", stoppedBy: "" };
+    turnId: conversationId + "-resume-" + Date.now(), messageId: null, answer: "", stoppedBy: "" };
   activeTurn = turn;
   setBusy(true);
   const view = messageElement("assistant");
@@ -608,7 +614,10 @@ async function resumeConfirm(card, decision, status) {
         turn.answer += text;
         writer.push(text);
       },
-      onDone: frame => { turn.stoppedBy = frame.stopped_by || ""; },
+      onDone: frame => {
+        turn.stoppedBy = frame.stopped_by || "";
+        turn.messageId = Number.isInteger(frame?.message_id) ? frame.message_id : null;
+      },
     });
     window.clearTimeout(timeout);
     await writer.drain();
@@ -616,7 +625,7 @@ async function resumeConfirm(card, decision, status) {
     if (!turn.answer.trim()) throw new Error("这次没有收到正文，请重新发起。");
     if (finishReason === "length") throw new Error("回复因长度限制而中断，请重新说一次你的需求。");
     renderAnswer(view, turn.answer, []);
-    addAnswerFeedback(view, turn.turnId);
+    addAnswerFeedback(view, turn);
     // 卡片页脚不能只看用户点了哪个键：后端说「超时/失败」时还写「已提交。」就是骗人。
     const outcome = RESUME_OUTCOMES[decision === "accept" ? turn.stoppedBy : "cancelled"]
       || RESUME_OUTCOMES[""];
@@ -641,13 +650,13 @@ async function resumeConfirm(card, decision, status) {
   }
 }
 
-function addAnswerFeedback(view, turnId) {
+function addAnswerFeedback(view, turn) {
   const row = document.createElement("div");
   row.className = "answer-feedback";
   const note = document.createElement("span");
   note.className = "feedback-note";
   const buttons = {};
-  const key = FEEDBACK_PREFIX + turnId;
+  const key = FEEDBACK_PREFIX + turn.turnId;
   const lock = value => {
     for (const [name, button] of Object.entries(buttons)) {
       button.classList.toggle("is-selected", name === value);
@@ -668,6 +677,7 @@ function addAnswerFeedback(view, turnId) {
       if (!saveFeedback(key, value)) return;
       lock(value);
       announcer.textContent = "已记录你的反馈，谢谢。";
+      void sendFeedback(turn, value, note);
     });
     buttons[value] = button;
     row.append(button);
@@ -676,6 +686,25 @@ function addAnswerFeedback(view, turnId) {
   const saved = readFeedback(key);
   if (saved) lock(saved);
   view.stack.append(row);
+}
+
+async function sendFeedback(turn, value, note) {
+  // 没有 message_id 就没法在后端定位那条回复（历史回载、超时中断都会这样）；
+  // 这种情况下只留本地状态，不打接口，也不弹错误——用户点👎不是为了看报错。
+  if (!turn.messageId || !conversationId) return;
+  try {
+    const response = await fetch("/api/feedback", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ conversation_id: conversationId, client_id: clientId(),
+                             message_id: turn.messageId, value }),
+    });
+    if (!response.ok) { note.textContent = "反馈没送出去，已记在本机。"; return; }
+    const payload = await response.json();
+    if (payload.status === "recorded") note.textContent = "已反馈，这条会进人工复核。";
+  } catch {
+    note.textContent = "反馈没送出去，已记在本机。";
+  }
 }
 
 async function readStream(response, handlers) {
@@ -771,7 +800,7 @@ async function sendQuestion(question) {
   if (!question || activeTurn) return;
   const suffix = Date.now() + "-" + Math.random().toString(36).slice(2, 8);
   const turn = { controller: new AbortController(), stopped: false, timedOut: false,
-    turnId: "local-" + suffix, citations: [], actionItems: [], actionTurn: 0,
+    turnId: "local-" + suffix, messageId: null, citations: [], actionItems: [], actionTurn: 0,
     refund: null, orderItems: [], confirm: null };
   activeTurn = turn;
   input.value = "";
@@ -840,6 +869,9 @@ async function sendQuestion(question) {
         answer += text;
         writer.push(text);
       },
+      onDone: frame => {
+        turn.messageId = Number.isInteger(frame?.message_id) ? frame.message_id : null;
+      },
     });
     window.clearTimeout(timeout);
     await writer.drain();
@@ -851,7 +883,7 @@ async function sendQuestion(question) {
     if (turn.orderItems.length) addOrderCards(view, turn.orderItems);
     if (turn.actionItems.length) addActionButtons(view, turn.actionItems, turn.actionTurn, turn.refund);
     if (turn.confirm) addConfirmCard(view, turn.confirm);
-    addAnswerFeedback(view, turn.turnId);
+    addAnswerFeedback(view, turn);
     announcer.textContent = "小邻已回复，你可以继续追问。";
   } catch (error) {
     writer.flush();

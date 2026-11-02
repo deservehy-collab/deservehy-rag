@@ -102,3 +102,21 @@ class TicketRequest(BaseModel):
     conversation_id: Annotated[int, Field(ge=1)]
     client_id: Annotated[str, Field(min_length=8, max_length=64, pattern=r"[A-Za-z0-9_-]+")]
     turn: Annotated[int, Field(ge=1)]
+
+
+class FeedbackRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True, str_strip_whitespace=True)
+
+    conversation_id: Annotated[int, Field(ge=1)]
+    client_id: Annotated[str, Field(min_length=8, max_length=64, pattern=r"[A-Za-z0-9_-]+")]
+    message_id: Annotated[int, Field(ge=1)]
+    value: Literal["up", "down"]
+
+
+class ReviewAction(BaseModel):
+    """审核动作的可选补充：approve 用 answer 覆盖 AI 示例答案，reject 用 reason 记日志。"""
+
+    model_config = ConfigDict(extra="forbid", strict=True, str_strip_whitespace=True)
+
+    answer: Annotated[str, Field(min_length=1, max_length=2000)] | None = None
+    reason: Annotated[str, Field(min_length=1, max_length=300)] | None = None

@@ -50,7 +50,8 @@ def test_hybrid_rerank_orders_by_rerank_and_numbers_sandwich(tmp_path):
     store = FakeStore()
     store.hybrid = [("2", 0.03), ("1", 0.02), ("3", 0.01)]
     retriever = KnowledgeRetriever(make_db(tmp_path), FakeEmbedder(), store, candidates=3, top_k=3,
-                                   reranker=FakeReranker([0.2, 0.9, 0.5]), rerank_min_score=0.3)
+                                   reranker=FakeReranker([0.2, 0.9, 0.5]),
+                                   confidence_min=0.10, confidence_effective_floor=0.15)
     result = retriever.retrieve("问题", canonical="规范问题")
     assert result.low_confidence is False
     assert [item.id for item in result.items] == [1, 3, 2]
@@ -62,10 +63,11 @@ def test_gate_refuses_when_top1_below_threshold(tmp_path):
     store = FakeStore()
     store.hybrid = [("1", 0.03)]
     retriever = KnowledgeRetriever(make_db(tmp_path), FakeEmbedder(), store, candidates=3, top_k=3,
-                                   reranker=FakeReranker([0.1]), rerank_min_score=0.3)
+                                   reranker=FakeReranker([0.1]),
+                                   confidence_min=0.10, confidence_effective_floor=0.15)
     result = retriever.retrieve("问题", canonical="规范")
     assert result.low_confidence is True
-    assert result.reason.startswith("top1=")
+    assert result.reason.startswith("confidence=")
 
 
 def test_dense_and_bm25_strategies_use_their_own_path(tmp_path):
@@ -116,7 +118,8 @@ def test_retrieve_expanded_merges_ids_and_takes_best_rerank(tmp_path):
                            "退货运费": [("2", 0.05), ("3", 0.01)]})
     reranker = PerQueryReranker({"退款": [0.4, 0.2], "退货运费": [0.9, 0.7]})
     retriever = KnowledgeRetriever(make_db(tmp_path), FakeEmbedder(), store, candidates=5, top_k=3,
-                                   reranker=reranker, rerank_min_score=0.3, synonyms=False)
+                                   reranker=reranker,
+                                   confidence_min=0.10, confidence_effective_floor=0.15, synonyms=False)
     result = retriever.retrieve_expanded(["退款", "退货运费"])
     assert result.low_confidence is False
     assert [item.id for item in result.items] == [2, 3, 1]
@@ -128,7 +131,8 @@ def test_retrieve_expanded_merges_ids_and_takes_best_rerank(tmp_path):
 def test_retrieve_expanded_dedupes_identical_content(tmp_path):
     store = PerQueryStore({"a": [("1", 0.03), ("2", 0.02)]})
     retriever = KnowledgeRetriever(make_db(tmp_path), FakeEmbedder(), store, candidates=5, top_k=3,
-                                   reranker=PerQueryReranker({"a": [0.8, 0.7]}), rerank_min_score=0.3,
+                                   reranker=PerQueryReranker({"a": [0.8, 0.7]}),
+                                   confidence_min=0.10, confidence_effective_floor=0.15,
                                    synonyms=False)
     with retriever.session_factory() as session:
         row = session.get(KnowledgeChunk, 2)
@@ -142,10 +146,11 @@ def test_retrieve_expanded_dedupes_identical_content(tmp_path):
 def test_retrieve_expanded_refuses_when_top1_below_threshold(tmp_path):
     store = PerQueryStore({"a": [("1", 0.03)]})
     retriever = KnowledgeRetriever(make_db(tmp_path), FakeEmbedder(), store, candidates=3, top_k=3,
-                                   reranker=PerQueryReranker({"a": [0.1]}), rerank_min_score=0.3,
+                                   reranker=PerQueryReranker({"a": [0.1]}),
+                                   confidence_min=0.10, confidence_effective_floor=0.15,
                                    synonyms=False)
     result = retriever.retrieve_expanded(["a"])
-    assert result.low_confidence is True and result.reason.startswith("top1=")
+    assert result.low_confidence is True and result.reason.startswith("confidence=")
 
 
 def test_retrieve_expanded_blank_queries_do_not_hit_models(tmp_path):

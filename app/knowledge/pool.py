@@ -13,13 +13,24 @@ class LowConfidencePool:
     def __init__(self, session_factory: sessionmaker[Session]):
         self.session_factory = session_factory
 
-    def record(self, conversation_id, raw_question, source, reason=None) -> None:
+    def record(self, conversation_id, raw_question, source, reason=None, retrieved_chunks=None) -> None:
         with self.session_factory() as session:
             session.add(LowConfidenceQuestion(
                 conversation_id=conversation_id, raw_question=raw_question[:2000],
                 source=source, reason=(reason or "")[:1000] or None,
+                # 快照进 JSON 列，硬截 10 条：不让一轮对话把表撑爆（confidence.snapshot_top_n 默认 5）。
+                retrieved_chunks=list(retrieved_chunks or [])[:10] or None,
             ))
             session.commit()
+
+    def exists_feedback(self, conversation_id, reason) -> bool:
+        with self.session_factory() as session:
+            return session.scalar(
+                select(LowConfidenceQuestion.id).where(
+                    LowConfidenceQuestion.source == "user_feedback",
+                    LowConfidenceQuestion.reason == reason,
+                    LowConfidenceQuestion.conversation_id == conversation_id,
+                ).limit(1)) is not None
 
 
 class FaithCaseLedger:

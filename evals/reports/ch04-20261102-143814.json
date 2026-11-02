@@ -1,0 +1,4644 @@
+{
+  "generated_at": "2026-11-02T14:38:14",
+  "config": {
+    "openai_base_url": "https://api.deepseek.com/v1",
+    "openai_model": "deepseek-flash",
+    "openai_extra_body": {
+      "thinking": {
+        "type": "disabled"
+      }
+    },
+    "context_window_tokens": 32768,
+    "max_output_tokens": 1024,
+    "max_user_input_tokens": 2000,
+    "tool_result_max_tokens": 1200,
+    "token_safety_margin": 316,
+    "history_keep_rounds": 20,
+    "history_round_tokens": 600,
+    "context_summary_enabled": true,
+    "summary_timeout_seconds": 20.0,
+    "log_file": "log/app.log",
+    "request_timeout_seconds": 60.0,
+    "store_name": "本店",
+    "db_host": "127.0.0.1",
+    "db_port": 3307,
+    "db_user": "root",
+    "db_name": "xiaolin_ch02",
+    "db_name_test": "xiaolin_ch02_test",
+    "tool_timeout_seconds": 5.0,
+    "tool_max_attempts": 2,
+    "mcp_servers": "logistics,aftersale",
+    "mcp_logistics_url": "http://127.0.0.1:8931/mcp",
+    "mcp_logistics_permission": "read",
+    "mcp_aftersale_url": "http://127.0.0.1:8932/mcp",
+    "mcp_aftersale_permission": "read",
+    "tool_write_allowlist": "create_ticket",
+    "tool_extra_modules": "",
+    "tool_audit_enabled": true,
+    "tool_discovery_cache_seconds": 60,
+    "tool_schema_reserve_tokens": 400,
+    "embedding_model": ".cache/models/bge-m3",
+    "embedding_device": "cuda",
+    "embedding_batch_size": 16,
+    "milvus_uri": "http://127.0.0.1:19530",
+    "milvus_collection": "knowledge",
+    "knowledge_doc_dir": "examples/knowledge",
+    "knowledge_top_k": 5,
+    "knowledge_candidates": 12,
+    "knowledge_rrf_k": 60,
+    "knowledge_rerank_model": ".cache/models/bge-reranker-v2-m3",
+    "knowledge_rerank_device": "cuda",
+    "knowledge_rerank_batch_size": 8,
+    "confidence_w_top1": 0.7,
+    "confidence_w_count": 0.2,
+    "confidence_w_margin": 0.1,
+    "snapshot_top_n": 5,
+    "knowledge_query_rewrite": true,
+    "knowledge_self_check": true,
+    "knowledge_tool_timeout_seconds": 20.0,
+    "knowledge_strategy": "hybrid_rerank",
+    "knowledge_mining_enabled": false,
+    "knowledge_mining_interval_minutes": 60,
+    "knowledge_mining_lookback_days": 7,
+    "knowledge_dedupe_threshold": 0.95,
+    "eval_schedule_cron": "",
+    "confidence_min": 0.3,
+    "confidence_effective_floor": 0.15,
+    "langfuse_enabled": true,
+    "langfuse_host": "http://127.0.0.1:3000",
+    "flywheel_auto_drain": true,
+    "flywheel_batch_size": 10,
+    "flywheel_dedupe_candidates": 20,
+    "workflow_checkpoint_path": ".cache/langgraph/ch05.sqlite",
+    "workflow_agent_max_steps": 4,
+    "workflow_agent_token_budget": 6000,
+    "workflow_intent_timeout_seconds": 10.0,
+    "workflow_intent_min_confidence": 0.6,
+    "workflow_understanding_enabled": true,
+    "workflow_understanding_timeout_seconds": 10.0,
+    "workflow_query_expansion": true,
+    "workflow_query_expansion_max": 3
+  },
+  "dataset": {
+    "total": 80,
+    "buckets": {
+      "A_policy": 20,
+      "B_model": 20,
+      "C_colloquial": 20,
+      "E_multi": 20
+    }
+  },
+  "retrieval": {
+    "dense": {
+      "overall": {
+        "count": 80,
+        "answerable": 72,
+        "recall@5": 0.9652777777777778,
+        "recall@10": 0.9652777777777778,
+        "mrr@10": 0.9317129629629629,
+        "refusal_rate": 0.0
+      },
+      "buckets": {
+        "A_policy": {
+          "count": 20,
+          "answerable": 18,
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "mrr@10": 0.8935185185185185,
+          "refusal_rate": 0.0
+        },
+        "B_model": {
+          "count": 20,
+          "answerable": 18,
+          "recall@5": 0.9444444444444444,
+          "recall@10": 0.9444444444444444,
+          "mrr@10": 0.9444444444444444,
+          "refusal_rate": 0.0
+        },
+        "C_colloquial": {
+          "count": 20,
+          "answerable": 18,
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "mrr@10": 0.9166666666666666,
+          "refusal_rate": 0.0
+        },
+        "E_multi": {
+          "count": 20,
+          "answerable": 18,
+          "recall@5": 0.9166666666666666,
+          "recall@10": 0.9166666666666666,
+          "mrr@10": 0.9722222222222222,
+          "refusal_rate": 0.0
+        }
+      }
+    },
+    "bm25": {
+      "overall": {
+        "count": 80,
+        "answerable": 72,
+        "recall@5": 0.875,
+        "recall@10": 0.875,
+        "mrr@10": 0.8090277777777778,
+        "refusal_rate": 0.0
+      },
+      "buckets": {
+        "A_policy": {
+          "count": 20,
+          "answerable": 18,
+          "recall@5": 0.8888888888888888,
+          "recall@10": 0.8888888888888888,
+          "mrr@10": 0.7638888888888888,
+          "refusal_rate": 0.0
+        },
+        "B_model": {
+          "count": 20,
+          "answerable": 18,
+          "recall@5": 0.9444444444444444,
+          "recall@10": 0.9444444444444444,
+          "mrr@10": 0.8796296296296297,
+          "refusal_rate": 0.0
+        },
+        "C_colloquial": {
+          "count": 20,
+          "answerable": 18,
+          "recall@5": 0.8888888888888888,
+          "recall@10": 0.8888888888888888,
+          "mrr@10": 0.7314814814814814,
+          "refusal_rate": 0.0
+        },
+        "E_multi": {
+          "count": 20,
+          "answerable": 18,
+          "recall@5": 0.7777777777777778,
+          "recall@10": 0.7777777777777778,
+          "mrr@10": 0.8611111111111112,
+          "refusal_rate": 0.0
+        }
+      }
+    },
+    "hybrid": {
+      "overall": {
+        "count": 80,
+        "answerable": 72,
+        "recall@5": 0.9444444444444444,
+        "recall@10": 0.9444444444444444,
+        "mrr@10": 0.9016203703703705,
+        "refusal_rate": 0.0
+      },
+      "buckets": {
+        "A_policy": {
+          "count": 20,
+          "answerable": 18,
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "mrr@10": 0.8657407407407408,
+          "refusal_rate": 0.0
+        },
+        "B_model": {
+          "count": 20,
+          "answerable": 18,
+          "recall@5": 0.9444444444444444,
+          "recall@10": 0.9444444444444444,
+          "mrr@10": 0.8888888888888888,
+          "refusal_rate": 0.0
+        },
+        "C_colloquial": {
+          "count": 20,
+          "answerable": 18,
+          "recall@5": 0.9444444444444444,
+          "recall@10": 0.9444444444444444,
+          "mrr@10": 0.8518518518518519,
+          "refusal_rate": 0.0
+        },
+        "E_multi": {
+          "count": 20,
+          "answerable": 18,
+          "recall@5": 0.8888888888888888,
+          "recall@10": 0.8888888888888888,
+          "mrr@10": 1.0,
+          "refusal_rate": 0.0
+        }
+      }
+    },
+    "hybrid_rerank": {
+      "overall": {
+        "count": 80,
+        "answerable": 72,
+        "recall@5": 0.9583333333333334,
+        "recall@10": 0.9583333333333334,
+        "mrr@10": 0.9236111111111112,
+        "refusal_rate": 1.0
+      },
+      "buckets": {
+        "A_policy": {
+          "count": 20,
+          "answerable": 18,
+          "recall@5": 0.9444444444444444,
+          "recall@10": 0.9444444444444444,
+          "mrr@10": 0.8888888888888888,
+          "refusal_rate": 1.0
+        },
+        "B_model": {
+          "count": 20,
+          "answerable": 18,
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "mrr@10": 0.9583333333333334,
+          "refusal_rate": 1.0
+        },
+        "C_colloquial": {
+          "count": 20,
+          "answerable": 18,
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "mrr@10": 0.875,
+          "refusal_rate": 1.0
+        },
+        "E_multi": {
+          "count": 20,
+          "answerable": 18,
+          "recall@5": 0.8888888888888888,
+          "recall@10": 0.8888888888888888,
+          "mrr@10": 0.9722222222222222,
+          "refusal_rate": 1.0
+        }
+      }
+    }
+  },
+  "cases": {
+    "A01": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 配送范围与时效",
+          "配送与运费",
+          "配送与运费 › 常见问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费",
+          "配送与运费 › 配送范围与时效"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 配送范围与时效"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "A02": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 配送范围与时效",
+          "配送与运费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 物流异常处理"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费",
+          "配送与运费 › 配送范围与时效"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 配送范围与时效"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "A03": {
+      "dense": {
+        "sections": [
+          "配送与运费",
+          "配送与运费 › 配送范围与时效",
+          "退换货与退款 › 退款到账时间"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费",
+          "配送与运费 › 常见问题",
+          "review_queue:10"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费",
+          "配送与运费 › 配送范围与时效",
+          "配送与运费 › 物流异常处理"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费",
+          "配送与运费 › 配送范围与时效",
+          "退换货与退款 › 质量问题换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      }
+    },
+    "A04": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款",
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 质量问题换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "退换货与退款 › 七天无理由退货",
+          "配送与运费 › 配送范围与时效",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 配送范围与时效"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款",
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "退换货与退款 › 退货运费承担"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "A05": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款",
+          "退换货与退款 › 售后申请流程"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "商品使用与保修 › 联系售后前请准备",
+          "review_queue:10"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款",
+          "退换货与退款 › 售后申请流程"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款",
+          "退换货与退款 › 售后申请流程"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "A06": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款 › 售后申请流程"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款 › 退货运费承担",
+          "退换货与退款",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款 › 退货运费承担"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款",
+          "型号与兼容性 › 常见型号问题",
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "退换货与退款 › 售后申请流程"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "A07": {
+      "dense": {
+        "sections": [
+          "商品使用与保修 › 保温杯保修政策",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.3333333333333333
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "review_queue:10",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.3333333333333333
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 小家电保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      }
+    },
+    "A08": {
+      "dense": {
+        "sections": [
+          "商品使用与保修 › 小家电保修",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "商品使用与保修 › 小家电保修",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修",
+          "review_queue:10",
+          "型号与兼容性 › 小家电 › 型号与配件"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "商品使用与保修 › 小家电保修",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修",
+          "商品使用与保修 › 保温杯保修政策"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "商品使用与保修 › 小家电保修",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修 › 保温杯保修政策",
+          "退换货与退款 › 质量问题换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "A09": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 配送范围与时效",
+          "配送与运费",
+          "配送与运费 › 物流异常处理",
+          "退换货与退款 › 退款到账时间"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 配送范围与时效"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 配送范围与时效",
+          "配送与运费",
+          "配送与运费 › 物流异常处理",
+          "退换货与退款 › 退款到账时间"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 配送范围与时效",
+          "配送与运费",
+          "退换货与退款 › 退款到账时间"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "A10": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担",
+          "退换货与退款 › 七天无理由退货",
+          "配送与运费 › 物流异常处理"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 常见问题",
+          "配送与运费 › 运费标准 › 普通地区邮费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款 › 退款到账时间",
+          "配送与运费 › 物流异常处理"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 运费标准 › 偏远地区邮费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "A11": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 物流异常处理",
+          "配送与运费",
+          "退换货与退款 › 七天无理由退货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 物流异常处理",
+          "配送与运费",
+          "退换货与退款 › 退款到账时间"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 物流异常处理",
+          "商品使用与保修 › 小家电保修",
+          "配送与运费 › 常见问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "A12": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 退货运费承担",
+          "退换货与退款"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "配送与运费 › 常见问题",
+          "退换货与退款 › 退货运费承担"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 退货运费承担",
+          "退换货与退款 › 七天无理由退货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "A13": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款",
+          "退换货与退款 › 售后申请流程",
+          "退换货与退款 › 退货运费承担"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 常见型号问题",
+          "退换货与退款 › 质量问题换货",
+          "配送与运费 › 物流异常处理",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "型号与兼容性 › 常见型号问题",
+          "退换货与退款",
+          "退换货与退款 › 售后申请流程"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "型号与兼容性 › 常见型号问题",
+          "退换货与退款 › 售后申请流程",
+          "退换货与退款 › 退货运费承担"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "A14": {
+      "dense": {
+        "sections": [
+          "商品使用与保修 › 保温杯使用说明",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "商品使用与保修 › 保温杯使用说明",
+          "配送与运费 › 常见问题",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 保温杯保修政策"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "商品使用与保修 › 保温杯使用说明",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修",
+          "商品使用与保修 › 保温杯保修政策",
+          "型号与兼容性 › 保温杯系列 › 型号对照表"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "A15": {
+      "dense": {
+        "sections": [
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "退换货与退款 › 质量问题换货",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "退换货与退款"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "型号与兼容性 › 常见型号问题",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "商品使用与保修",
+          "型号与兼容性 › 家居纺织品 › 袜类型号"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "退换货与退款 › 质量问题换货",
+          "商品使用与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款 › 质量问题换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "A16": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 常见问题",
+          "配送与运费 › 配送范围与时效"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "型号与兼容性 › 常见型号问题",
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "配送与运费 › 常见问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 常见问题",
+          "配送与运费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 常见问题",
+          "退换货与退款 › 退款到账时间"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "A17": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 七天无理由退货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退款到账时间",
+          "配送与运费 › 物流异常处理"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退款到账时间"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退款到账时间"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "A18": {
+      "dense": {
+        "sections": [
+          "商品使用与保修 › 小家电保修",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修",
+          "商品使用与保修 › 联系售后前请准备"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.25
+      },
+      "bm25": {
+        "sections": [
+          "商品使用与保修 › 小家电保修",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修",
+          "商品使用与保修 › 联系售后前请准备",
+          "型号与兼容性 › 小家电 › 型号与配件"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.25
+      },
+      "hybrid": {
+        "sections": [
+          "商品使用与保修 › 小家电保修",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修",
+          "商品使用与保修 › 联系售后前请准备"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.25
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "商品使用与保修 › 小家电保修",
+          "商品使用与保修 › 联系售后前请准备",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      }
+    },
+    "A19": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 常见问题",
+          "配送与运费",
+          "配送与运费 › 配送范围与时效",
+          "退换货与退款 › 退款到账时间"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费",
+          "商品使用与保修 › 常见故障排查",
+          "退换货与退款"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费",
+          "配送与运费 › 常见问题",
+          "退换货与退款"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 常见问题",
+          "退换货与退款",
+          "配送与运费"
+        ],
+        "refused": true,
+        "low_reason": "confidence=0.081<0.30(top1=0.105,eff=0,margin=0.079)",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      }
+    },
+    "A20": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "配送与运费 › 常见问题",
+          "退换货与退款 › 售后申请流程",
+          "退换货与退款 › 退款到账时间"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "bm25": {
+        "sections": [
+          "商品使用与保修 › 常见故障排查",
+          "退换货与退款 › 退款到账时间",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "商品使用与保修 › 常见故障排查",
+          "退换货与退款 › 质量问题换货",
+          "配送与运费 › 常见问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 质量问题换货",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 售后申请流程"
+        ],
+        "refused": true,
+        "low_reason": "confidence=0.001<0.30(top1=0.001,eff=0,margin=0.000)",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      }
+    },
+    "B01": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 保温杯保修政策"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修",
+          "型号与兼容性 › 小家电 › 型号与配件"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "商品使用与保修 › 保温杯保修政策",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "商品使用与保修 › 保温杯使用说明"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修 › 保温杯使用说明"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "B02": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "商品使用与保修 › 联系售后前请准备",
+          "型号与兼容性 › 小家电 › 型号与配件"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "review_queue:10",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.3333333333333333
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修",
+          "商品使用与保修 › 联系售后前请准备"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "商品使用与保修",
+          "退换货与退款 › 质量问题换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "B03": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 纺织品洗涤与换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 纺织品洗涤与换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "B04": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 常见型号问题",
+          "型号与兼容性"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 常见型号问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 常见型号问题",
+          "型号与兼容性 › 保温杯系列 › 型号对照表"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 常见型号问题",
+          "型号与兼容性",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "B05": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 保温杯保修政策"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 常见型号问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 常见型号问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 常见型号问题",
+          "商品使用与保修 › 保温杯使用说明"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "B06": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 常见型号问题",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 家居纺织品 › 袜类型号"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "review_queue:10",
+          "型号与兼容性"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 常见型号问题",
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 常见型号问题",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "B07": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 保温杯使用说明"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 小家电 › 电压与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 小家电 › 电压与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 常见型号问题",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 保温杯保修政策"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "B08": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 保温杯使用说明"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性",
+          "商品使用与保修 › 保温杯保修政策",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "商品使用与保修 › 保温杯保修政策",
+          "型号与兼容性 › 保温杯系列 › 型号对照表"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 常见型号问题",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "B09": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 小家电 › 型号与配件"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "型号与兼容性 › 常见型号问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "型号与兼容性 › 常见型号问题",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 常见型号问题",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "B10": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "商品使用与保修 › 保温杯使用说明"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 小家电 › 电压与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "商品使用与保修 › 保温杯使用说明"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修 › 小家电保修",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "B11": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 常见型号问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 常见型号问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 常见型号问题",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "B12": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "商品使用与保修 › 保温杯保修政策",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修 › 纺织品洗涤与换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "review_queue:10",
+          "商品使用与保修 › 保温杯使用说明"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "review_queue:10",
+          "商品使用与保修 › 保温杯保修政策"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修 › 小家电保修",
+          "型号与兼容性 › 小家电 › 电压与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "B13": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "商品使用与保修 › 纺织品洗涤与换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "型号与兼容性 › 常见型号问题",
+          "商品使用与保修 › 纺织品洗涤与换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "B14": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 小家电 › 电压与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 小家电 › 电压与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 常见型号问题",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 小家电 › 电压与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "B15": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 常见型号问题",
+          "商品使用与保修 › 保温杯保修政策",
+          "型号与兼容性 › 保温杯系列 › 型号对照表"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 小家电 › 电压与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "商品使用与保修 › 保温杯保修政策",
+          "型号与兼容性 › 常见型号问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 常见型号问题",
+          "商品使用与保修 › 保温杯保修政策",
+          "型号与兼容性 › 保温杯系列 › 型号对照表"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "B16": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "商品使用与保修 › 保温杯保修政策",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修 › 小家电保修",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "商品使用与保修 › 联系售后前请准备",
+          "商品使用与保修 › 保温杯保修政策"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "商品使用与保修 › 小家电保修",
+          "商品使用与保修 › 保温杯保修政策"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "商品使用与保修 › 小家电保修",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "B17": {
+      "dense": {
+        "sections": [
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "商品使用与保修 › 纺织品洗涤与换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "商品使用与保修 › 纺织品洗涤与换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "型号与兼容性 › 小家电 › 电压与保修"
+        ],
+        "refused": true,
+        "low_reason": "confidence=0.105<0.30(top1=0.132,eff=0,margin=0.124)",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.25
+      }
+    },
+    "B18": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 保温杯系列 › 型号对照表"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 小家电保修",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "B19": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 配送范围与时效",
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款 › 售后申请流程",
+          "退换货与退款"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "bm25": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "配送与运费",
+          "商品使用与保修 › 联系售后前请准备"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 配送范围与时效",
+          "退换货与退款 › 退款到账时间",
+          "配送与运费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "配送与运费 › 配送范围与时效",
+          "退换货与退款",
+          "退换货与退款 › 售后申请流程"
+        ],
+        "refused": true,
+        "low_reason": "confidence=0.022<0.30(top1=0.031,eff=0,margin=0.004)",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      }
+    },
+    "B20": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 常见故障排查",
+          "退换货与退款"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 小家电 › 电压与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 常见型号问题",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": true,
+        "low_reason": "confidence=0.072<0.30(top1=0.095,eff=0,margin=0.059)",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      }
+    },
+    "C01": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费",
+          "配送与运费 › 物流异常处理"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费",
+          "配送与运费 › 物流异常处理"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费",
+          "配送与运费 › 物流异常处理"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "C02": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款",
+          "退换货与退款 › 质量问题换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "商品使用与保修 › 联系售后前请准备"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款",
+          "退换货与退款 › 质量问题换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款",
+          "退换货与退款 › 售后申请流程"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "C03": {
+      "dense": {
+        "sections": [
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 保温杯保修政策",
+          "型号与兼容性 › 保温杯系列 › 型号对照表"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 常见型号问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "C04": {
+      "dense": {
+        "sections": [
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "型号与兼容性 › 常见型号问题",
+          "配送与运费 › 常见问题",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "退换货与退款 › 质量问题换货",
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "退换货与退款"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "C05": {
+      "dense": {
+        "sections": [
+          "配送与运费",
+          "配送与运费 › 配送范围与时效",
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 常见问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 常见问题",
+          "商品使用与保修 › 联系售后前请准备",
+          "型号与兼容性 › 常见型号问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 常见问题",
+          "配送与运费",
+          "配送与运费 › 配送范围与时效",
+          "商品使用与保修 › 联系售后前请准备"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.3333333333333333
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费",
+          "配送与运费 › 配送范围与时效",
+          "退换货与退款 › 质量问题换货",
+          "配送与运费 › 常见问题"
+        ],
+        "refused": true,
+        "low_reason": "confidence=0.270<0.30(top1=0.266,eff=1,margin=0.173)",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      }
+    },
+    "C06": {
+      "dense": {
+        "sections": [
+          "商品使用与保修",
+          "商品使用与保修 › 小家电保修",
+          "商品使用与保修 › 联系售后前请准备",
+          "退换货与退款 › 质量问题换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "bm25": {
+        "sections": [
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修 › 联系售后前请准备",
+          "商品使用与保修 › 小家电保修",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.3333333333333333
+      },
+      "hybrid": {
+        "sections": [
+          "商品使用与保修 › 小家电保修",
+          "商品使用与保修 › 联系售后前请准备",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 联系售后前请准备",
+          "退换货与退款 › 质量问题换货",
+          "商品使用与保修 › 小家电保修"
+        ],
+        "refused": true,
+        "low_reason": "confidence=0.070<0.30(top1=0.096,eff=0,margin=0.021)",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.25
+      }
+    },
+    "C07": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 运费标准 › 偏远地区邮费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 物流异常处理",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.3333333333333333
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 运费标准 › 偏远地区邮费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 普通地区邮费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "C08": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费",
+          "配送与运费 › 配送范围与时效",
+          "配送与运费 › 常见问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "商品使用与保修 › 常见故障排查",
+          "配送与运费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 配送范围与时效"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 常见问题",
+          "配送与运费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "C09": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款",
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款 › 退货运费承担"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 常见问题",
+          "退换货与退款 › 七天无理由退货",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "型号与兼容性 › 常见型号问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款 › 退货运费承担",
+          "退换货与退款 › 质量问题换货",
+          "配送与运费 › 运费标准 › 包邮与运费退还"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款 › 售后申请流程"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      }
+    },
+    "C10": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 售后申请流程",
+          "退换货与退款 › 退货运费承担"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "型号与兼容性 › 常见型号问题",
+          "配送与运费 › 运费标准 › 包邮与运费退还"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 退货运费承担",
+          "退换货与退款 › 售后申请流程"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 售后申请流程",
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      }
+    },
+    "C11": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 常见问题",
+          "配送与运费 › 配送范围与时效",
+          "配送与运费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 常见问题",
+          "配送与运费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 常见问题",
+          "配送与运费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "商品使用与保修 › 联系售后前请准备"
+        ],
+        "refused": true,
+        "low_reason": "confidence=0.020<0.30(top1=0.026,eff=0,margin=0.020)",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "C12": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款 › 退货运费承担",
+          "退换货与退款",
+          "退换货与退款 › 七天无理由退货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "商品使用与保修 › 联系售后前请准备",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款 › 退货运费承担",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款 › 售后申请流程"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款 › 售后申请流程",
+          "退换货与退款",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款 › 退货运费承担"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "C13": {
+      "dense": {
+        "sections": [
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 保温杯保修政策",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 常见型号问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 常见型号问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 保温杯保修政策",
+          "型号与兼容性 › 常见型号问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "C14": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 常见型号问题",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "review_queue:10",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 运费标准 › 包邮与运费退还"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "review_queue:10",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 常见型号问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 常见型号问题",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+        ],
+        "refused": true,
+        "low_reason": "confidence=0.225<0.30(top1=0.198,eff=1,margin=0.197)",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "C15": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "退换货与退款 › 退款到账时间"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 物流异常处理",
+          "配送与运费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 运费标准 › 偏远地区邮费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "C16": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款 › 退款到账时间"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "退换货与退款 › 退款到账时间"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 七天无理由退货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "退换货与退款 › 七天无理由退货"
+        ],
+        "refused": true,
+        "low_reason": "confidence=0.045<0.30(top1=0.062,eff=0,margin=0.018)",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "C17": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 配送范围与时效"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "退换货与退款 › 退款到账时间"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "退换货与退款 › 退款到账时间",
+          "配送与运费 › 常见问题",
+          "商品使用与保修 › 保温杯保修政策"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "C18": {
+      "dense": {
+        "sections": [
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "退换货与退款",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款 › 质量问题换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 常见型号问题",
+          "配送与运费 › 常见问题",
+          "退换货与退款",
+          "退换货与退款 › 退货运费承担"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款 › 退货运费承担",
+          "退换货与退款 › 售后申请流程"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款",
+          "退换货与退款 › 售后申请流程"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "C19": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 常见问题",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 普通地区邮费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 常见问题",
+          "型号与兼容性 › 常见型号问题",
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款 › 七天无理由退货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 常见问题",
+          "退换货与退款 › 质量问题换货",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 包邮与运费退还"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 常见问题",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还"
+        ],
+        "refused": true,
+        "low_reason": "confidence=0.002<0.30(top1=0.003,eff=0,margin=0.000)",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      }
+    },
+    "C20": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 常见问题",
+          "配送与运费 › 配送范围与时效",
+          "配送与运费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "bm25": {
+        "sections": [
+          "商品使用与保修 › 联系售后前请准备",
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 常见问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 常见问题",
+          "商品使用与保修 › 联系售后前请准备",
+          "配送与运费 › 物流异常处理"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 七天无理由退货",
+          "配送与运费 › 常见问题",
+          "配送与运费"
+        ],
+        "refused": true,
+        "low_reason": "confidence=0.001<0.30(top1=0.001,eff=0,margin=0.000)",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      }
+    },
+    "E01": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 配送范围与时效",
+          "配送与运费",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 物流异常处理"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 配送范围与时效"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费",
+          "配送与运费 › 配送范围与时效",
+          "配送与运费 › 运费标准 › 普通地区邮费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 配送范围与时效",
+          "配送与运费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "E02": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "review_queue:10"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款",
+          "退换货与退款 › 质量问题换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "E03": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 物流异常处理",
+          "配送与运费",
+          "配送与运费 › 配送范围与时效"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 物流异常处理",
+          "退换货与退款 › 质量问题换货",
+          "配送与运费 › 运费标准 › 普通地区邮费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "退换货与退款 › 质量问题换货",
+          "配送与运费 › 物流异常处理",
+          "配送与运费",
+          "配送与运费 › 运费标准 › 包邮与运费退还"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 物流异常处理"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "E04": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担",
+          "退换货与退款 › 退款到账时间",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 普通地区邮费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 常见问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "退换货与退款 › 退款到账时间"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 物流异常处理"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "E05": {
+      "dense": {
+        "sections": [
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修",
+          "型号与兼容性 › 保温杯系列 › 型号对照表"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 小家电保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 保温杯系列 › 型号对照表"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修",
+          "商品使用与保修 › 小家电保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "E06": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款",
+          "退换货与退款 › 售后申请流程",
+          "退换货与退款 › 七天无理由退货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款 › 售后申请流程",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款 › 售后申请流程",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款 › 售后申请流程",
+          "退换货与退款",
+          "退换货与退款 › 七天无理由退货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "E07": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "配送与运费",
+          "配送与运费 › 配送范围与时效",
+          "配送与运费 › 常见问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 常见型号问题",
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 配送范围与时效",
+          "配送与运费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "配送与运费",
+          "配送与运费 › 配送范围与时效",
+          "退换货与退款 › 七天无理由退货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "退换货与退款 › 售后申请流程",
+          "配送与运费"
+        ],
+        "refused": true,
+        "low_reason": "confidence=0.058<0.30(top1=0.082,eff=0,margin=0.005)",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 1.0
+      }
+    },
+    "E08": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 七天无理由退货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 1.0
+      }
+    },
+    "E09": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 保温杯系列 › 型号对照表"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "E10": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "商品使用与保修 › 保温杯保修政策",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+          "商品使用与保修 › 保温杯保修政策",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 保温杯系列 › 型号对照表"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "E11": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修 › 小家电保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "review_queue:10",
+          "型号与兼容性 › 保温杯系列 › 型号对照表"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "review_queue:10"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 小家电 › 电压与保修",
+          "商品使用与保修 › 小家电保修",
+          "型号与兼容性 › 小家电 › 型号与配件",
+          "商品使用与保修 › 保温杯保修政策"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      }
+    },
+    "E12": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款 › 退货运费承担",
+          "退换货与退款",
+          "退换货与退款 › 质量问题换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 物流异常处理",
+          "退换货与退款 › 七天无理由退货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "退换货与退款 › 七天无理由退货",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 物流异常处理"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "退换货与退款 › 七天无理由退货",
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "退换货与退款"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "E13": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 质量问题换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "配送与运费 › 常见问题",
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "退换货与退款 › 退货运费承担"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 七天无理由退货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 物流异常处理",
+          "退换货与退款 › 七天无理由退货",
+          "退换货与退款 › 质量问题换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 1.0
+      }
+    },
+    "E14": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "退换货与退款 › 退款到账时间",
+          "配送与运费 › 运费标准 › 偏远地区邮费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "配送与运费",
+          "退换货与退款 › 退款到账时间"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.5
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退款到账时间",
+          "配送与运费 › 运费标准 › 偏远地区邮费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 退货运费承担",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "退换货与退款 › 退款到账时间",
+          "配送与运费 › 运费标准 › 偏远地区邮费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "E15": {
+      "dense": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款 › 退款到账时间",
+          "配送与运费 › 物流异常处理",
+          "退换货与退款 › 七天无理由退货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款 › 退货运费承担",
+          "review_queue:10"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款 › 七天无理由退货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "退换货与退款 › 质量问题换货",
+          "退换货与退款 › 退款到账时间",
+          "退换货与退款 › 售后申请流程"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "E16": {
+      "dense": {
+        "sections": [
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 保温杯保修政策",
+          "型号与兼容性 › 保温杯系列 › 型号对照表"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 常见型号问题",
+          "商品使用与保修 › 常见故障排查",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 保温杯使用说明"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 0.5
+      },
+      "hybrid": {
+        "sections": [
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 保温杯使用说明",
+          "型号与兼容性 › 常见型号问题",
+          "型号与兼容性 › 保温杯系列 › 型号对照表",
+          "商品使用与保修 › 保温杯保修政策"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "商品使用与保修 › 常见故障排查",
+          "商品使用与保修 › 保温杯使用说明",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修 › 常见故障排查"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.5,
+        "recall@10": 0.5,
+        "mrr@10": 1.0
+      }
+    },
+    "E17": {
+      "dense": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "商品使用与保修 › 保温杯使用说明"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "商品使用与保修 › 纺织品洗涤与换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "商品使用与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+          "型号与兼容性 › 家居纺织品 › 袜类型号",
+          "商品使用与保修 › 纺织品洗涤与换货",
+          "型号与兼容性"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "E18": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 常见问题",
+          "配送与运费",
+          "配送与运费 › 配送范围与时效",
+          "配送与运费 › 物流异常处理"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "bm25": {
+        "sections": [
+          "配送与运费 › 常见问题",
+          "型号与兼容性 › 常见型号问题",
+          "配送与运费",
+          "退换货与退款 › 质量问题换货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 常见问题",
+          "配送与运费",
+          "配送与运费 › 物流异常处理",
+          "退换货与退款 › 七天无理由退货"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 常见问题",
+          "配送与运费",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 普通地区邮费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 1.0
+      }
+    },
+    "E19": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "商品使用与保修 › 保温杯保修政策",
+          "商品使用与保修"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "bm25": {
+        "sections": [
+          "商品使用与保修",
+          "商品使用与保修 › 保温杯保修政策"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid": {
+        "sections": [
+          "商品使用与保修",
+          "商品使用与保修 › 保温杯保修政策",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 包邮与运费退还"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "商品使用与保修 › 保温杯保修政策",
+          "配送与运费 › 运费标准 › 包邮与运费退还",
+          "型号与兼容性 › 小家电 › 电压与保修"
+        ],
+        "refused": true,
+        "low_reason": "confidence=0.001<0.30(top1=0.001,eff=0,margin=0.000)",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      }
+    },
+    "E20": {
+      "dense": {
+        "sections": [
+          "配送与运费 › 常见问题",
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 物流异常处理"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "bm25": {
+        "sections": [
+          "型号与兼容性 › 常见型号问题",
+          "商品使用与保修 › 常见故障排查",
+          "配送与运费 › 常见问题"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid": {
+        "sections": [
+          "配送与运费 › 常见问题",
+          "型号与兼容性 › 常见型号问题",
+          "配送与运费 › 运费标准 › 偏远地区邮费"
+        ],
+        "refused": false,
+        "low_reason": "",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      },
+      "hybrid_rerank": {
+        "sections": [
+          "配送与运费 › 运费标准 › 偏远地区邮费",
+          "退换货与退款 › 七天无理由退货",
+          "配送与运费 › 运费标准 › 普通地区邮费",
+          "配送与运费 › 常见问题"
+        ],
+        "refused": true,
+        "low_reason": "confidence=0.098<0.30(top1=0.122,eff=0,margin=0.122)",
+        "recall@5": 0.0,
+        "recall@10": 0.0,
+        "mrr@10": 0.0
+      }
+    }
+  }
+}

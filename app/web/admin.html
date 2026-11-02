@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#164d46">
+  <meta name="description" content="审核低置信问题，把答不上的问题补进知识库。">
+  <title>知识库审核 · deservehy客服</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='10' fill='%23164d46'/%3E%3Cpath d='M8 9h16v12H13l-5 4V9z' fill='none' stroke='%23d6efda' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/assets/admin.css">
+  <script src="/assets/admin.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-title">
+      <a class="back" href="/">← 回到聊天</a>
+      <h1>知识库审核</h1>
+      <p>把答不上的问题，变成知识库里的一条答案。</p>
+    </div>
+    <div class="topbar-count" aria-live="polite">
+      <span id="queue-total">—</span>
+      <small id="queue-scope">待审</small>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <div class="toolbar">
+      <div class="tabs" role="tablist" aria-label="按状态筛选">
+        <button type="button" class="tab is-active" role="tab" aria-selected="true" data-status="待审">待审</button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-status="通过">通过</button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-status="驳回">驳回</button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-status="">全部</button>
+      </div>
+      <button type="button" class="refresh" id="refresh">刷新</button>
+    </div>
+
+    <p class="status-line" id="status-line" role="status" aria-live="polite"></p>
+    <section class="queue" id="queue" aria-label="审核队列"></section>
+    <p class="empty" id="empty" hidden>这个筛选下暂时没有记录。</p>
+  </main>
+</body>
+</html>

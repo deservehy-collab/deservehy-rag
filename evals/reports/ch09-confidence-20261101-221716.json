@@ -1,0 +1,2422 @@
+{
+  "generated_at": "2026-11-01T22:17:16",
+  "dataset_size": 80,
+  "unanswerable": 8,
+  "weights": {
+    "w_top1": 0.7,
+    "w_count": 0.2,
+    "w_margin": 0.1
+  },
+  "grid": [
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.0,
+      "unanswerable_refusal_rate": 0.0,
+      "answerable_false_refusal_rate": 0.0,
+      "false_refusal_count": 0
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.05,
+      "unanswerable_refusal_rate": 0.625,
+      "answerable_false_refusal_rate": 0.0,
+      "false_refusal_count": 0
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.1,
+      "unanswerable_refusal_rate": 0.75,
+      "answerable_false_refusal_rate": 0.0278,
+      "false_refusal_count": 2
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.15,
+      "unanswerable_refusal_rate": 0.875,
+      "answerable_false_refusal_rate": 0.0278,
+      "false_refusal_count": 2
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.2,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0417,
+      "false_refusal_count": 3
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.25,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0556,
+      "false_refusal_count": 4
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.3,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0833,
+      "false_refusal_count": 6
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.35,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0833,
+      "false_refusal_count": 6
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.4,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0833,
+      "false_refusal_count": 6
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.45,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.1111,
+      "false_refusal_count": 8
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.5,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.1389,
+      "false_refusal_count": 10
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.55,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.1806,
+      "false_refusal_count": 13
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.6,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.2639,
+      "false_refusal_count": 19
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.65,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.2639,
+      "false_refusal_count": 19
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.7,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.3056,
+      "false_refusal_count": 22
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.75,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.375,
+      "false_refusal_count": 27
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.8,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.4167,
+      "false_refusal_count": 30
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.85,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.5694,
+      "false_refusal_count": 41
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.9,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.875,
+      "false_refusal_count": 63
+    },
+    {
+      "effective_floor": 0.1,
+      "confidence_min": 0.95,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.9861,
+      "false_refusal_count": 71
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.0,
+      "unanswerable_refusal_rate": 0.0,
+      "answerable_false_refusal_rate": 0.0,
+      "false_refusal_count": 0
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.05,
+      "unanswerable_refusal_rate": 0.625,
+      "answerable_false_refusal_rate": 0.0,
+      "false_refusal_count": 0
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.1,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0278,
+      "false_refusal_count": 2
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.15,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0417,
+      "false_refusal_count": 3
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.2,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0417,
+      "false_refusal_count": 3
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.25,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0556,
+      "false_refusal_count": 4
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.3,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0833,
+      "false_refusal_count": 6
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.35,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0833,
+      "false_refusal_count": 6
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.4,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0833,
+      "false_refusal_count": 6
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.45,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.1111,
+      "false_refusal_count": 8
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.5,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.1528,
+      "false_refusal_count": 11
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.55,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.2083,
+      "false_refusal_count": 15
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.6,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.2639,
+      "false_refusal_count": 19
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.65,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.2778,
+      "false_refusal_count": 20
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.7,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.3194,
+      "false_refusal_count": 23
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.75,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.3889,
+      "false_refusal_count": 28
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.8,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.4444,
+      "false_refusal_count": 32
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.85,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.6111,
+      "false_refusal_count": 44
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.9,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.8889,
+      "false_refusal_count": 64
+    },
+    {
+      "effective_floor": 0.15,
+      "confidence_min": 0.95,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 1.0,
+      "false_refusal_count": 72
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.0,
+      "unanswerable_refusal_rate": 0.0,
+      "answerable_false_refusal_rate": 0.0,
+      "false_refusal_count": 0
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.05,
+      "unanswerable_refusal_rate": 0.625,
+      "answerable_false_refusal_rate": 0.0,
+      "false_refusal_count": 0
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.1,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0278,
+      "false_refusal_count": 2
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.15,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0417,
+      "false_refusal_count": 3
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.2,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0556,
+      "false_refusal_count": 4
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.25,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0556,
+      "false_refusal_count": 4
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.3,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0833,
+      "false_refusal_count": 6
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.35,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0833,
+      "false_refusal_count": 6
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.4,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.1111,
+      "false_refusal_count": 8
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.45,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.1389,
+      "false_refusal_count": 10
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.5,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.1806,
+      "false_refusal_count": 13
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.55,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.2083,
+      "false_refusal_count": 15
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.6,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.2639,
+      "false_refusal_count": 19
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.65,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.2778,
+      "false_refusal_count": 20
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.7,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.3194,
+      "false_refusal_count": 23
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.75,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.4028,
+      "false_refusal_count": 29
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.8,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.4583,
+      "false_refusal_count": 33
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.85,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.6389,
+      "false_refusal_count": 46
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.9,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.9167,
+      "false_refusal_count": 66
+    },
+    {
+      "effective_floor": 0.2,
+      "confidence_min": 0.95,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 1.0,
+      "false_refusal_count": 72
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.0,
+      "unanswerable_refusal_rate": 0.0,
+      "answerable_false_refusal_rate": 0.0,
+      "false_refusal_count": 0
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.05,
+      "unanswerable_refusal_rate": 0.625,
+      "answerable_false_refusal_rate": 0.0,
+      "false_refusal_count": 0
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.1,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0278,
+      "false_refusal_count": 2
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.15,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0417,
+      "false_refusal_count": 3
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.2,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0556,
+      "false_refusal_count": 4
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.25,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0556,
+      "false_refusal_count": 4
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.3,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0833,
+      "false_refusal_count": 6
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.35,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0833,
+      "false_refusal_count": 6
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.4,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.1111,
+      "false_refusal_count": 8
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.45,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.1389,
+      "false_refusal_count": 10
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.5,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.1806,
+      "false_refusal_count": 13
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.55,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.2222,
+      "false_refusal_count": 16
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.6,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.2639,
+      "false_refusal_count": 19
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.65,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.2778,
+      "false_refusal_count": 20
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.7,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.3472,
+      "false_refusal_count": 25
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.75,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.4167,
+      "false_refusal_count": 30
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.8,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.4583,
+      "false_refusal_count": 33
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.85,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.6944,
+      "false_refusal_count": 50
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.9,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.9306,
+      "false_refusal_count": 67
+    },
+    {
+      "effective_floor": 0.25,
+      "confidence_min": 0.95,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 1.0,
+      "false_refusal_count": 72
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.0,
+      "unanswerable_refusal_rate": 0.0,
+      "answerable_false_refusal_rate": 0.0,
+      "false_refusal_count": 0
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.05,
+      "unanswerable_refusal_rate": 0.625,
+      "answerable_false_refusal_rate": 0.0,
+      "false_refusal_count": 0
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.1,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0278,
+      "false_refusal_count": 2
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.15,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0417,
+      "false_refusal_count": 3
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.2,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0556,
+      "false_refusal_count": 4
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.25,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0833,
+      "false_refusal_count": 6
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.3,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0833,
+      "false_refusal_count": 6
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.35,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.0833,
+      "false_refusal_count": 6
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.4,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.1111,
+      "false_refusal_count": 8
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.45,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.1528,
+      "false_refusal_count": 11
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.5,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.1944,
+      "false_refusal_count": 14
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.55,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.2361,
+      "false_refusal_count": 17
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.6,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.2917,
+      "false_refusal_count": 21
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.65,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.2917,
+      "false_refusal_count": 21
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.7,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.3472,
+      "false_refusal_count": 25
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.75,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.4167,
+      "false_refusal_count": 30
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.8,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.4583,
+      "false_refusal_count": 33
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.85,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.6944,
+      "false_refusal_count": 50
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.9,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 0.9306,
+      "false_refusal_count": 67
+    },
+    {
+      "effective_floor": 0.3,
+      "confidence_min": 0.95,
+      "unanswerable_refusal_rate": 1.0,
+      "answerable_false_refusal_rate": 1.0,
+      "false_refusal_count": 72
+    }
+  ],
+  "selected": {
+    "effective_floor": 0.15,
+    "confidence_min": 0.1,
+    "unanswerable_refusal_rate": 1.0,
+    "answerable_false_refusal_rate": 0.0278,
+    "false_refusal_count": 2
+  },
+  "per_case": [
+    {
+      "id": "A01",
+      "bucket": "A_policy",
+      "answerable": true,
+      "reranks": [
+        0.982757,
+        0.740737,
+        0.006004,
+        0.005469,
+        0.001949
+      ],
+      "expected_sections": [
+        "配送与运费 › 运费标准 › 普通地区邮费"
+      ],
+      "hit_sections": [
+        "配送与运费 › 运费标准 › 普通地区邮费",
+        "配送与运费 › 运费标准 › 偏远地区邮费",
+        "配送与运费 › 运费标准 › 包邮与运费退还",
+        "退换货与退款 › 退货运费承担",
+        "配送与运费 › 配送范围与时效"
+      ]
+    },
+    {
+      "id": "A02",
+      "bucket": "A_policy",
+      "answerable": true,
+      "reranks": [
+        0.608652,
+        0.247987,
+        0.003497,
+        0.001416,
+        0.000993
+      ],
+      "expected_sections": [
+        "配送与运费 › 运费标准 › 偏远地区邮费"
+      ],
+      "hit_sections": [
+        "配送与运费 › 运费标准 › 偏远地区邮费",
+        "配送与运费 › 运费标准 › 普通地区邮费",
+        "配送与运费 › 运费标准 › 包邮与运费退还",
+        "退换货与退款 › 退货运费承担"
+      ]
+    },
+    {
+      "id": "A03",
+      "bucket": "A_policy",
+      "answerable": true,
+      "reranks": [
+        0.917598,
+        0.759047,
+        0.512662,
+        0.232659,
+        0.168173
+      ],
+      "expected_sections": [
+        "配送与运费 › 配送范围与时效"
+      ],
+      "hit_sections": [
+        "配送与运费",
+        "配送与运费 › 配送范围与时效",
+        "退换货与退款 › 质量问题换货"
+      ]
+    },
+    {
+      "id": "A04",
+      "bucket": "A_policy",
+      "answerable": true,
+      "reranks": [
+        0.654122,
+        0.261897,
+        0.136378,
+        0.037397,
+        0.026106
+      ],
+      "expected_sections": [
+        "退换货与退款 › 七天无理由退货"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 七天无理由退货",
+        "退换货与退款",
+        "商品使用与保修 › 纺织品洗涤与换货",
+        "退换货与退款 › 退货运费承担"
+      ]
+    },
+    {
+      "id": "A05",
+      "bucket": "A_policy",
+      "answerable": true,
+      "reranks": [
+        0.997547,
+        0.971939,
+        0.19853,
+        0.192388,
+        0.174551
+      ],
+      "expected_sections": [
+        "退换货与退款 › 退款到账时间"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 退款到账时间",
+        "退换货与退款",
+        "退换货与退款 › 七天无理由退货"
+      ]
+    },
+    {
+      "id": "A06",
+      "bucket": "A_policy",
+      "answerable": true,
+      "reranks": [
+        0.977714,
+        0.903635,
+        0.202759,
+        0.177098,
+        0.120232
+      ],
+      "expected_sections": [
+        "退换货与退款 › 质量问题换货"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 质量问题换货",
+        "退换货与退款",
+        "商品使用与保修 › 纺织品洗涤与换货",
+        "退换货与退款 › 退货运费承担"
+      ]
+    },
+    {
+      "id": "A07",
+      "bucket": "A_policy",
+      "answerable": true,
+      "reranks": [
+        0.989013,
+        0.958924,
+        0.12603,
+        0.061087,
+        0.050705
+      ],
+      "expected_sections": [
+        "商品使用与保修 › 保温杯使用说明"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 保温杯系列 › 型号对照表",
+        "商品使用与保修 › 保温杯保修政策",
+        "商品使用与保修 › 常见故障排查",
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+        "商品使用与保修"
+      ]
+    },
+    {
+      "id": "A08",
+      "bucket": "A_policy",
+      "answerable": true,
+      "reranks": [
+        0.998232,
+        0.955569,
+        0.459895,
+        0.046465,
+        0.009708
+      ],
+      "expected_sections": [
+        "商品使用与保修 › 小家电保修"
+      ],
+      "hit_sections": [
+        "商品使用与保修 › 小家电保修",
+        "型号与兼容性 › 小家电 › 电压与保修",
+        "商品使用与保修 › 保温杯保修政策",
+        "商品使用与保修"
+      ]
+    },
+    {
+      "id": "A09",
+      "bucket": "A_policy",
+      "answerable": true,
+      "reranks": [
+        0.749454,
+        0.110088,
+        0.060975,
+        0.029817,
+        0.01053
+      ],
+      "expected_sections": [
+        "配送与运费 › 配送范围与时效"
+      ],
+      "hit_sections": [
+        "配送与运费 › 配送范围与时效",
+        "配送与运费",
+        "退换货与退款 › 退款到账时间"
+      ]
+    },
+    {
+      "id": "A10",
+      "bucket": "A_policy",
+      "answerable": true,
+      "reranks": [
+        0.97622,
+        0.688783,
+        0.021865,
+        0.021247,
+        0.010777
+      ],
+      "expected_sections": [
+        "配送与运费 › 运费标准 › 包邮与运费退还"
+      ],
+      "hit_sections": [
+        "配送与运费 › 运费标准 › 包邮与运费退还",
+        "退换货与退款 › 退货运费承担",
+        "配送与运费 › 物流异常处理",
+        "配送与运费 › 运费标准 › 普通地区邮费",
+        "配送与运费 › 运费标准 › 偏远地区邮费"
+      ]
+    },
+    {
+      "id": "A11",
+      "bucket": "A_policy",
+      "answerable": true,
+      "reranks": [
+        0.982356,
+        0.815967,
+        0.311217,
+        0.017111,
+        0.009161
+      ],
+      "expected_sections": [
+        "退换货与退款 › 退货运费承担"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 退货运费承担",
+        "配送与运费 › 运费标准 › 包邮与运费退还",
+        "配送与运费 › 物流异常处理",
+        "商品使用与保修 › 小家电保修",
+        "配送与运费 › 常见问题"
+      ]
+    },
+    {
+      "id": "A12",
+      "bucket": "A_policy",
+      "answerable": true,
+      "reranks": [
+        0.793586,
+        0.006438,
+        0.006145,
+        0.00582,
+        0.005708
+      ],
+      "expected_sections": [
+        "退换货与退款 › 退款到账时间"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 退款到账时间",
+        "退换货与退款 › 七天无理由退货"
+      ]
+    },
+    {
+      "id": "A13",
+      "bucket": "A_policy",
+      "answerable": true,
+      "reranks": [
+        0.963092,
+        0.781997,
+        0.070945,
+        0.019051,
+        0.008779
+      ],
+      "expected_sections": [
+        "退换货与退款 › 质量问题换货"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 质量问题换货",
+        "型号与兼容性 › 常见型号问题",
+        "退换货与退款 › 售后申请流程",
+        "退换货与退款 › 退货运费承担"
+      ]
+    },
+    {
+      "id": "A14",
+      "bucket": "A_policy",
+      "answerable": true,
+      "reranks": [
+        0.99014,
+        0.034881,
+        0.00902,
+        0.00407,
+        0.002845
+      ],
+      "expected_sections": [
+        "商品使用与保修 › 保温杯使用说明"
+      ],
+      "hit_sections": [
+        "商品使用与保修 › 保温杯使用说明",
+        "商品使用与保修 › 常见故障排查",
+        "商品使用与保修 › 保温杯保修政策",
+        "商品使用与保修",
+        "商品使用与保修 › 常见故障排查"
+      ]
+    },
+    {
+      "id": "A15",
+      "bucket": "A_policy",
+      "answerable": true,
+      "reranks": [
+        0.987375,
+        0.502411,
+        0.042167,
+        0.023599,
+        0.013121
+      ],
+      "expected_sections": [
+        "商品使用与保修 › 纺织品洗涤与换货"
+      ],
+      "hit_sections": [
+        "商品使用与保修 › 纺织品洗涤与换货",
+        "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+        "退换货与退款 › 七天无理由退货",
+        "退换货与退款 › 质量问题换货"
+      ]
+    },
+    {
+      "id": "A16",
+      "bucket": "A_policy",
+      "answerable": true,
+      "reranks": [
+        0.993359,
+        0.084342,
+        0.080213,
+        0.064653,
+        0.0341
+      ],
+      "expected_sections": [
+        "配送与运费 › 物流异常处理"
+      ],
+      "hit_sections": [
+        "配送与运费 › 物流异常处理",
+        "配送与运费 › 常见问题",
+        "退换货与退款 › 质量问题换货",
+        "退换货与退款 › 退款到账时间"
+      ]
+    },
+    {
+      "id": "A17",
+      "bucket": "A_policy",
+      "answerable": true,
+      "reranks": [
+        0.936981,
+        0.129183,
+        0.00343,
+        0.00161,
+        0.001585
+      ],
+      "expected_sections": [
+        "退换货与退款 › 退货运费承担"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 退货运费承担",
+        "配送与运费 › 运费标准 › 包邮与运费退还",
+        "退换货与退款 › 退款到账时间"
+      ]
+    },
+    {
+      "id": "A18",
+      "bucket": "A_policy",
+      "answerable": true,
+      "reranks": [
+        0.701202,
+        0.28887,
+        0.202917,
+        0.031679,
+        0.017712
+      ],
+      "expected_sections": [
+        "商品使用与保修 › 联系售后前请准备"
+      ],
+      "hit_sections": [
+        "商品使用与保修 › 小家电保修",
+        "商品使用与保修 › 联系售后前请准备",
+        "型号与兼容性 › 小家电 › 电压与保修",
+        "商品使用与保修 › 保温杯保修政策",
+        "商品使用与保修"
+      ]
+    },
+    {
+      "id": "A19",
+      "bucket": "A_policy",
+      "answerable": false,
+      "reranks": [
+        0.105211,
+        0.026759,
+        0.018689,
+        0.008813,
+        0.00749
+      ],
+      "expected_sections": [],
+      "hit_sections": [
+        "配送与运费 › 常见问题",
+        "退换货与退款",
+        "配送与运费"
+      ]
+    },
+    {
+      "id": "A20",
+      "bucket": "A_policy",
+      "answerable": false,
+      "reranks": [
+        0.00133,
+        0.000977,
+        0.000351,
+        0.000323,
+        0.000134
+      ],
+      "expected_sections": [],
+      "hit_sections": [
+        "退换货与退款 › 退货运费承担",
+        "退换货与退款 › 退款到账时间",
+        "退换货与退款 › 质量问题换货",
+        "配送与运费 › 运费标准 › 包邮与运费退还",
+        "退换货与退款 › 售后申请流程"
+      ]
+    },
+    {
+      "id": "B01",
+      "bucket": "B_model",
+      "answerable": true,
+      "reranks": [
+        0.984869,
+        0.334589,
+        0.011915,
+        0.006266,
+        0.006004
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 保温杯系列 › 型号对照表"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 保温杯系列 › 型号对照表",
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+        "商品使用与保修 › 常见故障排查",
+        "商品使用与保修 › 保温杯保修政策",
+        "商品使用与保修 › 保温杯使用说明"
+      ]
+    },
+    {
+      "id": "B02",
+      "bucket": "B_model",
+      "answerable": true,
+      "reranks": [
+        0.838944,
+        0.168173,
+        0.003099,
+        0.002208,
+        0.001193
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 保温杯系列 › 型号对照表"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 保温杯系列 › 型号对照表",
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+        "型号与兼容性 › 家居纺织品 › 袜类型号",
+        "商品使用与保修 › 常见故障排查",
+        "商品使用与保修"
+      ]
+    },
+    {
+      "id": "B03",
+      "bucket": "B_model",
+      "answerable": true,
+      "reranks": [
+        0.998595,
+        0.005555,
+        0.000675,
+        0.000444,
+        0.000242
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 家居纺织品 › 袜类型号"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 家居纺织品 › 袜类型号",
+        "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+        "型号与兼容性 › 保温杯系列 › 型号对照表",
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+      ]
+    },
+    {
+      "id": "B04",
+      "bucket": "B_model",
+      "answerable": true,
+      "reranks": [
+        0.994552,
+        0.551453,
+        0.02378,
+        0.00083,
+        0.000548
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 小家电 › 型号与配件"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 小家电 › 型号与配件",
+        "型号与兼容性 › 小家电 › 电压与保修",
+        "型号与兼容性 › 常见型号问题",
+        "型号与兼容性",
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+      ]
+    },
+    {
+      "id": "B05",
+      "bucket": "B_model",
+      "answerable": true,
+      "reranks": [
+        0.999785,
+        0.571886,
+        0.023109,
+        0.004905,
+        0.002901
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+        "型号与兼容性 › 保温杯系列 › 型号对照表",
+        "型号与兼容性 › 常见型号问题",
+        "商品使用与保修 › 常见故障排查",
+        "型号与兼容性 › 小家电 › 电压与保修"
+      ]
+    },
+    {
+      "id": "B06",
+      "bucket": "B_model",
+      "answerable": true,
+      "reranks": [
+        0.965053,
+        0.560403,
+        0.475544,
+        0.345436,
+        0.0745
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 小家电 › 型号与配件"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 小家电 › 型号与配件",
+        "型号与兼容性 › 小家电 › 电压与保修",
+        "型号与兼容性 › 常见型号问题",
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+        "型号与兼容性 › 保温杯系列 › 型号对照表"
+      ]
+    },
+    {
+      "id": "B07",
+      "bucket": "B_model",
+      "answerable": true,
+      "reranks": [
+        0.998058,
+        0.866698,
+        0.016153,
+        0.004468,
+        0.001125
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+        "型号与兼容性 › 保温杯系列 › 型号对照表",
+        "型号与兼容性 › 常见型号问题",
+        "商品使用与保修 › 常见故障排查",
+        "商品使用与保修 › 保温杯保修政策"
+      ]
+    },
+    {
+      "id": "B08",
+      "bucket": "B_model",
+      "answerable": true,
+      "reranks": [
+        0.995834,
+        0.007289,
+        0.003222,
+        0.002768,
+        0.002758
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+        "型号与兼容性 › 保温杯系列 › 型号对照表",
+        "型号与兼容性 › 常见型号问题",
+        "商品使用与保修 › 保温杯保修政策",
+        "商品使用与保修 › 常见故障排查"
+      ]
+    },
+    {
+      "id": "B09",
+      "bucket": "B_model",
+      "answerable": true,
+      "reranks": [
+        0.912748,
+        0.000111,
+        0.000101,
+        9.9e-05,
+        6.5e-05
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 家居纺织品 › 袜类型号"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 家居纺织品 › 袜类型号",
+        "型号与兼容性 › 保温杯系列 › 型号对照表",
+        "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+        "型号与兼容性"
+      ]
+    },
+    {
+      "id": "B10",
+      "bucket": "B_model",
+      "answerable": true,
+      "reranks": [
+        0.997379,
+        0.097562,
+        0.004399,
+        0.002043,
+        0.001598
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 小家电 › 型号与配件"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 小家电 › 型号与配件",
+        "型号与兼容性 › 小家电 › 电压与保修",
+        "商品使用与保修 › 小家电保修",
+        "型号与兼容性 › 保温杯系列 › 型号对照表",
+        "商品使用与保修 › 常见故障排查"
+      ]
+    },
+    {
+      "id": "B11",
+      "bucket": "B_model",
+      "answerable": true,
+      "reranks": [
+        0.998726,
+        0.974965,
+        0.002406,
+        0.00046,
+        0.000398
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 小家电 › 型号与配件"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 小家电 › 型号与配件",
+        "型号与兼容性 › 小家电 › 电压与保修",
+        "型号与兼容性 › 常见型号问题",
+        "商品使用与保修 › 常见故障排查",
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+      ]
+    },
+    {
+      "id": "B12",
+      "bucket": "B_model",
+      "answerable": true,
+      "reranks": [
+        0.934515,
+        0.073165,
+        0.071982,
+        0.022414,
+        0.015015
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 保温杯系列 › 型号对照表"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 保温杯系列 › 型号对照表",
+        "商品使用与保修 › 保温杯保修政策",
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+        "型号与兼容性 › 小家电 › 电压与保修"
+      ]
+    },
+    {
+      "id": "B13",
+      "bucket": "B_model",
+      "answerable": true,
+      "reranks": [
+        0.99476,
+        0.006145,
+        0.002183,
+        0.000285,
+        0.000276
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 家居纺织品 › 袜类型号"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 家居纺织品 › 袜类型号",
+        "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+        "型号与兼容性 › 常见型号问题",
+        "商品使用与保修 › 纺织品洗涤与换货"
+      ]
+    },
+    {
+      "id": "B14",
+      "bucket": "B_model",
+      "answerable": true,
+      "reranks": [
+        0.999064,
+        0.205934,
+        0.007149,
+        0.004556,
+        0.001188
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+        "型号与兼容性 › 保温杯系列 › 型号对照表",
+        "型号与兼容性 › 常见型号问题",
+        "商品使用与保修 › 常见故障排查"
+      ]
+    },
+    {
+      "id": "B15",
+      "bucket": "B_model",
+      "answerable": true,
+      "reranks": [
+        0.779825,
+        0.028598,
+        0.017712,
+        0.007726,
+        0.004556
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+        "型号与兼容性 › 常见型号问题",
+        "商品使用与保修 › 常见故障排查",
+        "商品使用与保修 › 保温杯保修政策",
+        "型号与兼容性 › 保温杯系列 › 型号对照表"
+      ]
+    },
+    {
+      "id": "B16",
+      "bucket": "B_model",
+      "answerable": true,
+      "reranks": [
+        0.984396,
+        0.44339,
+        0.012772,
+        0.009784,
+        0.001668
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 小家电 › 电压与保修"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 小家电 › 电压与保修",
+        "型号与兼容性 › 小家电 › 型号与配件",
+        "商品使用与保修 › 小家电保修",
+        "商品使用与保修 › 常见故障排查"
+      ]
+    },
+    {
+      "id": "B17",
+      "bucket": "B_model",
+      "answerable": true,
+      "reranks": [
+        0.138928,
+        0.003869,
+        0.002473,
+        0.001688,
+        0.001183
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 家居纺织品 › 袜类型号",
+        "商品使用与保修 › 纺织品洗涤与换货",
+        "商品使用与保修 › 常见故障排查",
+        "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+        "商品使用与保修 › 常见故障排查"
+      ]
+    },
+    {
+      "id": "B18",
+      "bucket": "B_model",
+      "answerable": true,
+      "reranks": [
+        0.960805,
+        0.829354,
+        0.004486,
+        0.004023,
+        0.001151
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 小家电 › 电压与保修"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 小家电 › 电压与保修",
+        "型号与兼容性 › 小家电 › 型号与配件",
+        "商品使用与保修 › 常见故障排查",
+        "型号与兼容性 › 常见型号问题",
+        "型号与兼容性 › 保温杯系列 › 型号对照表"
+      ]
+    },
+    {
+      "id": "B19",
+      "bucket": "B_model",
+      "answerable": false,
+      "reranks": [
+        0.030618,
+        0.026255,
+        0.019795,
+        0.018229,
+        0.014957
+      ],
+      "expected_sections": [],
+      "hit_sections": [
+        "退换货与退款 › 质量问题换货",
+        "配送与运费 › 配送范围与时效",
+        "退换货与退款",
+        "退换货与退款 › 售后申请流程"
+      ]
+    },
+    {
+      "id": "B20",
+      "bucket": "B_model",
+      "answerable": false,
+      "reranks": [
+        0.095013,
+        0.035948,
+        0.001305,
+        0.001134,
+        0.000721
+      ],
+      "expected_sections": [],
+      "hit_sections": [
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+        "型号与兼容性 › 保温杯系列 › 型号对照表",
+        "型号与兼容性 › 常见型号问题",
+        "型号与兼容性 › 小家电 › 电压与保修",
+        "商品使用与保修 › 常见故障排查"
+      ]
+    },
+    {
+      "id": "C01",
+      "bucket": "C_colloquial",
+      "answerable": true,
+      "reranks": [
+        0.568356,
+        0.293202,
+        0.032775,
+        0.016215,
+        0.005002
+      ],
+      "expected_sections": [
+        "配送与运费 › 运费标准 › 普通地区邮费"
+      ],
+      "hit_sections": [
+        "配送与运费 › 运费标准 › 普通地区邮费",
+        "配送与运费 › 运费标准 › 偏远地区邮费",
+        "配送与运费 › 运费标准 › 包邮与运费退还",
+        "退换货与退款 › 退货运费承担",
+        "配送与运费 › 常见问题"
+      ]
+    },
+    {
+      "id": "C02",
+      "bucket": "C_colloquial",
+      "answerable": true,
+      "reranks": [
+        0.985384,
+        0.968679,
+        0.205775,
+        0.189821,
+        0.124959
+      ],
+      "expected_sections": [
+        "退换货与退款 › 退款到账时间"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 退款到账时间",
+        "退换货与退款 › 七天无理由退货",
+        "退换货与退款",
+        "退换货与退款 › 售后申请流程"
+      ]
+    },
+    {
+      "id": "C03",
+      "bucket": "C_colloquial",
+      "answerable": true,
+      "reranks": [
+        0.611962,
+        0.388966,
+        0.050331,
+        0.002867,
+        0.000538
+      ],
+      "expected_sections": [
+        "商品使用与保修 › 保温杯使用说明"
+      ],
+      "hit_sections": [
+        "商品使用与保修 › 保温杯使用说明",
+        "商品使用与保修 › 常见故障排查",
+        "商品使用与保修 › 常见故障排查",
+        "商品使用与保修 › 保温杯保修政策",
+        "商品使用与保修"
+      ]
+    },
+    {
+      "id": "C04",
+      "bucket": "C_colloquial",
+      "answerable": true,
+      "reranks": [
+        0.507652,
+        0.179818,
+        0.107063,
+        0.038756,
+        0.028544
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+        "商品使用与保修 › 纺织品洗涤与换货",
+        "退换货与退款 › 质量问题换货",
+        "退换货与退款"
+      ]
+    },
+    {
+      "id": "C05",
+      "bucket": "C_colloquial",
+      "answerable": true,
+      "reranks": [
+        0.266262,
+        0.093678,
+        0.034815,
+        0.025323,
+        0.012723
+      ],
+      "expected_sections": [
+        "配送与运费 › 配送范围与时效"
+      ],
+      "hit_sections": [
+        "配送与运费",
+        "配送与运费 › 配送范围与时效",
+        "退换货与退款 › 质量问题换货",
+        "配送与运费 › 常见问题"
+      ]
+    },
+    {
+      "id": "C06",
+      "bucket": "C_colloquial",
+      "answerable": true,
+      "reranks": [
+        0.092524,
+        0.071851,
+        0.044932,
+        0.039269,
+        0.037679
+      ],
+      "expected_sections": [
+        "商品使用与保修 › 小家电保修"
+      ],
+      "hit_sections": [
+        "商品使用与保修 › 常见故障排查",
+        "商品使用与保修 › 小家电保修",
+        "商品使用与保修 › 联系售后前请准备",
+        "商品使用与保修 › 保温杯保修政策"
+      ]
+    },
+    {
+      "id": "C07",
+      "bucket": "C_colloquial",
+      "answerable": true,
+      "reranks": [
+        0.762778,
+        0.675765,
+        0.385722,
+        0.008813,
+        0.008678
+      ],
+      "expected_sections": [
+        "退换货与退款 › 退货运费承担"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 退货运费承担",
+        "配送与运费 › 运费标准 › 包邮与运费退还",
+        "配送与运费 › 物流异常处理",
+        "配送与运费 › 运费标准 › 偏远地区邮费",
+        "配送与运费 › 运费标准 › 普通地区邮费"
+      ]
+    },
+    {
+      "id": "C08",
+      "bucket": "C_colloquial",
+      "answerable": true,
+      "reranks": [
+        0.589657,
+        0.095181,
+        0.00415,
+        0.002444,
+        0.002059
+      ],
+      "expected_sections": [
+        "配送与运费 › 运费标准 › 偏远地区邮费"
+      ],
+      "hit_sections": [
+        "配送与运费 › 运费标准 › 偏远地区邮费",
+        "配送与运费 › 运费标准 › 普通地区邮费",
+        "配送与运费 › 运费标准 › 包邮与运费退还",
+        "配送与运费 › 常见问题",
+        "退换货与退款 › 退货运费承担"
+      ]
+    },
+    {
+      "id": "C09",
+      "bucket": "C_colloquial",
+      "answerable": true,
+      "reranks": [
+        0.389488,
+        0.323701,
+        0.268174,
+        0.240596,
+        0.203708
+      ],
+      "expected_sections": [
+        "退换货与退款 › 七天无理由退货"
+      ],
+      "hit_sections": [
+        "退换货与退款",
+        "退换货与退款 › 七天无理由退货",
+        "退换货与退款 › 质量问题换货",
+        "退换货与退款 › 售后申请流程"
+      ]
+    },
+    {
+      "id": "C10",
+      "bucket": "C_colloquial",
+      "answerable": true,
+      "reranks": [
+        0.439958,
+        0.194521,
+        0.163579,
+        0.151781,
+        0.094678
+      ],
+      "expected_sections": [
+        "退换货与退款 › 退款到账时间"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 退款到账时间",
+        "退换货与退款 › 售后申请流程",
+        "退换货与退款 › 七天无理由退货"
+      ]
+    },
+    {
+      "id": "C11",
+      "bucket": "C_colloquial",
+      "answerable": true,
+      "reranks": [
+        0.282097,
+        0.002704,
+        0.002482,
+        0.002208,
+        0.002027
+      ],
+      "expected_sections": [
+        "配送与运费 › 物流异常处理"
+      ],
+      "hit_sections": [
+        "配送与运费 › 物流异常处理",
+        "退换货与退款 › 七天无理由退货",
+        "配送与运费 › 运费标准 › 包邮与运费退还",
+        "退换货与退款 › 售后申请流程"
+      ]
+    },
+    {
+      "id": "C12",
+      "bucket": "C_colloquial",
+      "answerable": true,
+      "reranks": [
+        0.829077,
+        0.401981,
+        0.186243,
+        0.156105,
+        0.133641
+      ],
+      "expected_sections": [
+        "退换货与退款 › 质量问题换货"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 质量问题换货",
+        "退换货与退款 › 售后申请流程",
+        "退换货与退款",
+        "退换货与退款 › 七天无理由退货",
+        "退换货与退款 › 退货运费承担"
+      ]
+    },
+    {
+      "id": "C13",
+      "bucket": "C_colloquial",
+      "answerable": true,
+      "reranks": [
+        0.661486,
+        0.085404,
+        0.076408,
+        0.002511,
+        0.000712
+      ],
+      "expected_sections": [
+        "商品使用与保修 › 常见故障排查"
+      ],
+      "hit_sections": [
+        "商品使用与保修 › 常见故障排查",
+        "商品使用与保修 › 常见故障排查",
+        "商品使用与保修 › 保温杯使用说明",
+        "商品使用与保修 › 保温杯保修政策",
+        "型号与兼容性 › 常见型号问题"
+      ]
+    },
+    {
+      "id": "C14",
+      "bucket": "C_colloquial",
+      "answerable": true,
+      "reranks": [
+        0.198375,
+        0.001567,
+        0.001264,
+        0.000584,
+        0.000484
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 小家电 › 电压与保修"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 小家电 › 电压与保修",
+        "型号与兼容性 › 小家电 › 型号与配件",
+        "型号与兼容性 › 常见型号问题",
+        "商品使用与保修 › 常见故障排查",
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+      ]
+    },
+    {
+      "id": "C15",
+      "bucket": "C_colloquial",
+      "answerable": true,
+      "reranks": [
+        0.752559,
+        0.082846,
+        0.017917,
+        0.004248,
+        0.00358
+      ],
+      "expected_sections": [
+        "退换货与退款 › 退货运费承担"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 退货运费承担",
+        "配送与运费 › 运费标准 › 包邮与运费退还",
+        "配送与运费 › 运费标准 › 普通地区邮费",
+        "配送与运费 › 物流异常处理",
+        "配送与运费 › 运费标准 › 偏远地区邮费"
+      ]
+    },
+    {
+      "id": "C16",
+      "bucket": "C_colloquial",
+      "answerable": true,
+      "reranks": [
+        0.099645,
+        0.083441,
+        0.018689,
+        0.018334,
+        0.00316
+      ],
+      "expected_sections": [
+        "配送与运费 › 运费标准 › 包邮与运费退还"
+      ],
+      "hit_sections": [
+        "配送与运费 › 运费标准 › 偏远地区邮费",
+        "配送与运费 › 运费标准 › 包邮与运费退还",
+        "配送与运费 › 运费标准 › 普通地区邮费",
+        "退换货与退款 › 退货运费承担"
+      ]
+    },
+    {
+      "id": "C17",
+      "bucket": "C_colloquial",
+      "answerable": true,
+      "reranks": [
+        0.934991,
+        0.050237,
+        0.015664,
+        0.005041,
+        0.003075
+      ],
+      "expected_sections": [
+        "配送与运费 › 物流异常处理"
+      ],
+      "hit_sections": [
+        "配送与运费 › 物流异常处理",
+        "退换货与退款 › 退款到账时间",
+        "配送与运费 › 常见问题",
+        "商品使用与保修 › 保温杯保修政策"
+      ]
+    },
+    {
+      "id": "C18",
+      "bucket": "C_colloquial",
+      "answerable": true,
+      "reranks": [
+        0.828939,
+        0.135575,
+        0.11221,
+        0.033972,
+        0.018264
+      ],
+      "expected_sections": [
+        "商品使用与保修 › 纺织品洗涤与换货"
+      ],
+      "hit_sections": [
+        "商品使用与保修 › 纺织品洗涤与换货",
+        "退换货与退款 › 七天无理由退货",
+        "退换货与退款",
+        "退换货与退款 › 售后申请流程"
+      ]
+    },
+    {
+      "id": "C19",
+      "bucket": "C_colloquial",
+      "answerable": false,
+      "reranks": [
+        0.002736,
+        0.002243,
+        0.001817,
+        0.001478,
+        0.000981
+      ],
+      "expected_sections": [],
+      "hit_sections": [
+        "配送与运费 › 运费标准 › 偏远地区邮费",
+        "配送与运费 › 常见问题",
+        "配送与运费 › 运费标准 › 普通地区邮费",
+        "退换货与退款 › 退货运费承担",
+        "配送与运费 › 运费标准 › 包邮与运费退还"
+      ]
+    },
+    {
+      "id": "C20",
+      "bucket": "C_colloquial",
+      "answerable": false,
+      "reranks": [
+        0.000253,
+        0.000126,
+        0.000119,
+        9.8e-05,
+        9.1e-05
+      ],
+      "expected_sections": [],
+      "hit_sections": [
+        "退换货与退款 › 七天无理由退货",
+        "配送与运费 › 常见问题",
+        "配送与运费 › 配送范围与时效",
+        "配送与运费"
+      ]
+    },
+    {
+      "id": "E01",
+      "bucket": "E_multi",
+      "answerable": true,
+      "reranks": [
+        0.409398,
+        0.17824,
+        0.067424,
+        0.058561,
+        0.031619
+      ],
+      "expected_sections": [
+        "配送与运费 › 运费标准 › 偏远地区邮费",
+        "配送与运费 › 配送范围与时效"
+      ],
+      "hit_sections": [
+        "配送与运费 › 运费标准 › 偏远地区邮费",
+        "配送与运费 › 配送范围与时效",
+        "配送与运费",
+        "配送与运费 › 运费标准 › 普通地区邮费"
+      ]
+    },
+    {
+      "id": "E02",
+      "bucket": "E_multi",
+      "answerable": true,
+      "reranks": [
+        0.977284,
+        0.961534,
+        0.610976,
+        0.510992,
+        0.359589
+      ],
+      "expected_sections": [
+        "退换货与退款 › 七天无理由退货",
+        "退换货与退款 › 退款到账时间"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 退款到账时间",
+        "退换货与退款 › 七天无理由退货",
+        "退换货与退款",
+        "退换货与退款 › 质量问题换货"
+      ]
+    },
+    {
+      "id": "E03",
+      "bucket": "E_multi",
+      "answerable": true,
+      "reranks": [
+        0.73678,
+        0.711631,
+        0.393327,
+        0.110856,
+        0.108001
+      ],
+      "expected_sections": [
+        "退换货与退款 › 质量问题换货",
+        "退换货与退款 › 退货运费承担"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 质量问题换货",
+        "退换货与退款 › 退货运费承担",
+        "配送与运费 › 运费标准 › 包邮与运费退还",
+        "配送与运费 › 物流异常处理"
+      ]
+    },
+    {
+      "id": "E04",
+      "bucket": "E_multi",
+      "answerable": true,
+      "reranks": [
+        0.449755,
+        0.19729,
+        0.025227,
+        0.007969,
+        0.00461
+      ],
+      "expected_sections": [
+        "配送与运费 › 运费标准 › 包邮与运费退还",
+        "配送与运费 › 运费标准 › 普通地区邮费"
+      ],
+      "hit_sections": [
+        "配送与运费 › 运费标准 › 包邮与运费退还",
+        "退换货与退款 › 退货运费承担",
+        "配送与运费 › 运费标准 › 偏远地区邮费",
+        "配送与运费 › 运费标准 › 普通地区邮费"
+      ]
+    },
+    {
+      "id": "E05",
+      "bucket": "E_multi",
+      "answerable": true,
+      "reranks": [
+        0.962532,
+        0.881207,
+        0.358915,
+        0.331877,
+        0.052134
+      ],
+      "expected_sections": [
+        "商品使用与保修 › 保温杯使用说明",
+        "商品使用与保修 › 保温杯保修政策"
+      ],
+      "hit_sections": [
+        "商品使用与保修 › 保温杯保修政策",
+        "商品使用与保修 › 保温杯使用说明",
+        "商品使用与保修 › 常见故障排查",
+        "商品使用与保修",
+        "商品使用与保修 › 小家电保修"
+      ]
+    },
+    {
+      "id": "E06",
+      "bucket": "E_multi",
+      "answerable": true,
+      "reranks": [
+        0.981095,
+        0.924005,
+        0.715026,
+        0.170784,
+        0.102844
+      ],
+      "expected_sections": [
+        "退换货与退款 › 售后申请流程",
+        "退换货与退款 › 质量问题换货"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 质量问题换货",
+        "退换货与退款 › 售后申请流程",
+        "退换货与退款"
+      ]
+    },
+    {
+      "id": "E07",
+      "bucket": "E_multi",
+      "answerable": true,
+      "reranks": [
+        0.537527,
+        0.115361,
+        0.08389,
+        0.036978,
+        0.010818
+      ],
+      "expected_sections": [
+        "配送与运费 › 物流异常处理",
+        "配送与运费 › 配送范围与时效"
+      ],
+      "hit_sections": [
+        "配送与运费 › 物流异常处理",
+        "配送与运费 › 配送范围与时效",
+        "配送与运费"
+      ]
+    },
+    {
+      "id": "E08",
+      "bucket": "E_multi",
+      "answerable": true,
+      "reranks": [
+        0.984336,
+        0.976265,
+        0.107063,
+        0.089614,
+        0.050988
+      ],
+      "expected_sections": [
+        "退换货与退款 › 售后申请流程",
+        "退换货与退款 › 退款到账时间"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 退款到账时间",
+        "退换货与退款 › 七天无理由退货",
+        "退换货与退款"
+      ]
+    },
+    {
+      "id": "E09",
+      "bucket": "E_multi",
+      "answerable": true,
+      "reranks": [
+        0.474372,
+        0.02433,
+        0.003273,
+        0.001721,
+        0.001179
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+        "型号与兼容性 › 家居纺织品 › 袜类型号"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 家居纺织品 › 袜类型号",
+        "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+        "商品使用与保修 › 常见故障排查",
+        "商品使用与保修 › 纺织品洗涤与换货",
+        "商品使用与保修 › 常见故障排查"
+      ]
+    },
+    {
+      "id": "E10",
+      "bucket": "E_multi",
+      "answerable": true,
+      "reranks": [
+        0.975249,
+        0.205615,
+        0.111048,
+        0.011464,
+        0.01086
+      ],
+      "expected_sections": [
+        "商品使用与保修 › 保温杯保修政策",
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
+        "商品使用与保修 › 保温杯保修政策",
+        "型号与兼容性 › 保温杯系列 › 型号对照表",
+        "商品使用与保修 › 常见故障排查"
+      ]
+    },
+    {
+      "id": "E11",
+      "bucket": "E_multi",
+      "answerable": true,
+      "reranks": [
+        0.990216,
+        0.850717,
+        0.164516,
+        0.063019,
+        0.015724
+      ],
+      "expected_sections": [
+        "商品使用与保修 › 小家电保修",
+        "型号与兼容性 › 小家电 › 型号与配件"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 小家电 › 电压与保修",
+        "型号与兼容性 › 小家电 › 型号与配件",
+        "商品使用与保修 › 小家电保修",
+        "型号与兼容性 › 常见型号问题"
+      ]
+    },
+    {
+      "id": "E12",
+      "bucket": "E_multi",
+      "answerable": true,
+      "reranks": [
+        0.961822,
+        0.959154,
+        0.953966,
+        0.774413,
+        0.460926
+      ],
+      "expected_sections": [
+        "退换货与退款 › 七天无理由退货",
+        "退换货与退款 › 退货运费承担"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 退货运费承担",
+        "退换货与退款 › 七天无理由退货",
+        "商品使用与保修 › 纺织品洗涤与换货",
+        "退换货与退款"
+      ]
+    },
+    {
+      "id": "E13",
+      "bucket": "E_multi",
+      "answerable": true,
+      "reranks": [
+        0.983085,
+        0.688992,
+        0.673084,
+        0.274254,
+        0.257765
+      ],
+      "expected_sections": [
+        "退换货与退款 › 退款到账时间",
+        "配送与运费 › 物流异常处理"
+      ],
+      "hit_sections": [
+        "配送与运费 › 物流异常处理",
+        "退换货与退款 › 七天无理由退货",
+        "退换货与退款 › 质量问题换货"
+      ]
+    },
+    {
+      "id": "E14",
+      "bucket": "E_multi",
+      "answerable": true,
+      "reranks": [
+        0.801004,
+        0.212886,
+        0.093182,
+        0.040617,
+        0.007261
+      ],
+      "expected_sections": [
+        "退换货与退款 › 退货运费承担",
+        "配送与运费 › 运费标准 › 包邮与运费退还"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 退货运费承担",
+        "配送与运费 › 运费标准 › 普通地区邮费",
+        "配送与运费 › 运费标准 › 包邮与运费退还",
+        "配送与运费 › 运费标准 › 偏远地区邮费",
+        "退换货与退款 › 退款到账时间"
+      ]
+    },
+    {
+      "id": "E15",
+      "bucket": "E_multi",
+      "answerable": true,
+      "reranks": [
+        0.975762,
+        0.438875,
+        0.35209,
+        0.283583,
+        0.257018
+      ],
+      "expected_sections": [
+        "退换货与退款 › 售后申请流程",
+        "退换货与退款 › 质量问题换货"
+      ],
+      "hit_sections": [
+        "退换货与退款 › 质量问题换货",
+        "退换货与退款 › 售后申请流程",
+        "退换货与退款 › 退款到账时间"
+      ]
+    },
+    {
+      "id": "E16",
+      "bucket": "E_multi",
+      "answerable": true,
+      "reranks": [
+        0.904819,
+        0.130175,
+        0.015189,
+        0.012576,
+        0.006004
+      ],
+      "expected_sections": [
+        "商品使用与保修 › 常见故障排查",
+        "退换货与退款 › 质量问题换货"
+      ],
+      "hit_sections": [
+        "商品使用与保修 › 常见故障排查",
+        "商品使用与保修 › 保温杯使用说明",
+        "商品使用与保修 › 保温杯保修政策",
+        "商品使用与保修 › 常见故障排查"
+      ]
+    },
+    {
+      "id": "E17",
+      "bucket": "E_multi",
+      "answerable": true,
+      "reranks": [
+        0.561786,
+        0.428054,
+        0.010209,
+        0.000261,
+        0.000238
+      ],
+      "expected_sections": [
+        "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+        "型号与兼容性 › 家居纺织品 › 袜类型号"
+      ],
+      "hit_sections": [
+        "型号与兼容性 › 家居纺织品 › 袜类型号",
+        "型号与兼容性 › 家居纺织品 › 洗涤与尺码适配",
+        "商品使用与保修 › 纺织品洗涤与换货",
+        "商品使用与保修 › 保温杯使用说明"
+      ]
+    },
+    {
+      "id": "E18",
+      "bucket": "E_multi",
+      "answerable": true,
+      "reranks": [
+        0.996996,
+        0.013849,
+        0.010288,
+        0.007907,
+        0.003235
+      ],
+      "expected_sections": [
+        "配送与运费 › 常见问题"
+      ],
+      "hit_sections": [
+        "配送与运费 › 常见问题",
+        "配送与运费",
+        "配送与运费 › 运费标准 › 偏远地区邮费",
+        "配送与运费 › 物流异常处理"
+      ]
+    },
+    {
+      "id": "E19",
+      "bucket": "E_multi",
+      "answerable": false,
+      "reranks": [
+        0.00083,
+        0.000534,
+        0.000251,
+        0.000194,
+        5.7e-05
+      ],
+      "expected_sections": [],
+      "hit_sections": [
+        "配送与运费 › 运费标准 › 偏远地区邮费",
+        "商品使用与保修 › 保温杯保修政策",
+        "配送与运费 › 运费标准 › 包邮与运费退还",
+        "型号与兼容性 › 小家电 › 电压与保修"
+      ]
+    },
+    {
+      "id": "E20",
+      "bucket": "E_multi",
+      "answerable": false,
+      "reranks": [
+        0.120542,
+        9.1e-05,
+        4.6e-05,
+        4.1e-05,
+        3.5e-05
+      ],
+      "expected_sections": [],
+      "hit_sections": [
+        "退换货与退款 › 七天无理由退货",
+        "配送与运费 › 运费标准 › 偏远地区邮费",
+        "配送与运费 › 运费标准 › 普通地区邮费"
+      ]
+    }
+  ],
+  "recall@10": 0.9375,
+  "mrr@10": 0.9131944444444444
+}

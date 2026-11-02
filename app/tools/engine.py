@@ -36,6 +36,8 @@ class ToolOutcome:
     audit_status: str = "成功"
     arguments: dict = field(default_factory=dict)
     tool_call_id: str | None = None
+    # 未经投影的原始结果：query_faq 的召回快照（含 scores）只给内部 hook 用，不进模型上下文。
+    raw: dict | None = None
 
 
 def _elapsed(started: float) -> int:
@@ -142,12 +144,14 @@ class ToolEngine:
                                duration_ms=_elapsed(started), source=spec.source,
                                mcp_server=spec.mcp_server, retry_count=retry_count,
                                audit_status="失败", arguments=dict(args),
-                               tool_call_id=tool_call_id)
+                               tool_call_id=tool_call_id,
+                               raw=result if isinstance(result, dict) else None)
         return ToolOutcome(tool=spec.name, ok=True, code="ok", content=payload,
                            summary=summarize(spec, result), duration_ms=_elapsed(started),
                            source=spec.source, mcp_server=spec.mcp_server,
                            retry_count=retry_count, audit_status="成功", arguments=dict(args),
-                           tool_call_id=tool_call_id)
+                           tool_call_id=tool_call_id,
+                           raw=result if isinstance(result, dict) else None)
 
     async def _failure(self, spec, args, code, message, started, retry_count, tool_call_id, conversation_id):
         outcome = self._failure_outcome(spec, args, code, message, started, retry_count, tool_call_id)

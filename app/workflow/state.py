@@ -20,6 +20,7 @@ class WorkflowState(TypedDict, total=False):
     order: dict | None
     pending: dict | None
     retrieval: dict
+    retrieval_snapshot: list[dict]
     evidence: list[dict]
     citations: list[dict]
     reply: str

@@ -1,5 +1,6 @@
 import logging
 
+from app.observability.tracing import set_intent_on_trace
 from app.schemas import IntentResult
 from app.workflow.routing import fast_chitchat, route_for
 
@@ -18,6 +19,9 @@ def make_intent_node(deps):
         if confidence < deps.settings.workflow_intent_min_confidence:
             logger.info("意图置信度 %.2f 低于阈值，按其他处理：%s", confidence, intent)
             intent = "其他"
+        # 顺序是刻意的：trace 上要的是**实际生效**的意图（路由按它走、报表按它分组），
+        # 不是分类器原始输出。best-effort——tracing 内部已兜住异常，这里不包 try、不看返回值。
+        set_intent_on_trace(intent, confidence)
         return {"intent": intent, "intent_confidence": confidence, "last_intent": intent}
 
     return intent_node

@@ -20,12 +20,19 @@ class FakeRetriever:
                         "售后政策", "售后政策 › 退款", "policy", {"rerank": 0.9}, 1)
         decoy = Evidence(99, "重排候选：退款到账银行", "重排候选原文，不该进 prompt。",
                          "售后政策", "售后政策 › 重排候选", "policy", {"rerank": 0.4}, 0)
-        return RetrievalResult("hybrid_rerank", query, [decoy], [item])
+        return RetrievalResult("hybrid_rerank", query, [decoy], [item],
+                               snapshot=[{"n": 1, "chunk_id": 7, "question": item.question,
+                                          "answer": item.answer, "section_path": item.section_path,
+                                          "scores": dict(item.scores)}])
 
 
 class LowRetriever:
     def retrieve(self, query, category=None):
-        return RetrievalResult("hybrid_rerank", query, low_confidence=True, reason="top1=0.1<0.30")
+        return RetrievalResult("hybrid_rerank", query, low_confidence=True, reason="top1=0.1<0.30",
+                               snapshot=[{"n": 1, "chunk_id": 3, "question": "退款时效",
+                                          "answer": "退款审核通过后 1-3 个工作日到账。",
+                                          "section_path": "售后政策 › 退款",
+                                          "scores": {"rerank": 0.1}}])
 
 
 class MultiRound:
@@ -65,8 +72,9 @@ class Pool:
     def __init__(self):
         self.rows = []
 
-    def record(self, conversation_id, question, source, reason):
-        self.rows.append((conversation_id, source, reason))
+    def record(self, conversation_id, question, source, reason, retrieved_chunks=None):
+        # 五个位置参全留档：第六参（快照）是最容易被悄悄删掉的那个，丢了它下面就会红。
+        self.rows.append((conversation_id, question, source, reason, retrieved_chunks))
 
 
 class SelfCheck:
@@ -150,7 +158,10 @@ def test_query_faq_low_confidence_refuses_inside_business_route():
         frames = run(workflow, conversation_id, "退款几天到账")
         assert frames[-2][1]["content"].startswith("这个问题我在店铺知识库里没有找到可靠依据")
         assert model.calls == 1
-        assert pool.rows[0][1:] == ("retrieval_low_conf", "top1=0.1<0.30")
+        assert pool.rows[0][2:4] == ("retrieval_low_conf", "top1=0.1<0.30")
+        # 拒答入口的快照来自工具错误体里的 result.snapshot，分数要一起带走。
+        assert pool.rows[0][4][0]["chunk_id"] == 3
+        assert pool.rows[0][4][0]["scores"] == {"rerank": 0.1}
 
 
 def test_query_faq_self_check_rejection_stops_generation():
@@ -165,7 +176,66 @@ def test_query_faq_self_check_rejection_stops_generation():
         frames = run(workflow, conversation_id, "退款几天到账")
         assert frames[-2][1]["content"].startswith("这个问题我在店铺知识库里没有找到可靠依据")
         assert model.calls == 1
-        assert pool.rows[0][1] == "self_check"
+        assert pool.rows[0][2] == "self_check"
+        # 业务路由不跑检索节点：快照必须来自 query_faq 本次返回（tool 的 raw snapshot），
+        # 既不能是上一轮 state 里的旧值，也不能因为投影丢了 scores。
+        assert pool.rows[0][4][0]["chunk_id"] == 7
+        assert pool.rows[0][4][0]["scores"] == {"rerank": 0.9}
+
+
+class SequenceClassifier:
+    def __init__(self, intents):
+        self.intents = list(intents)
+
+    async def classify(self, question, previous_question=None):
+        from app.schemas import IntentResult
+
+        return IntentResult(intent=self.intents.pop(0), confidence=1.0)
+
+
+def test_business_turn_after_knowledge_turn_does_not_reuse_snapshot():
+    """上一轮知识路由的快照不能跟着 checkpoint 漂到这一轮的回复行上：👎 回捞会取到别人的证据。"""
+    model = MultiRound([[chunk("退款 1-3 个工作日到账[1]。")], [chunk("包裹在上海。")]])
+    with sqlite_factory() as factory:
+        store = ConversationStore(factory)
+        conversation_id = store.start_turn(user_id="a7", message="退款几天到账")
+        deps = WorkflowDeps(model=model, settings=_settings({}), store=store,
+                            knowledge=FakeRetriever(), pool=Pool(),
+                            classifier=SequenceClassifier(["商品咨询", "物流"]))
+        workflow = Workflow(deps=deps, checkpointer=InMemorySaver())
+        run(workflow, conversation_id, "退款几天到账")
+        store.start_turn(user_id="a7", message="订单 1001 到哪了", conversation_id=conversation_id)
+        run(workflow, conversation_id, "订单 1001 到哪了")
+
+        with factory() as session:
+            replies = session.scalars(
+                select(Message).where(Message.conversation_id == conversation_id,
+                                      Message.role == "assistant",
+                                      Message.content.is_not(None))
+                .order_by(Message.id)).all()
+        assert replies[0].retrieval_snapshot[0]["chunk_id"] == 7
+        assert replies[1].retrieval_snapshot is None
+
+
+def test_business_query_faq_success_persists_snapshot_for_feedback():
+    """业务路由调了 query_faq 的那一轮，回复行也要带快照：👎 是事后从 messages 回捞的。"""
+    model = MultiRound([[chunk("", "tool_calls", [call("query_faq", {"keyword": "退款"})])],
+                        [chunk("退款 1-3 个工作日到账。")]])
+    with sqlite_factory() as factory:
+        store = ConversationStore(factory)
+        conversation_id = store.start_turn(user_id="a8", message="退款几天到账")
+        workflow = build(factory, model, knowledge=FakeRetriever(), pool=Pool(),
+                         selfcheck=SelfCheck(True))
+        run(workflow, conversation_id, "退款几天到账")
+
+        with factory() as session:
+            replies = session.scalars(
+                select(Message).where(Message.conversation_id == conversation_id,
+                                      Message.role == "assistant",
+                                      Message.content.is_not(None))).all()
+        assert [row.content for row in replies] == ["退款 1-3 个工作日到账。"]
+        assert replies[0].retrieval_snapshot[0]["chunk_id"] == 7
+        assert replies[0].retrieval_snapshot[0]["scores"] == {"rerank": 0.9}
 
 
 def test_knowledge_route_citation_guard_keeps_only_injected_evidence_numbers():

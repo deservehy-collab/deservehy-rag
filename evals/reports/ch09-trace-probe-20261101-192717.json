@@ -1,0 +1,164 @@
+{
+  "generated_at": "2026-11-01T19:27:17",
+  "verdict": "MAIN",
+  "session_id": "conv-1",
+  "turn": {
+    "conversation_id": 1,
+    "message_id": null,
+    "events": [
+      "meta",
+      "token",
+      "orders",
+      "done"
+    ],
+    "error": null
+  },
+  "turn_trace_wiring": [
+    {
+      "conversation_id": 1,
+      "turn_trace_built": true,
+      "trace_id": "6415632df3771965d7964898cb8b3cf0"
+    }
+  ],
+  "root_observation": {
+    "name": "chat-turn",
+    "tags": [
+      "intent:退款退货"
+    ],
+    "metadata.intent": "退款退货",
+    "metadata.intent_confidence": 0.98,
+    "trace_id": "6415632df3771965d7964898cb8b3cf0",
+    "observation_id": "c0c7cdc4fd77bc78",
+    "start_time": "2026-11-01T11:27:06.032Z"
+  },
+  "classified_intent_this_turn": "退款退货",
+  "intent_matches_classification": true,
+  "metrics_join_query": {
+    "view": "observations",
+    "dimensions": [
+      {
+        "field": "traceId"
+      }
+    ],
+    "metrics": [
+      {
+        "measure": "totalTokens",
+        "aggregation": "sum"
+      },
+      {
+        "measure": "count",
+        "aggregation": "count"
+      }
+    ],
+    "config": {
+      "row_limit": 50
+    },
+    "orderBy": [
+      {
+        "field": "sum_totalTokens",
+        "direction": "desc"
+      }
+    ]
+  },
+  "metrics_join": [
+    {
+      "traceId": "6415632df3771965d7964898cb8b3cf0",
+      "sum_totalTokens": 990,
+      "count_count": 15
+    }
+  ],
+  "metrics_join_error": null,
+  "tokens_this_turn": 990,
+  "in_graph_set_intent_returns": [
+    {
+      "intent": "退款退货",
+      "confidence": 0.98,
+      "root_span_in_contextvar": "LangfuseSpan",
+      "span": {
+        "type": "_Span",
+        "recording": true,
+        "name": "chat-turn",
+        "trace_id": "6415632df3771965d7964898cb8b3cf0",
+        "span_id": "c0c7cdc4fd77bc78"
+      },
+      "returned": true
+    }
+  ],
+  "generation_usage": [
+    [
+      "log",
+      "CHAIN",
+      0
+    ],
+    [
+      "policy_order",
+      "CHAIN",
+      0
+    ],
+    [
+      "policy_selector",
+      "CHAIN",
+      0
+    ],
+    [
+      "route_selector",
+      "CHAIN",
+      0
+    ],
+    [
+      "PydanticOutputParser",
+      "CHAIN",
+      0
+    ],
+    [
+      "route",
+      "CHAIN",
+      0
+    ],
+    [
+      "ChatOpenAI",
+      "GENERATION",
+      569
+    ],
+    [
+      "RunnableSequence",
+      "CHAIN",
+      0
+    ],
+    [
+      "intent",
+      "CHAIN",
+      0
+    ],
+    [
+      "PydanticOutputParser",
+      "CHAIN",
+      0
+    ],
+    [
+      "coref",
+      "CHAIN",
+      0
+    ],
+    [
+      "ChatOpenAI",
+      "GENERATION",
+      421
+    ],
+    [
+      "RunnableSequence",
+      "CHAIN",
+      0
+    ],
+    [
+      "LangGraph",
+      "CHAIN",
+      0
+    ],
+    [
+      "chat-turn",
+      "SPAN",
+      0
+    ]
+  ]
+}

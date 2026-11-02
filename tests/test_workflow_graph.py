@@ -118,7 +118,9 @@ def test_chitchat_fast_path_never_touches_model_or_classifier():
         workflow = build(factory, ExplodingClassifier())
         conversation_id = store.start_turn(user_id="u2", message="你好")
         frames = run(workflow, conversation_id, "你好")
-        assert frames == [("token", {"content": CHITCHAT_TEXT}), ("done", {"finish_reason": "stop"})]
+        assert len(frames) == 2 and frames[0] == ("token", {"content": CHITCHAT_TEXT})
+        # done 帧多带 message_id（T9 起 👎 按它认领这一轮），只比收尾原因。
+        assert frames[1][0] == "done" and frames[1][1]["finish_reason"] == "stop"
 
 
 def test_turn_count_accumulates_and_offer_is_cleared_each_turn():
@@ -145,7 +147,8 @@ def test_empty_reply_uses_fallback_plain():
         workflow = build(factory, FixedClassifier("订单"), EmptyModel())
         conversation_id = store.start_turn(user_id="u4", message="随便")
         frames = run(workflow, conversation_id, "随便")
-        assert frames == [("token", {"content": FALLBACK_PLAIN}), ("done", {"finish_reason": "stop"})]
+        assert len(frames) == 2 and frames[0] == ("token", {"content": FALLBACK_PLAIN})
+        assert frames[1][0] == "done" and frames[1][1]["finish_reason"] == "stop"
 
 
 def test_policy_missing_order_emits_picker_before_done():

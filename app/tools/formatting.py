@@ -33,6 +33,9 @@ _STATUS_ENUM_KEY = {"query_order": "order_status", "query_logistics": "logistics
 
 _GENERIC_COUNT_KEYS = ("items", "nodes", "list", "records")
 
+# 只剥这些工具的私有字段：未登记的工具可能真带 MCP 的 `_meta`，一律剥会违反下面的透传承诺。
+INTERNAL_KEYS = {"query_faq": ("_snapshot",)}
+
 # MCP 未登记中文名的工具用 Server 级中文名兜底，避免摘要里出现英文工具名。
 _SERVER_LABELS = {"logistics": "查询物流", "aftersale": "查询售后"}
 
@@ -130,6 +133,9 @@ def _project(tool: str, result: dict) -> dict:
 
 def format_content(result, spec) -> str:
     payload = _project(spec.name, result) if isinstance(result, dict) else result
+    if isinstance(payload, dict):
+        internal = INTERNAL_KEYS.get(spec.name, ())
+        payload = {key: value for key, value in payload.items() if key not in internal}
     return json.dumps(payload, ensure_ascii=False, default=str)
 
 

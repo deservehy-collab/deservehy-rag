@@ -40,8 +40,10 @@ def make_log_node(deps):
             bool(retrieval.get("low_confidence")), state.get("steps"), state.get("tool_calls"),
             state.get("tokens"), state.get("stopped_by"), elapsed,
         )
-        message_id = await asyncio.to_thread(deps.store.add_message, conversation_id, "assistant", content=reply)
-        done = {"finish_reason": state.get("finish_reason") or "stop"}
+        message_id = await asyncio.to_thread(
+            deps.store.add_message, conversation_id, "assistant", content=reply,
+            retrieval_snapshot=state.get("retrieval_snapshot") or None)
+        done = {"finish_reason": state.get("finish_reason") or "stop", "message_id": message_id}
         # 只在真的非正常收尾时才多带一个 stopped_by：前端和既有用例都把 done 当「正常结束」的判据，
         # 空值多发一个 None 键会让「这一步到底成没成」在页面上糊掉。
         if state.get("stopped_by"):

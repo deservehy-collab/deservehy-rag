@@ -52,7 +52,11 @@ ch07 不做：只用同会话内的三层结构，不做语义检索捞历史、
 | `EMBEDDING_DEVICE` | `cuda` 或 `cpu` |
 | `MILVUS_URI` | 默认 `http://127.0.0.1:19530` |
 | `KNOWLEDGE_RERANK_MODEL` | 重排权重路径，默认 `.cache/models/bge-reranker-v2-m3` |
-| `KNOWLEDGE_RERANK_MIN_SCORE` | 重排 top1 低于该值判低置信并拒答，默认 0.30 |
+| `KNOWLEDGE_RERANK_MIN_SCORE` | （ch05–ch08 口径，ch09 起废弃）重排 top1 < 0.30 判低置信拒答 |
+| `CONFIDENCE_MIN` | ch09 起生效：三信号证据置信度低于该值判低置信并拒答（校准得出） |
+| `CONFIDENCE_EFFECTIVE_FLOOR` | rerank 分不低于该值才算一条有效证据（校准得出） |
+| `SNAPSHOT_TOP_N` | 每轮召回快照条数，默认 5（落池/落消息用） |
+| `CONFIDENCE_W_TOP1` / `CONFIDENCE_W_COUNT` / `CONFIDENCE_W_MARGIN` | 三信号权重，默认 0.7 / 0.2 / 0.1，**定死不调**；80 题撑不起四维网格，只校准阈值与有效条数下限 |
 | `KNOWLEDGE_CANDIDATES` / `KNOWLEDGE_TOP_K` / `KNOWLEDGE_RRF_K` | 双路召回条数、重排后保留条数、RRF 常数，默认 50 / 10 / 60 |
 | `KNOWLEDGE_QUERY_REWRITE` | 是否用 LLM 改写口语问题，默认开启；失败自动回退原话 |
 | `KNOWLEDGE_SELF_CHECK` | 生成前证据自评，默认开启；自评失败按可用放行 |
@@ -91,6 +95,12 @@ ch07 不做：只用同会话内的三层结构，不做语义检索捞历史、
 | `TOOL_SCHEMA_RESERVE_TOKENS` | 工具 JSON Schema 在预算里的预留，默认 `400` |
 | `TOOL_TIMEOUT_SECONDS` | 单次工具调用超时，默认 5 秒；ch08 起由统一引擎执行，且同一个值也管着与 MCP Server 的握手 |
 | `TOOL_MAX_ATTEMPTS` | 最多试几次，默认 2；**只对只读工具重试，写操作恒为一次** |
+| `LANGFUSE_ENABLED` | 是否上报链路，默认 `false`；关掉时其余三个键不生效，回复不受影响 |
+| `LANGFUSE_HOST` | 自部署地址，默认 `http://127.0.0.1:3000` |
+| `LANGFUSE_PUBLIC_KEY` / `LANGFUSE_SECRET_KEY` | 项目凭据，**不要提交**；缺一个就自动不上报 |
+| `FLYWHEEL_AUTO_DRAIN` | 入池后是否自动跑标准化+查重，默认 `true` |
+| `FLYWHEEL_BATCH_SIZE` / `FLYWHEEL_DEDUPE_CANDIDATES` | 每批处理条数、查重比对候选数，默认 10 / 20 |
+| `EVAL_SCHEDULE_CRON` | 定时评估的 cron，默认空＝不启；例如 `0 4 * * *`，只跑检索指标 |
 
 预算不是配出来的一个数，是从窗口倒推：`历史预算 = min(HISTORY_KEEP_ROUNDS × HISTORY_ROUND_TOKENS, 窗口 − 输出 − 余量 − 系统 − 证据 − 梗概 − ReAct 峰值)`，再按层 1 七成 / 层 2 三成分配。ch08 起「系统」这一项里多了工具 schema：`chat_system` 实测 704 ＋ 预留 400 ＋ 四个内置工具的 schema 实测 472 ＝ **1576**。演示配置（18000 / 2000 / 2000 / 3 步 / 1200 / Top-5）实算得 **历史 5308、层 1 3715、层 2 1592**；默认 32768 仍是 12000 / 8399 / 3600（被「想留轮数」封顶，匀得出的还剩 19452）。
 
@@ -131,7 +141,7 @@ docker compose up -d
 
 `scripts.init_db` 与 `scripts.ingest_knowledge` 均可重复执行：前者建库建表补 FAQ 种子，后者按内容幂等导入并在必要时补向量。
 
-### 数据迁移（ch07／ch08）
+### 数据迁移（ch07／ch08／ch09）
 
 新库直接 `python -m scripts.init_db`，ORM 里已带 `conversation_summaries` 表、`conversations` 的两个锚点列与 `tool_audit_logs` 表。已有库要单独跑一次迁移：
 
@@ -142,6 +152,14 @@ docker compose exec -T mysql mysql -uroot -p%DB_PASSWORD% xiaolin_ch02 < scripts
 这条只跑一次：`ALTER TABLE` 不加 `IF NOT EXISTS`，重复执行报 `duplicate column name`，那说明库已经升过，可以忽略。锚点列允许 NULL，老会话不用回填——第一次降级或摘要时按当前边界写进去。
 
 ch08 的 `tool_audit_logs`（`scripts\init_sql\006_tools.sql`）更省事的做法是再跑一次 `python -m scripts.init_db`——`create_all` 只建缺的表，不动已有数据。**这张表没建也不会报错**：审计写失败按设计只打日志、不拦工具执行，所以缺表时建工单照样「成功」、页面照样出工单号，只有查审计行才能发现。演示与验收前务必先补表。
+
+ch09 的 `review_queue` / `eval_runs` 两张表与 `low_confidence_questions.retrieved_chunks`、`low_confidence_questions.matched_review_id`、`messages.retrieval_snapshot` 三列走专门脚本：
+
+```bat
+.venv\Scripts\python.exe -X utf8 -m scripts.migrate_ch09   :: 幂等：重复执行只补缺的表/列/索引/外键
+```
+
+脚本先查 `information_schema` 再改，重复跑不报 `duplicate column`；新库直接 `python -m scripts.init_db` 即可（ORM 已带全）。对应 DDL 是 `scripts/init_sql/007_flywheel.sql`，只给 Docker 首次初始化和手工补表用——用 `init_db` 建的库不要再执行那份文件。`low_confidence_questions.retrieved_chunks` 缺了不会报错（落池的写入会被吞掉），但审核页就看不出「当时召回了什么」，升级后先跑迁移。
 
 ## 演示与验收
 
@@ -237,6 +255,18 @@ grep -c "model_ctx" log/app.log     # 主力 Agent 每调模型一次一条
 grep "summary trigger\|summary done\|layer1 降级" log/app.log | tail -20
 ```
 
+可观测与低置信飞轮（ch09，六条验收逐条给证据）：
+
+```bat
+start-langfuse.bat                                  :: 起 Langfuse（第一次要先填 deploy\langfuse\.env）
+.venv\Scripts\python.exe -X utf8 -m scripts.migrate_ch09
+.venv\Scripts\python.exe -X utf8 -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+:: 另开终端
+.venv\Scripts\python.exe -X utf8 -m scripts.demo_flywheel --case all --eval-round
+```
+
+`demo_flywheel` 依次验六条：① 一轮对话在 Langfuse 里能按 `conv-<id>` 查到带 `intent` 的 trace；②③ 答不上的问题进池（带召回快照）→ 审核通过 → 写回知识库 → 同一问题不再拒答；④ 👎 入池；⑤ 按意图汇总出非零 token；⑥ `eval_runs` 至少两轮且趋势可比。`--case all --eval-round` 会现跑一轮 80 题评估，比较慢，且要和线上服务错开跑（本机 6GB 显存装不下两份重排模型）；报告写 `evals/reports/ch09-demo-<时间戳>.json`。审核页在 `http://127.0.0.1:8000/admin`，页面级验收清单（审核页展开、👎 按钮、375px 不溢出）见 `docs/superpowers/plans/2026-10-31-ch09-observability-flywheel.md` 的 T14 Step 7。
+
 其他命令：
 
 ```bat
@@ -305,16 +335,43 @@ ch08 建工单确认流（模型 deepseek-flash，2026-10-31）：
 - 这一集把意图分类钉成「其他」直连主 Agent（脚本自带 8 行桩，不 import `tests/`）：要测的是「该不该发起写操作」，路由抖动有第 6 章评估与 `tests/test_intent.py` 兜着。
 - 回归：`pytest` 453 passed（ch08 收尾时的全量数，含第八次评审修复新增的 5 条）。
 
-## 低置信池与编造台账
+## 可观测（Langfuse）
 
-- `low_confidence_questions`：检索闸门（`retrieval_low_conf`）或生成前自评（`self_check`）拒绝时写入原始问题、会话、来源、原因与时间，供后续补文档或补 FAQ。
-- `faith_cases`：忠实度裁判判为编造的个案，按 `eval_id` 幂等更新，复发 `seen_count++` 并把状态改回 `未解决`；核实修正后用 `FaithCaseLedger.resolve` 标记已解决。
-- 查看 SQL：
+链路数据里带着用户原话与召回内容，所以 Langfuse 是**自部署**的（`deploy/langfuse/docker-compose.yml`，端口只绑在 `127.0.0.1`），不走 Langfuse Cloud——数据不出这台机器。
+
+1. **为什么自部署**：trace 里有问题原文、召回片段与模型回复，等于把对话内容复制了一份；放自家服务器才谈得上「数据不出门」。因此本项目的选型是固定的，不提供切换 Cloud 的开关。
+2. **起容器**：`cp deploy/langfuse/.env.example deploy/langfuse/.env`，把里面所有 `CHANGEME` 换成现场生成的值（文件头给了三条命令；`LANGFUSE_INIT_USER_EMAIL` / `...PASSWORD` 是 UI 登录账号）→ 双击 `start-langfuse.bat`，它跑 `docker compose up -d` 并轮询 `/api/public/health`，最多等 180 秒；停就双击 `stop-langfuse.bat`。`deploy/langfuse/.env` 含口令与凭据，**不提交**。
+3. **建项目取 pk/sk**：浏览器开 `http://127.0.0.1:3000` 用上面那个账号登录 → 建组织/项目 → Settings → API Keys。若 `deploy/langfuse/.env` 里已经预置了 `LANGFUSE_INIT_PROJECT_PUBLIC_KEY` / `...SECRET_KEY`，项目与这对 key 会在首次启动时自动建好，直接拿来用即可。把 pk/sk 填进项目根 `.env` 的 `LANGFUSE_PUBLIC_KEY` / `LANGFUSE_SECRET_KEY`，并置 `LANGFUSE_ENABLED=true`。
+4. **一条 trace 里能看到什么**：入口是每轮的 `chat-turn` 根节点，下面按节点展开 coref / intent / route / retrieve / gate / agent / log，每次模型调用的 prompt 与回复、工具入参出参、召回片段、token 用量与耗时都在里面；按 Session 找 `conv-<会话id>`（例如 `conv-123`），标签带 `intent:物流`。
+5. **`user_id` 就是会话 id**：本项目没有账号体系，编一个用户 id 就是假数据，所以 Langfuse 的 Users 维度**不是**真实用户分析，只看会话。
+6. **reasoning token 不单列**：Langfuse 的 observations 度量只有 input / output / total / cost，上游把 reasoning 计进 output（实测 `usageDetails` 为空），所以按意图的成本表没有 reasoning 列。
+7. **观测是旁路**：Langfuse 没起、端口不通、key 不对，都不影响回复，只是没有链路数据（服务日志一条 warning）；回调里抛错也只落日志，不改本轮结果。
+8. **按意图看花销**：`python scripts/report_intent_cost.py`（等价 `.venv\Scripts\python.exe -X utf8 -m scripts.report_intent_cost`），报告写 `evals/reports/ch09-intent-cost-<时间戳>.md`，逐意图给请求数、输入/输出/合计 token 与花费。自部署没有价格表，花费字段恒 0，不按 token 反推；一条数据都没有时退出码 1，不拿 0 糊过去。
+
+## 低置信池、飞轮与人工审核
+
+1. **三个入口进同一张表**：`low_confidence_questions` 的 `source` 分三种——`retrieval_low_conf`（检索证据置信度不够）、`self_check`（生成前自评认为知识不够答）、`user_feedback`（用户点了 👎）。每条尽量带上那轮的召回片段快照 `retrieved_chunks`；👎 是事后回捞 `messages.retrieval_snapshot`。业务路由里调过 `query_faq` 的那轮同样会把快照写到回复行；**闲聊/纯业务数据类那轮没调知识库，快照留空是对的。**
+2. **流水线**：入池后自动跑一轮（后台线程，不挡回复）——标准化（口语问题 → 标准问法 + 一条 AI 示例答案）→ 与已有待审条目语义查重（命中就合并、`occurrence_count++`）→ 进 `review_queue` 待审。关掉自动跑就把 `FLYWHEEL_AUTO_DRAIN` 置 `false`，改用手动 `python scripts/run_flywheel.py`。
+3. **审核页** `http://127.0.0.1:8000/admin`：按状态筛选，逐条展开看归并进来的原始说法与那轮召回片段。**召回片段为空 = 知识库确实没这块；有片段但分数都很低 = 有相关内容但没检到，先别急着加新条目**——这条判断就是审核页存在的理由，光看问题原文分不出这两种情况。
+4. **通过后写回知识库**：走 ch03 的入库路径（`ingest_pairs` + `vectorize_pending`），`knowledge_chunks.section_path` 记 `review_queue:<id>` 便于溯源；同一行重复通过返回 409（`already_approved`），正在入库时再点返回 409（`review_in_progress`，等几秒刷新），已入库的条目不会被改第二次。
+5. **驳回不会锁死这个问题**：被驳回的条目只是不再出现在待审列表里，同一问题再被问一次会作为新的待审行重新出现（规格 §9.2 的行为，不是 bug）。
+6. **👎 的幂等**：同一条消息重复点 👎 返回 `{"status":"duplicate"}`，不会重复入池；历史回载的旧回复没有 `message_id`，那儿的 👎 只锁本地按钮、不发请求。`POST /api/feedback` 的请求体是 `{"conversation_id", "client_id", "message_id", "value": "down"}`，他人会话 403，消息不存在 404。
+7. **评估趋势**：`python scripts/evaluate_retrieval.py --no-faith` 每轮落一行 `eval_runs`；`python scripts/report_eval_trend.py` 出对比表，箭头向下 = 比上一轮掉，行首带双叹号 = 这一轮有指标在掉。`EVAL_SCHEDULE_CRON` 非空时服务内定时跑（定时轮只跑检索指标，不跑忠实度）。
+8. **查看 SQL**：
 
 ```sql
-SELECT id, conversation_id, raw_question, source, reason, created_at
+SELECT id, conversation_id, raw_question, source, reason, matched_review_id, created_at
 FROM low_confidence_questions ORDER BY id DESC LIMIT 20;
 
+SELECT id, normalized_question, occurrence_count, review_status, created_at
+FROM review_queue ORDER BY occurrence_count DESC, id DESC LIMIT 20;
+
+SELECT id, triggered_by, dataset_size, created_at FROM eval_runs ORDER BY id DESC LIMIT 10;
+```
+
+`faith_cases`：忠实度裁判判为编造的个案，按 `eval_id` 幂等更新，复发 `seen_count++` 并把状态改回 `未解决`；核实修正后用 `FaithCaseLedger.resolve` 标记已解决。
+
+```sql
 SELECT eval_id, bucket, query, status, seen_count, reason, last_seen_at
 FROM faith_cases ORDER BY last_seen_at DESC;
 ```
@@ -373,11 +430,14 @@ FROM faith_cases ORDER BY last_seen_at DESC;
 ## 目录
 
 ```
-app/          配置、模型、提示词、SSE 服务、工具（注册中心／校验／权限／格式化／审计／引擎／MCP 发现）、存储、ORM 模型、知识库模块、workflow 图与主 Agent 循环、网页
+app/          配置、模型、提示词、SSE 服务、工具（注册中心／校验／权限／格式化／审计／引擎／MCP 发现）、存储、ORM 模型、知识库模块（含 confidence.py 证据置信度评分）、workflow 图与主 Agent 循环、网页（含 admin.* 审核页）
+app/observability/  Langfuse 回调、intent 上 trace、按意图成本报表
+app/flywheel/  低置信问题标准化、语义查重、流水线、审核写回
+deploy/langfuse/  自部署 Langfuse 的 compose 与配置样例（.env 不入库）
 mcp_servers/  两个自建 MCP Server（物流、售后）与确定性 mock
 examples/     知识库示例文档；tools/ 下是动态注册与超时演示用的示例工具
-scripts/      初始化数据库、知识导入/挖掘/演示、评估、初始化 SQL
-evals/        80 题检索标注集、ch06 意图/多轮/扩写标注集、ch08 追问/发起标注集与评估报告
+scripts/      初始化数据库、知识导入/挖掘/演示、评估、初始化 SQL，以及 ch09 的 migrate_ch09 / calibrate_confidence / probe_trace / run_flywheel / report_eval_trend / report_intent_cost / demo_flywheel
+evals/        80 题检索标注集、ch06 意图/多轮/扩写标注集、ch08 追问/发起标注集、ch09 置信度校准与演示报告
 tests/        SQLite 自动测试 + MySQL/Milvus 集成检查（不可用时跳过）
 dev-notes/    分阶段开发留痕
 docs/         规格与实施计划

@@ -48,10 +48,15 @@ class CustomerService:
         selfcheck=None,
         classifier=None,
         checkpointer=None,
+        langfuse=None,
+        flywheel=None,
     ):
         self.settings = settings
         self.model = model
         self.store = store
+        self.pool = pool
+        # 三个入池口（检索拒答、自评拒答、👎）的自动排空都从这里取触发器。
+        self.flywheel = flywheel
         self.workflow = None
         self.context = ContextBuilder(store, settings) if store is not None else None
         self.summary = (SummaryService(model, store, settings) if store is not None else None)
@@ -72,6 +77,8 @@ class CustomerService:
                         max_queries=settings.workflow_query_expansion_max,
                         timeout=settings.workflow_understanding_timeout_seconds),
                     mcp=McpDiscovery(settings),
+                    langfuse=langfuse,
+                    flywheel=flywheel,
                 ),
                 checkpointer=checkpointer,
             )

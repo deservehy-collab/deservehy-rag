@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
 
+from app.knowledge.confidence import EvidenceConfidence, score, snapshot_of
 from app.knowledge.embedding import Embedder
 from app.knowledge.quality import number_evidence
 from app.knowledge.synonyms import expand_for_bm25
@@ -45,6 +46,8 @@ class RetrievalResult:
     low_confidence: bool = False
     reason: str = ""
     queries: list[str] = field(default_factory=list)
+    confidence: EvidenceConfidence | None = None
+    snapshot: list[dict] = field(default_factory=list)
 
 
 class KnowledgeRetriever:
@@ -61,7 +64,12 @@ class KnowledgeRetriever:
         reranker=None,
         synonyms: bool = True,
         strategy: str = "hybrid_rerank",
-        rerank_min_score: float = 0.30,
+        confidence_min: float = 0.10,
+        confidence_effective_floor: float = 0.15,
+        confidence_w_top1: float = 0.7,
+        confidence_w_count: float = 0.2,
+        confidence_w_margin: float = 0.1,
+        snapshot_top_n: int = 5,
     ):
         if strategy not in STRATEGIES:
             raise ValueError(f"未知检索策略：{strategy}")
@@ -75,7 +83,14 @@ class KnowledgeRetriever:
         self.reranker = reranker
         self.synonyms = synonyms
         self.strategy = strategy
-        self.rerank_min_score = rerank_min_score
+        # 默认值取自 evals/reports/ch09-confidence-20261101-221716.md 的「选中」行（T7 校准，
+        # floor=0.15/min=0.10，2 题误拒）；改前请重跑 scripts/calibrate_confidence.py。
+        self.confidence_min = confidence_min
+        self.confidence_effective_floor = confidence_effective_floor
+        self.confidence_w_top1 = confidence_w_top1
+        self.confidence_w_count = confidence_w_count
+        self.confidence_w_margin = confidence_w_margin
+        self.snapshot_top_n = snapshot_top_n
         if self.strategy == "hybrid_rerank" and self.reranker is None:
             raise ValueError("hybrid_rerank 需要重排模型。")
 
@@ -133,16 +148,25 @@ class KnowledgeRetriever:
             for item, value in zip(items, ranked_scores):
                 item.scores["rerank"] = value
             items.sort(key=lambda item: item.scores["rerank"], reverse=True)
+        # 每个 retrieve* 只打一次分：闸门、reason、state 里的 confidence 都复用这一份。
+        conf = score(items, w_top1=self.confidence_w_top1, w_count=self.confidence_w_count,
+                     w_margin=self.confidence_w_margin, effective_floor=self.confidence_effective_floor)
+        if strategy == "hybrid_rerank":
             top = items[0].scores["rerank"]
-            if top < self.rerank_min_score:
-                low, reason = True, f"top1={top:.3f}<{self.rerank_min_score:.2f}"
+            if conf.value < self.confidence_min:
+                low, reason = True, (
+                    f"confidence={conf.value:.3f}<{self.confidence_min:.2f}"
+                    f"(top1={top:.3f},eff={conf.signals['effective_count']},"
+                    f"margin={conf.signals['margin']:.3f})"
+                )
         items = items[:self.top_k]
         evidence: list[Evidence] = []
         if not low:
             for numbered in number_evidence([item.item() for item in items]):
                 evidence.append(Evidence(**numbered))
         return RetrievalResult(strategy=strategy, canonical_query=canonical, items=items,
-                               evidence=evidence, low_confidence=low, reason=reason, queries=[canonical])
+                               evidence=evidence, low_confidence=low, reason=reason, queries=[canonical],
+                               confidence=conf, snapshot=snapshot_of(items, limit=self.snapshot_top_n))
 
     def retrieve_expanded(self, queries, *, category=None) -> RetrievalResult:
         strategy = self.strategy
@@ -191,12 +215,12 @@ class KnowledgeRetriever:
                                    low_confidence=True, reason="no_hits")
         items: list[Evidence] = []
         seen: set[tuple] = set()
-        for row, score in ranked:
+        for row, values in ranked:
             fingerprint = (row.section_path, row.answer)
             if fingerprint in seen:
                 continue
             seen.add(fingerprint)
-            items.append(self._evidence(row, dict(score)))
+            items.append(self._evidence(row, dict(values)))
         low, reason = False, ""
         if strategy == "hybrid_rerank":
             by_id = {item.id: item for item in items}
@@ -220,16 +244,24 @@ class KnowledgeRetriever:
                 for item, value in zip(targets, self.reranker.score(query, passages)):
                     item.scores["rerank"] = max(item.scores.get("rerank", value), value)
             items.sort(key=lambda item: item.scores["rerank"], reverse=True)
+        conf = score(items, w_top1=self.confidence_w_top1, w_count=self.confidence_w_count,
+                     w_margin=self.confidence_w_margin, effective_floor=self.confidence_effective_floor)
+        if strategy == "hybrid_rerank":
             top = items[0].scores["rerank"]
-            if top < self.rerank_min_score:
-                low, reason = True, f"top1={top:.3f}<{self.rerank_min_score:.2f}"
+            if conf.value < self.confidence_min:
+                low, reason = True, (
+                    f"confidence={conf.value:.3f}<{self.confidence_min:.2f}"
+                    f"(top1={top:.3f},eff={conf.signals['effective_count']},"
+                    f"margin={conf.signals['margin']:.3f})"
+                )
         items = items[:self.top_k]
         evidence: list[Evidence] = []
         if not low:
             for numbered in number_evidence([item.item() for item in items]):
                 evidence.append(Evidence(**numbered))
         return RetrievalResult(strategy=strategy, canonical_query=cleaned[0], queries=cleaned,
-                               items=items, evidence=evidence, low_confidence=low, reason=reason)
+                               items=items, evidence=evidence, low_confidence=low, reason=reason,
+                               confidence=conf, snapshot=snapshot_of(items, limit=self.snapshot_top_n))
 
     def search(self, query: str, limit: int | None = None) -> list[dict]:
         result = self.retrieve(query)

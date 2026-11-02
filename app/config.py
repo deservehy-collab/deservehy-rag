@@ -77,7 +77,11 @@ class Settings(BaseSettings):
     knowledge_rerank_model: str = Field(default=".cache/models/bge-reranker-v2-m3", min_length=1, max_length=255)
     knowledge_rerank_device: str = Field(default="cuda", min_length=1, max_length=16)
     knowledge_rerank_batch_size: int = Field(default=8, ge=1, le=64)
-    knowledge_rerank_min_score: float = Field(default=0.30, ge=0, le=1, allow_inf_nan=False)
+    # 三信号权重固定（80 题撑不起四维网格，只校准 min/floor）；条数只影响快照长度。
+    confidence_w_top1: float = Field(default=0.7, ge=0, le=1)
+    confidence_w_count: float = Field(default=0.2, ge=0, le=1)
+    confidence_w_margin: float = Field(default=0.1, ge=0, le=1)
+    snapshot_top_n: int = Field(default=5, ge=1, le=10)
     knowledge_query_rewrite: bool = True
     knowledge_self_check: bool = True
     knowledge_tool_timeout_seconds: float = Field(default=20, gt=0, allow_inf_nan=False)
@@ -86,6 +90,20 @@ class Settings(BaseSettings):
     knowledge_mining_interval_minutes: int = Field(default=60, ge=0)
     knowledge_mining_lookback_days: int = Field(default=7, ge=1, le=365)
     knowledge_dedupe_threshold: float = Field(default=0.95, ge=0, le=1, allow_inf_nan=False)
+    # 定时评估（空 = 关）。示例：每周日 03:30 跑一轮 → "30 3 * * 0"；默认只跑检索指标，不跑忠实度。
+    eval_schedule_cron: str = Field(default="", max_length=100)
+    # default 取自 evals/reports/ch09-confidence-20261101-221716.md 的「选中」行（80 题、8 题不可答）；
+    # 改前请重跑 scripts/calibrate_confidence.py，别手调。
+    confidence_min: float = Field(default=0.10, ge=0, le=1, alias="CONFIDENCE_MIN")
+    confidence_effective_floor: float = Field(default=0.15, ge=0, le=1,
+                                              alias="CONFIDENCE_EFFECTIVE_FLOOR")
+    langfuse_enabled: bool = Field(default=False, alias="LANGFUSE_ENABLED")
+    langfuse_host: str = Field(default="http://127.0.0.1:3000", alias="LANGFUSE_HOST")
+    langfuse_public_key: str = Field(default="", alias="LANGFUSE_PUBLIC_KEY")
+    langfuse_secret_key: str = Field(default="", alias="LANGFUSE_SECRET_KEY")
+    flywheel_auto_drain: bool = True
+    flywheel_batch_size: int = Field(default=10, ge=1, le=50)
+    flywheel_dedupe_candidates: int = Field(default=20, ge=1, le=50)
     workflow_checkpoint_path: str = Field(default=".cache/langgraph/ch05.sqlite", min_length=1, max_length=255)
     workflow_agent_max_steps: int = Field(
         default=4,

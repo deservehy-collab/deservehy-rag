@@ -77,14 +77,31 @@ def _error_reason(outcome) -> str:
     return str(payload.get("reason") or outcome.code)
 
 
+def _context_snapshot(items: list[dict], limit: int) -> list[dict]:
+    """业务路由的 query_faq 不走 retrieve 节点，快照只能从刚返回的 items 现拼。"""
+    rows = []
+    for index, item in enumerate(items[:max(0, limit)], 1):
+        rows.append({"n": index, "chunk_id": item.get("id"),
+                     "question": item.get("question"),
+                     "answer": (item.get("answer") or "")[:500],
+                     "section_path": item.get("section_path"),
+                     "scores": dict(item.get("scores") or {})})
+    return rows
+
+
 def make_agent_node(deps):
-    async def on_tool_outcome(name, outcome, guard, conversation_id, question):
+    async def on_tool_outcome(name, outcome, guard, conversation_id, question, retrieved_chunks=None):
         if name != "query_faq":
             return None
         if not outcome.ok:
             if outcome.code == "low_confidence":
+                # 工具把这次召回的完整快照挂在内部字段 `_snapshot` 上（不进模型上下文）；
+                # 旧 checkpoint 的 state 快照可能过期，只有工具没给时才退回。
+                snapshot = (outcome.raw or {}).get("_snapshot")
                 await record_low_confidence(deps.pool, conversation_id, question,
-                                            "retrieval_low_conf", _error_reason(outcome))
+                                            "retrieval_low_conf", _error_reason(outcome),
+                                            snapshot or retrieved_chunks,
+                                            flywheel=deps.flywheel)
                 return REFUSAL_TEXT
             return None
         payload = json.loads(outcome.content)
@@ -97,8 +114,12 @@ def make_agent_node(deps):
             useful, reason = await asyncio.to_thread(
                 deps.selfcheck.check, question, data.get("canonical_query") or "", items)
             if not useful:
+                # 工具在原始结果里留了带 scores 的快照；投影后的 items 没有分数，只能当退路。
+                snapshot = (outcome.raw or {}).get("_snapshot")
                 await record_low_confidence(deps.pool, conversation_id, question,
-                                            "self_check", reason or "self_check")
+                                            "self_check", reason or "self_check",
+                                            snapshot or _context_snapshot(items, deps.settings.snapshot_top_n),
+                                            flywheel=deps.flywheel)
                 return REFUSAL_TEXT
         return None
 
@@ -131,8 +152,17 @@ def make_agent_node(deps):
             guard.enable_citations({item["n"] for item in state.get("evidence") or []
                                     if isinstance(item.get("n"), int)})
 
+        last_snapshot: list[dict] = []
+
         async def hook(name, outcome):
-            return await on_tool_outcome(name, outcome, guard, conversation_id, question)
+            if name == "query_faq":
+                snapshot = (outcome.raw or {}).get("_snapshot")
+                if snapshot:
+                    # 业务路由不跑检索节点；把这次召回的片段交给 log 节点写进回复行，
+                    # 👎 事后回捞才有证据，而不是空快照。
+                    last_snapshot[:] = snapshot
+            return await on_tool_outcome(name, outcome, guard, conversation_id, question,
+                                         state.get("retrieval_snapshot"))
 
         result = await run_react(
             model=deps.model, registry=registry, engine=engine, messages=messages,
@@ -154,10 +184,14 @@ def make_agent_node(deps):
                 emit("token", {"content": text})
             logger.info("workflow node=agent conv=%s paused=confirm_write tool=%s",
                         conversation_id, result.pending_write["tool"])
-            return {"reply": text, "actions": [], "offer": None,
-                    "finish_reason": result.finish_reason, "steps": result.steps,
-                    "tool_calls": result.tool_calls, "tokens": result.tokens,
-                    "stopped_by": result.stopped_by, "pending_write": result.pending_write}
+            update = {"reply": text, "actions": [], "offer": None,
+                      "finish_reason": result.finish_reason, "steps": result.steps,
+                      "tool_calls": result.tool_calls, "tokens": result.tokens,
+                      "stopped_by": result.stopped_by, "pending_write": result.pending_write}
+            if last_snapshot:
+                # 空值不回写：知识路由的 retrieve 节点已经把快照放进 state，不能在这里清掉。
+                update["retrieval_snapshot"] = last_snapshot
+            return update
 
         actions = [name for name in guard.actions.actions if name in ACTION_LABELS]
         if "refund" in actions and not (route == "policy" and state.get("order")):
@@ -168,9 +202,13 @@ def make_agent_node(deps):
             offer = build_offer(turn, actions, question, state.get("intent") or "",
                                 state.get("order") if route == "policy" else None)
             emit("actions", actions_payload(actions, turn, offer["refund"]))
-        return {"reply": result.reply, "actions": actions, "offer": offer,
-                "finish_reason": result.finish_reason, "steps": result.steps,
-                "tool_calls": result.tool_calls, "tokens": result.tokens,
-                "stopped_by": result.stopped_by, "pending_write": result.pending_write}
+        update = {"reply": result.reply, "actions": actions, "offer": offer,
+                  "finish_reason": result.finish_reason, "steps": result.steps,
+                  "tool_calls": result.tool_calls, "tokens": result.tokens,
+                  "stopped_by": result.stopped_by, "pending_write": result.pending_write}
+        if last_snapshot:
+            # 空值不回写：知识路由的 retrieve 节点已经把快照放进 state，不能在这里清掉。
+            update["retrieval_snapshot"] = last_snapshot
+        return update
 
     return agent_node

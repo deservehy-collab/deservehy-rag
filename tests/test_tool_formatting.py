@@ -35,6 +35,17 @@ def test_missing_projection_passes_the_payload_through_untouched():
     assert json.loads(format_content(payload, spec("brand_new_tool"))) == payload
 
 
+def test_private_snapshot_is_stripped_only_for_query_faq():
+    faq = {"ok": True, "data": {"items": [], "canonical_query": "q", "low_confidence": False},
+           "_snapshot": [{"chunk_id": 7}]}
+    payload = json.loads(format_content(faq, spec("query_faq")))
+    assert "_snapshot" not in payload
+
+    # 未登记工具原样透传：外部 MCP 的 `_meta` 不能因为下划线前缀被误删。
+    passthrough = {"ok": True, "data": {"items": []}, "_meta": {"cursor": "x"}}
+    assert json.loads(format_content(passthrough, spec("brand_new_tool")))["_meta"] == {"cursor": "x"}
+
+
 def test_order_status_enum_is_translated():
     out = json.loads(format_content({"ok": True, "data": {"order_id": "1001", "status": "SHIPPED",
                                                           "amount": "199.00", "created_at": "x",

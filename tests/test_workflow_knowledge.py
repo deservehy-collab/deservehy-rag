@@ -28,7 +28,14 @@ class FakeRetriever:
                          "价格与优惠", "重排候选 › 保温杯系列", "policy",
                          {"rerank": 0.55}, 0)
         if self.low:
-            return RetrievalResult("hybrid_rerank", query, low_confidence=True, reason="top1=0.1<0.30")
+            # 拒答分支也带快照：生产里 KnowledgeRetriever 低置信时照样产出 top-N
+            # （retrieval.py:169 `snapshot_of(items)`），假件不给就测不到落池那一跳。
+            return RetrievalResult("hybrid_rerank", query, low_confidence=True,
+                                   reason="top1=0.1<0.30",
+                                   snapshot=[{"n": 1, "chunk_id": 7, "question": item.question,
+                                              "answer": item.answer,
+                                              "section_path": item.section_path,
+                                              "scores": {"rerank": 0.92}}])
         return RetrievalResult("hybrid_rerank", query, [decoy], [item])
 
 
@@ -54,8 +61,9 @@ class Pool:
     def __init__(self):
         self.rows = []
 
-    def record(self, conversation_id, question, source, reason):
-        self.rows.append((conversation_id, question, source, reason))
+    def record(self, conversation_id, question, source, reason, retrieved_chunks=None):
+        # 五个位置参全留档：第六参（快照）是最容易被悄悄删掉的那个，丢了它下面就会红。
+        self.rows.append((conversation_id, question, source, reason, retrieved_chunks))
 
 
 def build(factory, knowledge, pool=None, classifier="商品咨询"):
@@ -84,7 +92,9 @@ def test_low_confidence_refuses_without_entering_agent():
         assert frames[0][1]["tool"] == "retrieve"
         assert frames[2][1]["content"].startswith("这个问题我在店铺知识库里没有找到可靠依据")
         assert model.calls == 0
-        assert workflow.deps.pool.rows[0][2:] == ("retrieval_low_conf", "top1=0.1<0.30")
+        assert workflow.deps.pool.rows[0][2:4] == ("retrieval_low_conf", "top1=0.1<0.30")
+        # 拒答入池必须带上这一轮 state 里的召回快照（第六参），否则 👎 事后无法回捞片段。
+        assert workflow.deps.pool.rows[0][4][0]["chunk_id"] == 7
 
 
 def test_retrieval_failure_becomes_refusal():
@@ -102,7 +112,7 @@ def test_retrieval_failure_becomes_refusal():
         assert frames[2][1]["content"].startswith("这个问题我在店铺知识库里没有找到可靠依据")
         assert model.calls == 0
         assert frames[-1][0] == "done"
-        assert workflow.deps.pool.rows[0][2:] == ("retrieval_low_conf", "retrieval_error")
+        assert workflow.deps.pool.rows[0][2:4] == ("retrieval_low_conf", "retrieval_error")
 
 
 def test_retrieval_timeout_becomes_refusal():
@@ -122,7 +132,7 @@ def test_retrieval_timeout_becomes_refusal():
         assert frames[1][1]["summary"] == "知识库响应超时"
         assert frames[2][1]["content"].startswith("这个问题我在店铺知识库里没有找到可靠依据")
         assert workflow.deps.model.calls == 0
-        assert workflow.deps.pool.rows[0][2:] == ("retrieval_low_conf", "retrieval_timeout")
+        assert workflow.deps.pool.rows[0][2:4] == ("retrieval_low_conf", "retrieval_timeout")
 
 
 def test_gate_pass_injects_evidence_and_drops_query_faq_tool():
@@ -156,7 +166,8 @@ def test_retriever_gate_contract_never_pass_without_evidence(tmp_path):
     ranked = FakeStore()
     ranked.hybrid = [("2", 0.03), ("1", 0.02), ("3", 0.01)]
     passing = KnowledgeRetriever(factory, FakeEmbedder(), ranked, candidates=3, top_k=3,
-                                 reranker=FakeReranker([0.5, 0.9, 0.6]), rerank_min_score=0.3)
+                                 reranker=FakeReranker([0.5, 0.9, 0.6]),
+                                 confidence_min=0.10, confidence_effective_floor=0.15)
     result = passing.retrieve("问题", canonical="规范问题")
     assert result.low_confidence is False
     assert result.evidence
@@ -165,14 +176,16 @@ def test_retriever_gate_contract_never_pass_without_evidence(tmp_path):
     weak = FakeStore()
     weak.hybrid = [("1", 0.03)]
     below = KnowledgeRetriever(factory, FakeEmbedder(), weak, candidates=3, top_k=3,
-                               reranker=FakeReranker([0.1]), rerank_min_score=0.3)
+                               reranker=FakeReranker([0.1]),
+                               confidence_min=0.10, confidence_effective_floor=0.15)
     top1_low = below.retrieve("问题", canonical="规范")
     assert top1_low.low_confidence is True
     assert top1_low.evidence == []
-    assert top1_low.reason.startswith("top1=")
+    assert top1_low.reason.startswith("confidence=")
 
     empty = KnowledgeRetriever(factory, FakeEmbedder(), FakeStore(), candidates=3, top_k=3,
-                               reranker=FakeReranker([0.9]), rerank_min_score=0.3)
+                               reranker=FakeReranker([0.9]),
+                               confidence_min=0.10, confidence_effective_floor=0.15)
     no_hits = empty.retrieve("问题", canonical="规范")
     assert no_hits.low_confidence is True and no_hits.reason == "no_hits"
     blank = empty.retrieve("   ")

@@ -191,7 +191,9 @@ def test_a_failed_write_reports_failure_everywhere_and_voids_the_card():
         assert frames[1][1]["phase"] == "end" and frames[1][1]["ok"] is False
         assert frames[2][1]["content"] == TICKET_FAILED_TEXT
         # done 帧必须把 stopped_by 带出来：前端就是靠它决定卡片页脚写「已提交。」还是「没提交成功」。
-        assert frames[3] == ("done", {"finish_reason": "stop", "stopped_by": "write_failed"})
+        assert frames[3][0] == "done"
+        assert frames[3][1]["finish_reason"] == "stop"
+        assert frames[3][1]["stopped_by"] == "write_failed"
         assert count(factory, Ticket) == 0
         assert audit_rows(factory, conversation_id)[0][0] == "失败"
         assert state_values(workflow, conversation_id)["stopped_by"] == "write_failed"
@@ -211,7 +213,9 @@ def test_a_write_timeout_says_result_unknown_and_never_invites_a_retry():
         assert frames[1][1]["ok"] is False
         assert frames[2][1]["content"] == TICKET_TIMEOUT_TEXT
         assert "再让我建一次" not in frames[2][1]["content"]
-        assert frames[3] == ("done", {"finish_reason": "stop", "stopped_by": "write_timeout"})
+        assert frames[3][0] == "done"
+        assert frames[3][1]["finish_reason"] == "stop"
+        assert frames[3][1]["stopped_by"] == "write_timeout"
         assert audit_rows(factory, conversation_id)[0][0] == "超时"
         assert count(factory, Ticket) == 0
         assert state_values(workflow, conversation_id)["stopped_by"] == "write_timeout"

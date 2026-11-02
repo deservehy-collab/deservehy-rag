@@ -108,7 +108,7 @@ def make_policy_retrieve_node(deps):
             return {"queries": list(queries),
                     "retrieval": {"low_confidence": True, "reason": "retrieval_timeout",
                                   "canonical_query": "", "strategy": ""},
-                    "evidence": [], "citations": []}
+                    "retrieval_snapshot": [], "evidence": [], "citations": []}
         except Exception:
             logger.exception("策略检索失败，按低置信处理。")
             emit("status", {"phase": "end", "tool": "retrieve", "label": "检索知识库", "ok": False,
@@ -117,7 +117,7 @@ def make_policy_retrieve_node(deps):
             return {"queries": list(queries),
                     "retrieval": {"low_confidence": True, "reason": "retrieval_error",
                                   "canonical_query": "", "strategy": ""},
-                    "evidence": [], "citations": []}
+                    "retrieval_snapshot": [], "evidence": [], "citations": []}
         evidence = [item.item() for item in result.evidence]
         citations = [item.citation() for item in result.evidence]
         if citations:
@@ -130,7 +130,10 @@ def make_policy_retrieve_node(deps):
                     state.get("conversation_id"), queries, result.low_confidence, result.reason)
         return {"queries": list(queries),
                 "retrieval": {"low_confidence": result.low_confidence, "reason": result.reason,
-                              "canonical_query": result.canonical_query, "strategy": result.strategy},
+                              "canonical_query": result.canonical_query, "strategy": result.strategy,
+                              "confidence": (result.confidence.as_dict()
+                                             if result.confidence is not None else None)},
+                "retrieval_snapshot": result.snapshot,
                 "evidence": evidence, "citations": citations}
 
     return retrieve_node

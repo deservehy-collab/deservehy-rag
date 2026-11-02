@@ -1,0 +1,313 @@
+{
+  "generated_at": "2026-11-01T18:48:15",
+  "verdict": "FAILED",
+  "session_id": "conv-1",
+  "trace_rows_this_turn": [
+    {
+      "name": "log",
+      "type": "CHAIN",
+      "tags": [],
+      "intent": null,
+      "totalUsage": 0,
+      "totalCost": null
+    },
+    {
+      "name": "policy_selector",
+      "type": "CHAIN",
+      "tags": [],
+      "intent": null,
+      "totalUsage": 0,
+      "totalCost": null
+    },
+    {
+      "name": "policy_order",
+      "type": "CHAIN",
+      "tags": [],
+      "intent": null,
+      "totalUsage": 0,
+      "totalCost": null
+    },
+    {
+      "name": "route_selector",
+      "type": "CHAIN",
+      "tags": [],
+      "intent": null,
+      "totalUsage": 0,
+      "totalCost": null
+    },
+    {
+      "name": "route",
+      "type": "CHAIN",
+      "tags": [],
+      "intent": null,
+      "totalUsage": 0,
+      "totalCost": null
+    },
+    {
+      "name": "PydanticOutputParser",
+      "type": "CHAIN",
+      "tags": [],
+      "intent": null,
+      "totalUsage": 0,
+      "totalCost": null
+    },
+    {
+      "name": "ChatOpenAI",
+      "type": "GENERATION",
+      "tags": [],
+      "intent": null,
+      "totalUsage": 569,
+      "totalCost": null
+    },
+    {
+      "name": "RunnableSequence",
+      "type": "CHAIN",
+      "tags": [],
+      "intent": null,
+      "totalUsage": 0,
+      "totalCost": null
+    },
+    {
+      "name": "intent",
+      "type": "CHAIN",
+      "tags": [],
+      "intent": null,
+      "totalUsage": 0,
+      "totalCost": null
+    },
+    {
+      "name": "PydanticOutputParser",
+      "type": "CHAIN",
+      "tags": [],
+      "intent": null,
+      "totalUsage": 0,
+      "totalCost": null
+    },
+    {
+      "name": "ChatOpenAI",
+      "type": "GENERATION",
+      "tags": [],
+      "intent": null,
+      "totalUsage": 421,
+      "totalCost": null
+    },
+    {
+      "name": "RunnableSequence",
+      "type": "CHAIN",
+      "tags": [],
+      "intent": null,
+      "totalUsage": 0,
+      "totalCost": null
+    },
+    {
+      "name": "coref",
+      "type": "CHAIN",
+      "tags": [],
+      "intent": null,
+      "totalUsage": 0,
+      "totalCost": null
+    },
+    {
+      "name": "LangGraph",
+      "type": "CHAIN",
+      "tags": [],
+      "intent": null,
+      "totalUsage": 0,
+      "totalCost": null
+    }
+  ],
+  "in_graph_set_intent_returns": [
+    {
+      "intent": "退款退货",
+      "confidence": 0.97,
+      "span": {
+        "type": "_Span",
+        "recording": true,
+        "name": "POST /api/chat",
+        "trace_id": "9a057f600f26935bf12ead9a97d0a099",
+        "span_id": "ab9eee6f31e5318e"
+      },
+      "returned": true
+    }
+  ],
+  "turn": {
+    "conversation_id": 1,
+    "message_id": null,
+    "events": [
+      "meta",
+      "token",
+      "orders",
+      "done"
+    ]
+  },
+  "observation_names": [
+    "log",
+    "policy_selector",
+    "policy_order",
+    "route_selector",
+    "route",
+    "PydanticOutputParser",
+    "ChatOpenAI",
+    "RunnableSequence",
+    "intent",
+    "PydanticOutputParser",
+    "ChatOpenAI",
+    "RunnableSequence",
+    "coref",
+    "LangGraph"
+  ],
+  "observation_metadata": {
+    "log": [
+      null,
+      null
+    ],
+    "policy_selector": [
+      null,
+      null
+    ],
+    "policy_order": [
+      null,
+      null
+    ],
+    "route_selector": [
+      null,
+      null
+    ],
+    "route": [
+      null,
+      null
+    ],
+    "PydanticOutputParser": [
+      null,
+      null
+    ],
+    "ChatOpenAI": [
+      null,
+      null
+    ],
+    "RunnableSequence": [
+      null,
+      null
+    ],
+    "intent": [
+      null,
+      null
+    ],
+    "coref": [
+      null,
+      null
+    ],
+    "LangGraph": [
+      null,
+      null
+    ]
+  },
+  "generation_usage": [
+    [
+      "ChatOpenAI",
+      569,
+      null
+    ],
+    [
+      "ChatOpenAI",
+      421,
+      null
+    ]
+  ],
+  "metrics_by_tags": [
+    {
+      "tags": [],
+      "sum_totalTokens": 4220,
+      "sum_totalCost": 0,
+      "count_count": 64
+    },
+    {
+      "tags": [
+        "intent:rootI"
+      ],
+      "sum_totalTokens": 150,
+      "sum_totalCost": 0,
+      "count_count": 2
+    },
+    {
+      "tags": [
+        "intent:实验A"
+      ],
+      "sum_totalTokens": 0,
+      "sum_totalCost": 0,
+      "count_count": 1
+    },
+    {
+      "tags": [
+        "intent:gg"
+      ],
+      "sum_totalTokens": 0,
+      "sum_totalCost": 0,
+      "count_count": 1
+    },
+    {
+      "tags": [
+        "intent:lateJ"
+      ],
+      "sum_totalTokens": 0,
+      "sum_totalCost": 0,
+      "count_count": 1
+    },
+    {
+      "tags": [
+        "intent:mechD"
+      ],
+      "sum_totalTokens": 0,
+      "sum_totalCost": 0,
+      "count_count": 1
+    },
+    {
+      "tags": [
+        "intent:实验B"
+      ],
+      "sum_totalTokens": 0,
+      "sum_totalCost": 0,
+      "count_count": 1
+    },
+    {
+      "tags": [
+        "intent:mechF"
+      ],
+      "sum_totalTokens": 0,
+      "sum_totalCost": 0,
+      "count_count": 1
+    },
+    {
+      "tags": [
+        "intent:实验Bmid"
+      ],
+      "sum_totalTokens": 0,
+      "sum_totalCost": 0,
+      "count_count": 1
+    },
+    {
+      "tags": [
+        "intent:hh"
+      ],
+      "sum_totalTokens": 0,
+      "sum_totalCost": 0,
+      "count_count": 1
+    },
+    {
+      "tags": [
+        "intent:实验C"
+      ],
+      "sum_totalTokens": 0,
+      "sum_totalCost": 0,
+      "count_count": 1
+    }
+  ],
+  "metrics_by_tags_this_session": [
+    {
+      "tags": [],
+      "sum_totalTokens": 990,
+      "sum_totalCost": 0,
+      "count_count": 14
+    }
+  ]
+}

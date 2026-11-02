@@ -13,7 +13,8 @@ class FakeKnowledge:
 
     def retrieve(self, query, category=None):
         if self.low:
-            return RetrievalResult("hybrid_rerank", query, low_confidence=True, reason="top1=0.1<0.30")
+            return RetrievalResult("hybrid_rerank", query, low_confidence=True,
+                                   reason="confidence=0.080<0.10(top1=0.100,eff=0,margin=0.100)")
         item = Evidence(7, "G500 杯盖适配", "G500 适配 P1001 和 B500，不适用 B750。",
                         "型号与兼容性 › 保温杯系列", "型号与兼容性 › 保温杯系列 › 杯盖与配件适配",
                         "policy", {"rrf": 0.03, "rerank": 0.92}, 1)
@@ -88,4 +89,4 @@ def test_retrieval_gate_rejection_writes_pool():
         assert tokens.startswith("这个问题我在店铺知识库里没有找到可靠依据")
         with factory() as session:
             row = session.scalar(select(LowConfidenceQuestion))
-            assert row.source == "retrieval_low_conf" and "top1=0.1" in row.reason
+            assert row.source == "retrieval_low_conf" and "confidence=" in row.reason
