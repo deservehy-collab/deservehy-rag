@@ -104,6 +104,30 @@ class Settings(BaseSettings):
     flywheel_auto_drain: bool = True
     flywheel_batch_size: int = Field(default=10, ge=1, le=50)
     flywheel_dedupe_candidates: int = Field(default=20, ge=1, le=50)
+    # ch10 主题分类：后台批量归类默认关（与定时评估一致），演示时显式打开。
+    # 用 AliasChoices 而不是 alias：测试用字段名构造 Settings，pydantic v2 的 alias 会忽略字段名。
+    topic_classify_enabled: bool = Field(
+        default=False, validation_alias=AliasChoices("TOPIC_CLASSIFY_ENABLED", "topic_classify_enabled"))
+    topic_service_url: str = Field(
+        default="http://127.0.0.1:8933", min_length=1, max_length=255,
+        validation_alias=AliasChoices("TOPIC_SERVICE_URL", "topic_service_url"))
+    topic_classify_interval_minutes: int = Field(
+        default=10, ge=1, le=1440,
+        validation_alias=AliasChoices("TOPIC_CLASSIFY_INTERVAL_MINUTES", "topic_classify_interval_minutes"))
+    topic_classify_min_pending: int = Field(
+        default=20, ge=1,
+        validation_alias=AliasChoices("TOPIC_CLASSIFY_MIN_PENDING", "topic_classify_min_pending"))
+    topic_classify_batch: int = Field(
+        default=50, ge=1, le=200,
+        validation_alias=AliasChoices("TOPIC_CLASSIFY_BATCH", "topic_classify_batch"))
+    topic_model_dir: str = Field(
+        default=".cache/models/topic-classifier", min_length=1, max_length=255,
+        validation_alias=AliasChoices("TOPIC_MODEL_DIR", "topic_model_dir"))
+    topic_device: Literal["cpu", "cuda"] = Field(
+        default="cpu", validation_alias=AliasChoices("TOPIC_DEVICE", "topic_device"))
+    topic_max_len: int = Field(
+        default=128, ge=32, le=256,
+        validation_alias=AliasChoices("TOPIC_MAX_LEN", "topic_max_len"))
     workflow_checkpoint_path: str = Field(default=".cache/langgraph/ch05.sqlite", min_length=1, max_length=255)
     workflow_agent_max_steps: int = Field(
         default=4,

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>主题分布 · deservehy客服</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='10' fill='%23164d46'/%3E%3Cpath d='M8 9h16v12H13l-5 4V9z' fill='none' stroke='%23d6efda' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/assets/admin.css">
+  <script src="/assets/admin-topics.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-title">
+      <a class="back" href="/admin">← 回到审核</a>
+      <h1>主题分布</h1>
+      <p>低置信问题按 17 类主题归类后，先补量大的那几类。</p>
+    </div>
+    <a class="refresh" href="/">回到聊天</a>
+  </header>
+
+  <main class="workspace">
+    <section class="summary" aria-label="归类概况">
+      <div class="summary-card"><span id="total-classified">—</span><small>已归类</small></div>
+      <div class="summary-card"><span id="pending">—</span><small>待归类</small></div>
+      <div class="summary-card"><span id="multi-label">—</span><small>多标签</small></div>
+      <div class="summary-card"><span id="last-classified">—</span><small>最近归类</small></div>
+    </section>
+
+    <div class="toolbar">
+      <p class="status-line" id="status-line" role="status" aria-live="polite"></p>
+      <button type="button" class="refresh" id="refresh">刷新</button>
+    </div>
+
+    <section class="topic-bars" id="bars" aria-label="17 类主题分布"></section>
+    <p class="empty" id="empty" hidden>还没有归类结果。启动推理服务后运行
+      <code>python -m scripts.classify_topics</code>，或打开 <code>TOPIC_CLASSIFY_ENABLED</code>
+      等后台自动归类。</p>
+  </main>
+</body>
+</html>

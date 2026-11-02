@@ -36,6 +36,7 @@ def test_schema_has_the_business_and_knowledge_tables(sqlite_factory):
             "tool_audit_logs",
             "review_queue",
             "eval_runs",
+            "topic_classifications",
         }
 
 

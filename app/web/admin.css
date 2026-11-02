@@ -463,3 +463,51 @@ button:focus-visible, a:focus-visible, textarea:focus-visible, summary:focus-vis
     transition: none !important;
   }
 }
+
+/* ch10 主题分布页 */
+.topics-link { margin: 8px 0 0; }
+.summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.summary-card {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.summary-card span {
+  display: block;
+  color: var(--rail);
+  font: 600 28px/1.2 var(--display-font);
+  font-variant-numeric: tabular-nums;
+}
+.summary-card small { color: var(--muted); }
+.toolbar { margin-top: 16px; }
+.topic-bars { display: grid; gap: 10px; margin-top: 18px; }
+.topic-bar-row {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr) 96px;
+  align-items: center;
+  gap: 12px;
+}
+.topic-bar-label { color: var(--ink); font-size: 13px; }
+.topic-bar-track {
+  height: 18px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--mint);
+}
+.topic-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--rail), #6fbf9d);
+}
+.topic-bar-value {
+  color: var(--muted);
+  text-align: right;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 720px) {
+  .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .topic-bar-row { grid-template-columns: 64px minmax(0, 1fr) 84px; }
+}

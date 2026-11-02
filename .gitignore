@@ -9,3 +9,5 @@ __pycache__/
 .cache/
 .superpowers/
 log/
+# ch10 真实抽审/训练数据含 DB 原文，只在本地人工填写与训练，绝不入库
+data/topics/real_*

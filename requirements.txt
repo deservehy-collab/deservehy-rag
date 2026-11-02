@@ -11,6 +11,8 @@ cryptography==50.0.2
 torch>=2.6,<3
 # GPU 版 torch 请从 cu128 wheel 源安装，start.bat 已带 -f https://mirrors.aliyun.com/pytorch-wheels/cu128/
 sentence-transformers>=5,<7
+# ch10 主题分类训练/推理直接依赖，锁文件里已是 5.21.0；不要升大版本
+transformers==5.21.0
 pymilvus>=2.6,<2.7
 apscheduler>=3.11,<4
 langgraph==1.2.18

@@ -98,6 +98,8 @@ def _settings(settings_overrides):
         "flywheel_auto_drain": False,
         # 单测默认不连真进程 MCP Server；要验清单就把 deps.mcp 换成 FakeMcp。
         "mcp_servers": "",
+        # ch10 主题分类默认关：未启动推理服务时别让调度器在测试里打日志。
+        "topic_classify_enabled": False,
     }
     defaults.update(settings_overrides)
     return Settings(_env_file=None, **defaults)

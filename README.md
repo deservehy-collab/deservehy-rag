@@ -376,6 +376,39 @@ SELECT eval_id, bucket, query, status, seen_count, reason, last_seen_at
 FROM faith_cases ORDER BY last_seen_at DESC;
 ```
 
+## ch10 多标签主题分类器
+
+低置信池里除了「一个问题」还藏着「哪类问题多」。ch10 用 17 类术语表把池子里的问题批量归类，先补量大的那几类；**实时聊天主链路不调用分类器**，全部走旁路。
+
+### 准备
+1. 下载预训练权重：
+   `HF_ENDPOINT=https://hf-mirror.com .venv/Scripts/python.exe -c "from huggingface_hub import snapshot_download; snapshot_download('hfl/chinese-roberta-wwm-ext', local_dir='.cache/models/chinese-roberta-wwm-ext')"`
+   （xet 下载报 401 时加 `HF_HUB_DISABLE_XET=1`）
+2. 复制 `.env.example` 里的 `TOPIC_*` 配置到 `.env`；默认 `TOPIC_CLASSIFY_ENABLED=false`。
+3. 已有数据库执行 `python scripts/migrate_ch10.py`（新库由 `docker compose` 自动跑 `008_topics.sql`）。
+
+### 构建、训练、评测
+```bash
+python -m scripts.build_topic_dataset --split --seed 42 --out .cache/topics/splits
+python -m scripts.train_topic_classifier
+python -m scripts.evaluate_topic_classifier
+```
+训练产物在 `.cache/models/topic-classifier/`（含 `labels.json` 与逐类 `thresholds.json`），不提交仓库；评测报告写到 `evals/reports/ch10-topic-*`。
+
+### 演示
+```bash
+start-topic.bat
+python -m scripts.classify_topics --force --limit 17
+python -m scripts.demo_topics
+```
+
+浏览器打开 `http://127.0.0.1:8000/admin/topics` 看主题分布。推理服务默认 CPU（`TOPIC_DEVICE=cpu`），避免和聊天模型抢 6GB 显存；`TOPIC_CLASSIFY_ENABLED=true` 时主应用内每 `TOPIC_CLASSIFY_INTERVAL_MINUTES` 分钟归一批，待归类少于 `TOPIC_CLASSIFY_MIN_PENDING` 时跳过。
+
+### 边界与口径
+- 17 类固定顺序见 `app/topics/taxonomy.py`；一句话字面提到几个诉求就标几个，空标签回落 `其他`。
+- 多标签评测同时给逐类 P/R/F1、2×2 与 17×17 混淆矩阵、Top 混淆对；macro-F1 只对「真或预测出现过」的类目取平均（当前切分 17 类全覆盖，与 17 列全平均数值相同）。
+- 验收③「买大了想退」要求同时命中 `退换货` 与 `尺码`；当前模型只出 `退换货`（`尺码` 0.2062 < 阈值 0.25），评测脚本会返回退出码 3，报告如实记录。
+
 ## 知识库说明
 
 - 文档放 `examples/knowledge/*.md`：`00`–`02` 按 policy 处理，`03` 起按 manual 处理；每个分块记录父级标题路径（`section_path`）与所属分类。

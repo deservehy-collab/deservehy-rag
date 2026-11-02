@@ -39,6 +39,7 @@ from app.schemas import AfterSales, ChatRequest, ExtractRequest, FeedbackRequest
 from app.service import CustomerService, ModelFailure
 from app.storage import ConversationStore
 from app.tools.wiring import build_engine as build_tool_engine, build_registry
+from app.topics import stats as topic_stats
 from app.workflow.graph import open_checkpointer
 from app.workflow.knowledge_node import record_low_confidence
 
@@ -103,6 +104,8 @@ def create_app(
         )
         scheduler = None
         eval_scheduler = None
+        topic_scheduler = None
+        topic_client = None
         langfuse = build_client(resolved_settings)
         if langfuse is not None:
             logger.info("Langfuse 观测已开启：%s", resolved_settings.langfuse_host)
@@ -185,12 +188,43 @@ def create_app(
                         # 保证 finally 里的 shutdown() 不会碰半成品。
                         eval_scheduler = None
                         logger.exception("定时评估启动失败（cron 写法有误？），服务继续运行。")
+                if resolved_settings.topic_classify_enabled:
+                    try:
+                        from app.topics.scheduler import TopicScheduler
+                        from app.topics.worker import TopicClient, run_batch
+
+                        topic_client = TopicClient(resolved_settings.topic_service_url)
+
+                        def run_topic_batch():
+                            report = run_batch(
+                                factory, topic_client,
+                                min_pending=resolved_settings.topic_classify_min_pending,
+                                limit=resolved_settings.topic_classify_batch,
+                            )
+                            logger.info("主题归类：待归类 %s，已归类 %s，失败 %s。",
+                                        report.pending, report.classified, report.failed)
+
+                        topic_scheduler = TopicScheduler(
+                            run_topic_batch, resolved_settings.topic_classify_interval_minutes)
+                        await topic_scheduler.start()
+                    except Exception:
+                        # start() 失败也要把已经建出来的客户端关掉：否则整个服务生命周期都挂着
+                        # 一个用不上的连接池（finally 要到进程退出才 close）。
+                        topic_scheduler = None
+                        if topic_client is not None:
+                            topic_client.close()
+                            topic_client = None
+                        logger.exception("主题归类定时任务启动失败，服务继续运行。")
                 yield
             finally:
                 if scheduler is not None:
                     scheduler.shutdown()
                 if eval_scheduler is not None:
                     eval_scheduler.shutdown()
+                if topic_scheduler is not None:
+                    topic_scheduler.shutdown()
+                if topic_client is not None:
+                    topic_client.close()
                 service = getattr(application.state, "service", None)
                 if service is not None and service.summary is not None:
                     # 后台摘要可能还在写库，先排空再关连接池，免得任务落在已 dispose 的 engine 上。
@@ -226,6 +260,10 @@ def create_app(
     @application.get("/admin", response_class=FileResponse, include_in_schema=False)
     async def admin_page():
         return FileResponse(web_directory / "admin.html")
+
+    @application.get("/admin/topics", response_class=FileResponse, include_in_schema=False)
+    def topics_page():
+        return FileResponse(web_directory / "admin-topics.html")
 
     @application.exception_handler(RequestValidationError)
     async def invalid_request(request: Request, exc: RequestValidationError):
@@ -532,6 +570,15 @@ def create_app(
         if not ok:
             raise ModelFailure("review_conflict", "这条记录不存在，或已经通过入库、不能再驳回。", 409)
         return {"ok": True, "review_id": review_id, "status": "驳回"}
+
+    @application.get("/api/admin/topics/distribution")
+    async def admin_topic_distribution(request: Request):
+        factory = request.app.state.service.store.session_factory
+        try:
+            data = await asyncio.to_thread(topic_stats.distribution, factory)
+        except (SQLAlchemyError, sqlite3.Error):
+            raise ModelFailure("database_unavailable", DB_FAILURE_MESSAGE, 503) from None
+        return data
 
     @application.post("/api/after-sales/extract", response_model=AfterSales)
     async def extract(body: ExtractRequest, request: Request):

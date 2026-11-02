@@ -1,0 +1,1200 @@
+{"id": "syn-0001", "text": "这双鞋穿着有点小,能换大一码吗?退换的话要寄回去吗?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0002", "text": "衣服尺码选错了,想换成大一号的,换货流程怎么走?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0003", "text": "我买的这个偏大太多,穿不了,能退货还是只能换小码?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0004", "text": "按照尺码表选的还是不合身,可以退掉重新拍个合适的码吗?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0005", "text": "裤子尺码不合适能换货吗,换的话要不要重新付钱?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0006", "text": "这鞋子偏小挤脚,我想换成大码,退货换货运费怎么弄?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码", "运费"]}
+{"id": "syn-0007", "text": "裙子买大了想换小码,换货期间能直接退吗?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0008", "text": "尺码表看错了买到不合身,能退换吗怎么操作?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0009", "text": "我身高体重报错了拍错码,现在能退换选对的尺码吗?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0010", "text": "这件上衣肩宽穿不下,想退掉换大两个码可以吗?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0011", "text": "我买的这个尺码不合适想退货,请问选哪个尺码换货更合适?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0012", "text": "衣服尺码偏小穿不下,能退换吗?换大一码怎么操作?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0013", "text": "我想退货,但尺码表看不太懂,退货时该选哪个尺码重新拍?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0014", "text": "鞋子尺码买大了想换货,换小一码要走什么流程?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0015", "text": "这件退货的话,我按身高体重该选哪个尺码再下单?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0016", "text": "尺码不合身申请退货,重新买的话你们建议选大还是选小?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0017", "text": "我身高体重报给你,能帮我推荐尺码吗?不合适的话能退换吗?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0018", "text": "想换货但不确定尺码,换货时选码是跟原来一样还是换大一码?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0019", "text": "这条裤子尺码偏大想退,退了以后按尺码表该拍哪个号?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0020", "text": "退货原因是尺码不对,换货的话你们能帮我确认下该选哪个码吗?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0021", "text": "我买的这件衣服尺码偏小想退货,尺码表是不是不准啊?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0022", "text": "这鞋我按尺码买的穿着挤脚,能换大一码吗?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0023", "text": "衣服尺码选大了想换小一码,换货流程怎么走?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0024", "text": "裤子尺码不合适能退吗,我该按身高体重选哪个码?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0025", "text": "我买的M码太小了,想退货重拍,尺码表准吗?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0026", "text": "鞋子尺码偏大穿着掉跟,能换小一码吗?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0027", "text": "按尺码表选的结果不合身,想换货该选哪个尺码?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0028", "text": "衣服尺码和描述不符太大,能退掉重新按尺码买吗?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0029", "text": "这条裙子我拿不准尺码买错了,可以换货吗?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0030", "text": "按你们尺码推荐买的太小了,退货怎么操作?", "labels": ["退换货", "尺码"], "origin": "synthetic", "target_labels": ["退换货", "尺码"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0031", "text": "请问运费要补多少钱,快递大概几天能送到?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0032", "text": "这单收运费吗,物流显示发到哪了?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0033", "text": "运费怎么算的,包裹什么时候能到啊?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0034", "text": "补的运费能退吗,快递一直不动怎么办?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0035", "text": "包邮的话运费多少,我的包裹到哪个站点了?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0036", "text": "运费险会赔吗,物流信息为啥一直不更新?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0037", "text": "这单运费谁出,快递能送到家吗?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0038", "text": "多收的运费怎么退,快递延迟了要多久到?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0039", "text": "运费要满多少才包邮,我的货什么时候发出?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0040", "text": "运费贵不贵,快递能不能改到明天送?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0041", "text": "这个要补运费的话,快递大概几天能送到啊?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0042", "text": "运费我付了,包裹现在到哪了能查一下吗?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0043", "text": "包邮的吗,发货后一般多久能到?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0044", "text": "我这边运费怎么算,寄过来要几天啊?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0045", "text": "快递费能不能便宜点,顺便问下什么时候能送到?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0046", "text": "运费是到付还是先付,物流显示啥时候发?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0047", "text": "下单要加运费吗,发什么快递几天到?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0048", "text": "运费多少钱,能不能帮我催下快递快点到?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0049", "text": "这个偏远地区运费贵不贵,快递能送到吗?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0050", "text": "我付的运费包含配送吗,大概几天能收到货?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0051", "text": "运费补了之后发什么快递,大概几天能到啊?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0052", "text": "我这运费付了,包裹现在到哪了,能查下物流吗?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0053", "text": "包邮的话发哪家快递,运输要多久能到?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0054", "text": "运费要多少,付完多久能发货、几天能送达?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0055", "text": "多出的运费我认了,但快递能不能快点送到?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0056", "text": "这个运费是谁承担的,发货后用哪个物流配送?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0057", "text": "运费能不能便宜点,顺便问下快递几天能到?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0058", "text": "我补的运费到账没,快递单号什么时候能给我?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0059", "text": "运费险能赔吗,这单物流怎么一直不更新?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0060", "text": "加钱换顺丰要补多少运费,明天能送到吗?", "labels": ["物流", "运费"], "origin": "synthetic", "target_labels": ["物流", "运费"], "prelabels": ["物流", "运费"]}
+{"id": "syn-0061", "text": "我前天买的现在降价了,还能用优惠券补差价吗?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0062", "text": "这个商品有满减活动吗,刚下单就降价能价保吗?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0063", "text": "用券买完之后又降价了,价保能不能把优惠也算进去?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0064", "text": "现在有什么折扣活动,我上周买的能申请补差价吗?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0065", "text": "参加满减买的,结果今天更便宜了,价保怎么算差价?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0066", "text": "优惠券还能领吗,之前买贵了想问问能不能价保?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0067", "text": "店铺最近有活动吗,我前几天下单的能退差价不?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0068", "text": "这款现在打几折呀,我昨天原价买的能补差价吗?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0069", "text": "有没有满减优惠,刚买就降价了价保申请在哪弄?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0070", "text": "活动价和我的下单价比差不少,优惠券用过还能价保吗?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0071", "text": "我下单后第二天就降价了,能补差价吗?另外现在有什么满减券可以领?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0072", "text": "刚买完就发现降价了想申请价保,顺便问下店铺满减怎么凑最划算?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0073", "text": "这个商品之后降价能补差价吗,还有优惠券和满减活动能用吗?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0074", "text": "价保期间降价了怎么补差价,同时店铺有什么满减优惠能参加?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0075", "text": "我前几天买的现在便宜了想补差价,现在下单还能用满减券吗?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0076", "text": "请问价保怎么申请补差价,另外满减和优惠券能叠加使用吗?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0077", "text": "刚下的单还没发货就降价了,能价保补差价吗?满减活动什么时候结束?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0078", "text": "买贵了想申请价保退差价,店铺现在有哪些满减优惠我没赶上?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0079", "text": "降价了想走价保补差价,顺便问下优惠券满减的活动规则是啥?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0080", "text": "这个能保价补差价吗?还有满减优惠券怎么领、活动到几号结束?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0081", "text": "刚买完就降价了能补差价吗,最近有没有满减优惠券可以领?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0082", "text": "我买贵了想申请价保退差价,顺便问下现在店里还有别的折扣活动吗?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0083", "text": "这款之前买的能价保吗,你们这两天搞的满减活动我还能参加不?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0084", "text": "下单后发现降价了,价保怎么申请,另外优惠券还能叠加用吗?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0085", "text": "请问现在有没有优惠活动,我刚买的东西降价了能补差价吗?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0086", "text": "想问问价保是几天内有效,还有最近满三百减多少的活动规则是啥?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0087", "text": "我刚下的单还没发货就降价了,能价保吗,顺便有没有优惠券能领?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0088", "text": "这个价保怎么操作,店里现在满减和折扣活动哪个更划算?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0089", "text": "东西买早了降价了要补差价,再问下会员还有什么优惠活动吗?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保", "会员积分"]}
+{"id": "syn-0090", "text": "能帮我看看能不能价保退差价吗,另外现在下单有什么满减活动?", "labels": ["优惠活动", "价保"], "origin": "synthetic", "target_labels": ["优惠活动", "价保"], "prelabels": ["优惠活动", "价保"]}
+{"id": "syn-0091", "text": "我下完单发现发票抬头写错了,还没发货能改吗?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0092", "text": "麻烦把订单收货地址改一下,发票也重新开成公司抬头.", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0093", "text": "刚拍的这单能帮我取消重下吗,我要加个发票备注.", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0094", "text": "订单还没发,地址改成公司那边,发票抬头也一起换.", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0095", "text": "我想把订单里的商品换成另一个颜色,发票信息也顺便改改.", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0096", "text": "下错单了地址填错,能不能改地址再补开张电子发票?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0097", "text": "两个订单能合并发吗,发票开一张还是分开开?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0098", "text": "我订单电话填错了要修改,发票要开个人抬头可以吗?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0099", "text": "这单先别发货,地址要改,发票抬头也改成公司的.", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0100", "text": "请问未发货的订单能改收件人吗,顺便把发票类型换成专票.", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0101", "text": "我还没发货呢,想改一下收货地址,顺便帮我把发票抬头也改了吧?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0102", "text": "订单能改地址吗,还有发票抬头我想换成公司的怎么弄?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0103", "text": "刚下的单还没发,想取消重新拍,之前申请的电子发票会作废吗?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0104", "text": "能不能帮我改下收货人信息,发票要开个人还是单位呢?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0105", "text": "下单后发现地址填错了想改,发票可以晚点再开吗?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0106", "text": "这单还没发货,我想合并一下订单,发票能一起开吗?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0107", "text": "我想把订单里的商品换一个,发票抬头也得跟着变吧?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0108", "text": "订单地址想改一下,顺便问下电子发票什么时候发我?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0109", "text": "没发货之前能取消订单吗,那开的发票怎么处理?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0110", "text": "帮我把收货电话改一下,发票抬头也要重新填一下行吗?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0111", "text": "我还没发货的订单能改收货地址吗,另外开票抬头要改一下?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0112", "text": "订单还没发出能不能换颜色,顺便帮我把发票抬头也改下?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改", "商品信息"]}
+{"id": "syn-0113", "text": "我想在发货前取消订单,开好的电子发票怎么处理?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0114", "text": "麻烦帮我改下订单里的商品数量,发票开公司抬头可以吗?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0115", "text": "未发货前能不能改收货人信息,发票要开个人抬头行吗?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0116", "text": "这单还没发想合并订单,发票能不能合成一张开?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0117", "text": "我要把未发货订单的尺码换一下,发票抬头也一起改能行吗?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["尺码", "发票", "订单修改"]}
+{"id": "syn-0118", "text": "订单还没发货能改配送时间吗,另外能开纸质发票吗?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0119", "text": "发货前改下订单地址,发票抬头改公司的还来得及吗?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0120", "text": "还没发货想改下订单备注,发票能不能开电子版抬头写公司?", "labels": ["发票", "订单修改"], "origin": "synthetic", "target_labels": ["发票", "订单修改"], "prelabels": ["发票", "订单修改"]}
+{"id": "syn-0121", "text": "我退货运费谁出,会员积分还能退回来吗?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["退换货", "运费", "会员积分"]}
+{"id": "syn-0122", "text": "我是会员,积分能抵运费吗?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0123", "text": "开通会员送运费券吗,积分怎么领?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0124", "text": "会员积分能换运费券吗,怎么用?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0125", "text": "这单运费多少钱,能用积分抵扣吗?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0126", "text": "会员免运费吗,积分会不会少算?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0127", "text": "退货运费要自己出吗,积分会扣掉吗?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["退换货", "运费", "会员积分"]}
+{"id": "syn-0128", "text": "会员积分兑换的运费券在哪看?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0129", "text": "运费有点贵,会员积分能减一点吗?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0130", "text": "我积分够不够换免运费,怎么查?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0131", "text": "我想问下会员积分能抵扣运费吗?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0132", "text": "运费要多少钱,会员积分能抵吗?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0133", "text": "会员积分够的话,这个运费能减免吗?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0134", "text": "运费八块,我会员积分能换点运费吗?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0135", "text": "积分怎么攒的,攒了能抵运费不?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0136", "text": "这个订单运费谁出,会员积分能不能用上?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0137", "text": "会员积分有什么用,能抵扣运费吗?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0138", "text": "我积分挺多的,这单运费能用积分抵掉吗?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0139", "text": "运费和积分是一回事吗,积分能顶运费不?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0140", "text": "买这个要运费吗,会员积分能抵多少?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0141", "text": "我这会员积分能抵多少运费,能直接用掉吗?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0142", "text": "运费要另外付的话,会员积分能不能抵扣一部分?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0143", "text": "会员积分换的免邮券怎么用到这个订单的运费上?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0144", "text": "我这单运费多少,会员积分够不够抵扣啊?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0145", "text": "会员积分快过期了,能拿来抵运费吗,怎么操作?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0146", "text": "运费显示要十几块,我用会员积分抵扣行不行?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0147", "text": "我是会员有积分,这单运费能少付点或者免掉吗?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0148", "text": "会员积分怎么攒才能换免运费,现在还差多少?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0149", "text": "退货运费谁出,我会员积分能补这个差价吗?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["退换货", "运费", "会员积分"]}
+{"id": "syn-0150", "text": "运费能用积分抵的话,我会员积分在哪看够不够?", "labels": ["运费", "会员积分"], "origin": "synthetic", "target_labels": ["运费", "会员积分"], "prelabels": ["运费", "会员积分"]}
+{"id": "syn-0151", "text": "这个配件坏了想保修维修,但没货了什么时候能补货?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0152", "text": "我要维修换零件,请问相关配件现在缺货吗多久到货?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0153", "text": "商品故障需要保修维修,可缺货要等补货才能修吗?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0154", "text": "申请保修维修要换的配件没库存,大概什么时候能补上?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0155", "text": "维修需要的零件显示缺货,补货后能直接安排修吗?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0156", "text": "这个型号缺货了,补货到之前能先走保修维修吗?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0157", "text": "保修期内坏了要修,但替换配件缺货,补货要等多久?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0158", "text": "维修点说配件没货,我想问补货时间顺便预约维修.", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0159", "text": "机器故障在保修期,配件缺货的话补货后怎么维修?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0160", "text": "想申请保修维修,可商品缺货,补货了还能修吗?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0161", "text": "我买的这个配件没货了,等补货到了再帮我修可以吗?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0162", "text": "这款维修需要的零件什么时候能补上货,我好拿去修?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0163", "text": "缺货的配件啥时候补货,我的机器还等着换件维修呢", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0164", "text": "维修要换的零件没库存,补货后能直接安排修吗?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0165", "text": "请问维修用的那个配件什么时候补货,修好大概要多久?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0166", "text": "东西坏了要修但零件缺货,补货后还能走保修吗?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0167", "text": "维修师傅说配件要等补货,到货了会通知我来修吗?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0168", "text": "我的机器在保修期内,换的零件缺货啥时候补货?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0169", "text": "这个配件没货了,补货要几天,保修维修还能继续吗?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0170", "text": "修东西缺的零件什么时候补货,补上后能帮我维修吗?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0171", "text": "我买的这个配件没货了,大概什么时候能补货?到货后坏了能直接保修吗?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0172", "text": "这款商品缺货要等多久补货?收到后要是出故障维修怎么申请?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0173", "text": "我想换的这个配件没库存,补货要几天?换回来的还在保修期吗?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0174", "text": "缺货的商品什么时候能到货?到货后机器有问题能保修维修吗?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0175", "text": "这个型号断货了,补货后买了要是坏了怎么走保修?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0176", "text": "配件缺货等补货期间,我的旧机器能先送去维修吗?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0177", "text": "没货的那款什么时候补上?补货到后要是故障了保修多久?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0178", "text": "这款什么时候能补货到?到货后要是有问题维修要收费吗?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0179", "text": "缺货等补货太久了,到货后要是在保修期内坏了能免费修吗?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0180", "text": "这个配件暂无库存,多久能补货?到货后使用坏了怎么保修?", "labels": ["库存补货", "保修维修"], "origin": "synthetic", "target_labels": ["库存补货", "保修维修"], "prelabels": ["库存补货", "保修维修"]}
+{"id": "syn-0181", "text": "收到的商品有破损,我想退货退款,具体怎么操作?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0182", "text": "这个质量问题能换货吗,换货运费谁出?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题", "运费"]}
+{"id": "syn-0183", "text": "东西是坏的,我要求退款,流程麻烦说下.", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0184", "text": "商品有瑕疵想退掉,退款多久能到账?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0185", "text": "到货发现破损了,能直接换新的吗?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0186", "text": "质量有问题我要退货,需要先拍照给你们吗?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0187", "text": "这个坏掉的商品我申请退款,要寄回给你们吗?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0188", "text": "发来的东西有瑕疵,我想退换,选哪个更合适?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0189", "text": "商品破损严重,我要求换货,多久能处理完?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0190", "text": "功能有故障算质量问题吧,那我想退货怎么办?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0191", "text": "收到的衣服破了个洞,我想退货退款,怎么弄?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0192", "text": "东西有质量问题,能直接换货吗,流程麻烦不?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0193", "text": "这个包到货就裂了,我申请退货的话运费谁出?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题", "运费"]}
+{"id": "syn-0194", "text": "鞋子开胶了算质量问题吧,我想退了重新买,怎么操作?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0195", "text": "刚收到的杯子是碎的,我要换货,需要先寄回去吗?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0196", "text": "商品有瑕疵,我不想要了,退款和退货是一起办的吗?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0197", "text": "耳机到货就是坏的,能退货吗,需要我提供照片不?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0198", "text": "这件衣服质量太差了,起球严重,我要退掉怎么申请?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0199", "text": "买的锅有质量问题,我选换货还是退货更省事?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0200", "text": "食品收到已经变质了,能全额退款吗,货要退回去吗?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0201", "text": "这个杯子到货就碎了,能直接换货吗,流程麻烦不?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0202", "text": "鞋子穿两天开胶了,质量有问题,我要退货退钱.", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0203", "text": "发来的零食过期了,这种质量问题能退吗,怎么申请?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0204", "text": "手机屏幕有划痕是瑕疵品,我要换货,需要寄回去吗?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0205", "text": "刚收到的锅底变形了,算质量问题吧,能退款吗?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0206", "text": "衣服有明显污渍,质量不行,我要求退货,要拍照片吗?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0207", "text": "耳机到手就是坏的,能换货不,还是先退款重新拍?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0208", "text": "这个包收到发现拉链坏的,质量太差,我想退掉怎么操作?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0209", "text": "收到的化妆品漏了,属于质量问题吧,能退货退全款吗?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0210", "text": "收到货就发现是坏的,这种质量问题能直接退换吗?", "labels": ["退换货", "质量问题"], "origin": "synthetic", "target_labels": ["退换货", "质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0211", "text": "我刚付款没成功,能帮我先把收货地址改一下吗?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0212", "text": "这笔扣款失败了,订单还没发货,帮我改个付款方式顺便改地址", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0213", "text": "付完款想取消订单,钱什么时候退回来?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["退换货", "支付", "订单修改"]}
+{"id": "syn-0214", "text": "支付一直提示失败,我不想要了,未发货能取消订单吗?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0215", "text": "用这张卡付不了款,换成别的支付方式后订单地址能一起改吗?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0216", "text": "扣款成功了但我想改数量,还没发货来得及吗?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0217", "text": "我的支付被重复扣了两次,麻烦顺便帮我取消这个订单", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0218", "text": "付款时选错分期了,订单还没发货能改成一次性付清并换颜色吗?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0219", "text": "支付失败后订单是不是没生成,那我想改下收货人信息怎么弄?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0220", "text": "已经扣款了但地址填错了,还没发货能改吗,需不需要重新付一次?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0221", "text": "我付款时提示失败,这单能先帮我改下收货地址吗?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0222", "text": "刚换的支付方式扣款没成功,订单还没发货能取消吗?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0223", "text": "支付一直显示处理中,麻烦先把我这单的尺码换成大一号行吗?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0224", "text": "付款时多扣了一次钱,订单地址填错能改一下吗?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0225", "text": "银行卡支付失败了,趁没发货帮我把订单里的商品换一款吧?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0226", "text": "我这单支付完发现选错了颜色,还没发货能改吗?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0227", "text": "支付页面卡住没反应,能不能先把我订单合并一下再付?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0228", "text": "支付宝扣款了但订单没生成,原来那单地址能帮我改吗?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0229", "text": "付款后想换个支付方式,顺便把没发货的订单取消重下可以吗?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0230", "text": "支付失败的订单能保留吗,我想改下收货人信息再付?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0231", "text": "我下单后想改收货地址,但付款一直失败,能先帮我改地址再重新付吗?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0232", "text": "刚下的单想改成另一件商品,支付页面卡住没扣款,怎么处理?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0233", "text": "订单还没发货,我想取消重下,可用余额付款失败怎么办?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0234", "text": "付款时提示失败但我看订单信息填错了地址,能先改地址吗?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0235", "text": "我想把订单里的尺码换一下,但支付一直没成功,能修改吗?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0236", "text": "这个单还没发货,能合并到我另一个订单吗?刚才付款扣款异常了.", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0237", "text": "支付失败钱被扣了,顺便帮我改下订单里的商品颜色行不行?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0238", "text": "我想取消这个未发货订单,重新下单用别的支付方式可以吗?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0239", "text": "刚付款显示异常,订单地址写错了能改吗,改完还要再付一次吗?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0240", "text": "订单还没发货我想改数量,支付失败扣的钱什么时候退回来?", "labels": ["支付", "订单修改"], "origin": "synthetic", "target_labels": ["支付", "订单修改"], "prelabels": ["退换货", "支付", "订单修改"]}
+{"id": "syn-0241", "text": "这款面料是什么材质的,现在还有现货吗?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0242", "text": "这个颜色是图片上那种吗,缺货的话什么时候补?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0243", "text": "请问这个型号的参数是多少,没货了会到货提醒吗?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0244", "text": "这个商品保质期多久,现在库存还有没有?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0245", "text": "这款适合多大年龄用,断货了几天能补上?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0246", "text": "商品详情里的尺寸参数准吗,什么时候能补货?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0247", "text": "这个配件是原装的吗,没货要等多久才到?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0248", "text": "请问这个款有几个颜色,卖完了还会再进吗?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0249", "text": "这个材质会不会容易变形,缺货的什么时候能到?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0250", "text": "这款的规格和包装是什么样,还有库存能拍吗?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0251", "text": "这个面料是纯棉的吗,缺货的话大概什么时候能补上?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0252", "text": "这款有L码吗,没货的话什么时候能到货?", "labels": ["尺码", "库存补货"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["尺码", "库存补货"]}
+{"id": "syn-0253", "text": "这个颜色还有其他尺码在售吗,断码的还补不补?", "labels": ["尺码", "库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["尺码", "库存补货", "商品信息"]}
+{"id": "syn-0254", "text": "请问这款保温杯容量多大,现在没货了什么时候能补货?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0255", "text": "这个型号的材质是啥,缺的那个颜色啥时候能到货?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0256", "text": "这款鞋是正码吗,我看没我的号了啥时候补货?", "labels": ["尺码", "库存补货"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["尺码", "库存补货"]}
+{"id": "syn-0257", "text": "这个成分表能发我看看吗,卖完的规格还会再进吗?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0258", "text": "帮我看下这款净含量多少,没库存的话还要等多久补?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0259", "text": "这裙子是什么面料啊,没货的那款什么时候能补上?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0260", "text": "这款充电宝多少毫安,缺货的颜色什么时候能补到?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0261", "text": "这款蓝色的是纯棉材质吗,你们什么时候能补上货?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0262", "text": "请问这个尺寸的详细参数是多少,缺货的话什么时候能到?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0263", "text": "那个大容量的还有没有,补货了能提醒我吗,具体容量多少?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0264", "text": "这款保质期到什么时候,现在没货了大概几天能补到?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0265", "text": "我想知道这衣服的材质成分,没货的那款还补不补?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0266", "text": "这个型号的功率参数是多少,断货的那批什么时候能补上?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0267", "text": "请问这款有红色的吗,红色的缺货得等多久补货?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0268", "text": "这个配件的具体规格是什么,现在缺货要多久才会有?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0269", "text": "这个商品适用多大年龄用,没库存的话什么时候能补货?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0270", "text": "这款的重量和尺寸是多少,缺货的码数还能补到吗?", "labels": ["库存补货", "商品信息"], "origin": "synthetic", "target_labels": ["库存补货", "商品信息"], "prelabels": ["库存补货", "商品信息"]}
+{"id": "syn-0271", "text": "我账号登录不上,会员积分还能正常用吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0272", "text": "账号密码忘了登不进去,积分会不会过期失效?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0273", "text": "想改账号绑定的手机号,里面的会员积分受影响吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0274", "text": "账号被冻结了,会员积分还能转到新号上吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0275", "text": "换了新账号登录,之前的会员积分怎么合并过来?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0276", "text": "账号注册没成功,会员积分是不是也领不到了?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0277", "text": "账号安全设置在哪改,会员积分还能正常累积吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0278", "text": "账号注销以后,我攒的会员积分是不是全没了?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0279", "text": "积分怎么兑换会员权益,需要先登录账号吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0280", "text": "会员等级怎么升级,跟账号积分有关系吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0281", "text": "我账号登录不上去了,之前攒的会员积分会不会丢啊?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0282", "text": "会员积分怎么兑优惠券,要登录账号才能用吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0283", "text": "账号密码忘了重新登录后,我的会员积分和等级还在吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0284", "text": "我想查下账号里的积分余额,会员积分什么时候清零?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0285", "text": "账号绑定的手机号换了,会员积分还能转到新账号吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0286", "text": "会员等级怎么涨积分,必须用账号下单才累计吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0287", "text": "账号被冻结了,里面的会员积分还能正常使用吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0288", "text": "我注册新账号,原来的会员积分能合并过来吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0289", "text": "会员积分兑换的东西,用账号登录后在哪里领?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0290", "text": "账号登录异常收不到验证码,积分和会员权益受影响吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0291", "text": "我账号登录不上去了,是不是会员积分也会受影响啊?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0292", "text": "密码忘了怎么找回账号,会员积分还能保住吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0293", "text": "账号被冻结了,里面的会员积分还能用吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0294", "text": "我注册新账号,之前的会员积分能转到新号上吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0295", "text": "账号密码怎么修改,改完会员积分还有效吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0296", "text": "会员积分快到期了,换个账号登录积分跟着走吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0297", "text": "我账号好像被盗了,会员积分会不会被用掉?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0298", "text": "会员等级是跟账号绑定的吗,积分怎么查?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0299", "text": "换绑手机号以后,账号里的会员积分会清零吗?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0300", "text": "账号注销的话,会员积分是不是就没了?", "labels": ["账号", "会员积分"], "origin": "synthetic", "target_labels": ["账号", "会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-0301", "text": "我买的衣服穿着不合身,想退掉要怎么操作啊?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0302", "text": "收到的东西跟图片差太多,我能申请换一个吗?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0303", "text": "这个尺码太小了穿不下,可以退货吗,流程麻烦不?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0304", "text": "我刚下的单还没发货,能直接取消退款吗?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货", "订单修改"]}
+{"id": "syn-0305", "text": "商品有点小瑕疵我不想留了,退款什么时候能到账?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0306", "text": "买错颜色了,想换成另一个色,需要怎么弄?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0307", "text": "东西收到后不喜欢,七天无理由退货还来得及吗?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0308", "text": "我申请退款好几天了,怎么一直没审核通过呢?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0309", "text": "这个用着不合适,想退回去,运费是我出还是你们出?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货", "运费"]}
+{"id": "syn-0310", "text": "两件都想退,能不能放一个包裹寄回来一起处理?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0311", "text": "我那个快递到哪了,都三天了怎么还没到?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0312", "text": "物流信息一直不更新,是不是丢件了?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0313", "text": "显示已签收但我根本没收到,怎么回事?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0314", "text": "能不能帮我催一下快递,太慢了.", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0315", "text": "我的包裹派送两天了还没送到,找谁问?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0316", "text": "快递员放门口没通知我,东西不见了怎么办?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0317", "text": "我买的东西显示发往中转站,还要多久能到?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0318", "text": "快递能改送到另一个地方吗,我人不在原来那了.", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0319", "text": "物流说异常件,到底什么意思啊?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0320", "text": "同城发货怎么还这么慢,正常几天到?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0321", "text": "我买的东西发货了吗,能帮我看看物流到哪了不?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0322", "text": "快递显示昨天就派送了,怎么到现在还没送到啊?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0323", "text": "包裹在路上好几天没更新物流信息了,是不是丢件了?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0324", "text": "能帮我催一下快递吗,急用,麻烦尽快送到.", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0325", "text": "物流单号查不到记录,帮我确认下是不是没发出去?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0326", "text": "我地址填错了,包裹现在还能改送到别的城市吗?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流", "订单修改"]}
+{"id": "syn-0327", "text": "快递员说放门口了,但我没收到,这该找谁处理?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0328", "text": "请问下单后一般多久发货,大概几天能到我这边?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0329", "text": "我的包裹显示已签收,可我根本没收到,怎么回事?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0330", "text": "这个订单能指定周末送货吗,平时上班家里没人.", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0331", "text": "我买的东西发货了吗,怎么查不到物流信息?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0332", "text": "快递显示已签收但我没收到,怎么回事?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0333", "text": "包裹到哪儿了,能帮我催一下吗?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0334", "text": "物流好几天没更新了,是不是丢件了?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0335", "text": "能不能帮我查下快递单号,我找不到物流了.", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0336", "text": "快递员说放门口了,可我没看到包裹.", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0337", "text": "我的件显示派送中,今天能送到吗?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0338", "text": "物流显示异常,能帮我联系快递看看吗?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0339", "text": "我改地址了,物流会不会寄到旧地址去?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流", "订单修改"]}
+{"id": "syn-0340", "text": "快递一直停在转运中心,能不能催催?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0341", "text": "我的快递到哪了,怎么好几天没更新物流信息了?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0342", "text": "显示已签收但我根本没收到包裹,这是怎么回事?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0343", "text": "包裹昨天就发货了,大概几天能送到我这边?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0344", "text": "物流一直卡在中转站不动,能帮我催一下吗?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0345", "text": "快递员说放门口了,可我回家没找到,怎么办?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0346", "text": "我买的东西显示配送异常,是被退回去了吗?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0347", "text": "同城发货怎么还要三四天,能加急送一下吗?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0348", "text": "能帮我查下这个包裹现在在哪个城市吗?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0349", "text": "快递显示派送中一整天了,什么时候能送到?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0350", "text": "包裹被送到隔壁小区驿站了,能改送到我这吗?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0351", "text": "我身高165体重100斤,穿S码会不会太紧啊?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0352", "text": "你们家尺码偏大还是偏小,我平时穿M码该选哪个?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0353", "text": "这条裤子我该买多大码,能帮我看看尺码表吗?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0354", "text": "我腿比较粗,这个尺码表对照着选L码合适吗?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0355", "text": "我170高140斤,按身高体重选什么码比较合适?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0356", "text": "衣服尺码表在哪看呀,我想确认一下胸围选多大?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0357", "text": "我平时穿38码鞋,这款鞋码偏小要不要拍大一码?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0358", "text": "这件外套我买大一点好还是买正码,拿不准选哪个码?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0359", "text": "我腰围二尺四,这个尺码表对应几码能帮我看看吗?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0360", "text": "宝宝两岁半,这个童装尺码应该选90还是100的?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0361", "text": "我身高165体重110斤,穿你们这款M码会不会偏小啊?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0362", "text": "我平时穿38码的鞋,这双运动鞋我该选多大码合适?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0363", "text": "你们这个尺码表准不准啊,我腰围80该拍L还是XL?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0364", "text": "我腿比较粗,这裤子买大一码会不会更合适一点?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0365", "text": "这件衣服偏大还是偏小啊,我170身高130斤拍哪个码?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0366", "text": "我两个码之间拿不准,身高178体重150斤选XL还是XXL?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0367", "text": "裙子我按尺码表选M码能穿吗,我平时上衣都穿S的", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0368", "text": "宝宝两岁半身高95,这童装拍100码会不会太小?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0369", "text": "这款卫衣版型宽松吗,我115斤穿S码会不会太紧?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0370", "text": "我胸围95想买件外套,选L码里面还能加衣服吗?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0371", "text": "我身高一米七体重一百三,穿你家哪个码合适啊?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0372", "text": "这条裤子的尺码表准不准,我平时穿L码该选哪个?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0373", "text": "我腿比较粗,这鞋码是不是得买大一码才穿得下?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0374", "text": "请问衣服偏大还是偏小,我一百斤选M码会不会松?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0375", "text": "我腰围二尺五,按你们尺码表该拍多大码呀?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0376", "text": "想给老妈买件上衣,她一百四十斤,选哪个码不紧?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0377", "text": "我家孩子身高一米二,这童装拍130码能穿吗?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0378", "text": "这双鞋码数标准吗,我平时37码要不要买大半码?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0379", "text": "我肩宽四十,这件外套选L还是XL,怕小了勒肩膀.", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0380", "text": "裙子尺码只有S和M,我一百一十斤穿哪个不会短?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0381", "text": "我165高110斤,穿你们家L码合适吗?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0382", "text": "这裤子偏大还是偏小,我平时穿M码该买哪个码?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0383", "text": "我腿比较粗,这个尺码表我该选哪个号?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0384", "text": "鞋子码数正不正,我平时穿37码要买大一码吗?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0385", "text": "我身高170体重140斤,帮我推荐个尺码呗", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0386", "text": "这件衣服我买大一号会不会宽松点,怕小", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0387", "text": "请问这个连衣裙S码胸围多少,我85能穿吗?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码", "商品信息"]}
+{"id": "syn-0388", "text": "你家尺码是不是偏小啊,我买平时码行不行?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0389", "text": "宝宝两岁半,这衣服选90还是100码?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0390", "text": "我腰围二尺四,这裤子选哪个码合适?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0391", "text": "我买的东西能开电子发票吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0392", "text": "发票抬头开个人还是公司,有什么区别?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0393", "text": "下单时忘了选开发票,现在还能补开吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0394", "text": "开专票需要提供哪些信息啊?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0395", "text": "电子发票开好后会发到我邮箱里吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0396", "text": "发票上的抬头能改成我们公司名吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0397", "text": "我买的这个能开增值税专用发票不?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0398", "text": "发票金额是按实付算还是原价算?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0399", "text": "纸质发票能不能寄过来,我要报销用.", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0400", "text": "刚下的单,发票内容能不能改一下?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0401", "text": "电子发票什么时候能发到我邮箱里呀?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0402", "text": "发票抬头可以改成公司的名称和税号吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0403", "text": "这个商品能开增值税专用发票吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0404", "text": "我刚收到货,发票没随包裹一起寄过来怎么办?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0405", "text": "发票上的金额开错了,能重新开一张吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0406", "text": "我在哪填写发票抬头和税号信息啊?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0407", "text": "买之前问下,这个能开发票报销用吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0408", "text": "发票已经开好了能改成纸质的寄给我吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0409", "text": "申请开票后一般几天能收到电子发票?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0410", "text": "我买的东西能开发票吗,怎么申请开?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0411", "text": "发票抬头可以开公司名称和税号吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0412", "text": "下单时忘了选发票,现在还能补开吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0413", "text": "能开增值税专用发票吗,需要提供什么资料?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0414", "text": "发票上的抬头写错了,可以重开一张吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0415", "text": "我要开个人发票,抬头写我名字就行吧?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0416", "text": "这个订单的发票金额是按实付还是原价开?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0417", "text": "发票能随包裹一起寄过来吗,还是单独发?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["物流", "发票"]}
+{"id": "syn-0418", "text": "开好的电子发票在哪里下载,我找不到入口.", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0419", "text": "买的东西能开电子发票吗?抬头怎么写?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0420", "text": "我要开公司抬头的发票,需要提供什么资料?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0421", "text": "下单的时候忘了选发票,现在还能补开吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0422", "text": "开专票需要另外加钱吗?怎么申请?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0423", "text": "发票上的抬头写错了,能重新开一张吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0424", "text": "电子发票什么时候能开出来,发到哪个邮箱?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0425", "text": "我买的东西可以开增值税发票吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0426", "text": "发票能不能开成办公用品的明细?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0427", "text": "确认收货后还能申请开发票吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0428", "text": "纸质发票可以改成开电子发票吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0429", "text": "我想开个发票,抬头写公司名称,怎么弄?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0430", "text": "买完东西发票怎么申请,能开电子发票吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0431", "text": "收到的水果有好几个都烂了,这个怎么处理啊?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0432", "text": "新买的杯子打开一看有个裂纹,能换一个吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0433", "text": "衣服拆开发现袖口脱线了,这算质量问题吧?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0434", "text": "刚到的鞋子鞋底开胶了,才穿一次就这样?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0435", "text": "买的面包还没到保质期就发霉了,太离谱了吧?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0436", "text": "收到的手机充电口插不进去,是不是坏的?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0437", "text": "包裹里玻璃瓶全碎了,这破损得找你们吧?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0438", "text": "买的零食打开一股怪味,感觉变质了怎么办?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0439", "text": "耳机左耳没声音,刚拆封就是坏的,能退吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0440", "text": "收到的锅盖边缘有磕碰痕迹,算残次品吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0441", "text": "收到的货有破损,这个算质量问题吧,能退换吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0442", "text": "东西到货就发现是坏的,这种质量问题怎么处理啊?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0443", "text": "我收到的商品有瑕疵,是不是可以按质量问题申请售后?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0444", "text": "刚拆开就看到东西变质了,质量有问题能给我换一个吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0445", "text": "商品到手就是破损的,这种质量问题你们负责吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0446", "text": "到货发现功能故障,这种质量问题能直接退吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0447", "text": "包裹里东西摔坏了,属于质量问题吧,想申请处理一下.", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0448", "text": "拆开发现表面有划痕瑕疵,质量有问题怎么申请售后?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0449", "text": "收到的食品已经变质了,质量问题能退换成新的吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0450", "text": "刚收到货就发现是坏的,质量有问题找谁处理?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0451", "text": "我收到的快递盒子都压扁了,里面的杯子碎了一个角,这算质量问题吧?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0452", "text": "刚拆开衣服就发现袖口脱线,还有个小破洞,这种瑕疵能算质量问题吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0453", "text": "买的零食打开有一股怪味,跟平时吃的不一样,是不是变质了呀?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0454", "text": "新买的耳机左边完全没声音,刚到手就坏了,这种算质量问题吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0455", "text": "收到的水果烂了好几个,表面都发霉了,这个能按质量问题处理吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0456", "text": "鞋子穿了一天鞋底就开胶了,这质量也太差了吧,算不算质量问题?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0457", "text": "杯子到手发现杯身有一道很长的裂纹,还没用就裂了,这是质量问题吧?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0458", "text": "给孩子买的玩具开机就没反应,电池换了也不行,到货就是坏的算质量问题吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0459", "text": "这件衣服洗了一次就缩水变形了,跟描述完全不一样,这算质量问题吧?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0460", "text": "面包收到的时候保质期只剩两天,而且有点发硬,这种是不是商品质量问题?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0461", "text": "收到货打开就发现杯子裂了一道口子,这算质量问题吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0462", "text": "刚拆开包裹就看到衣服上有个洞,这个怎么处理啊?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0463", "text": "买的零食还没过期就发霉了,这种质量问题能退吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0464", "text": "新到的手机开机就黑屏,是不是质量有问题啊?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0465", "text": "鞋子穿了两次鞋底就开胶了,这质量也太差了吧?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0466", "text": "收到的水果烂了好几个,这种坏掉的能赔吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0467", "text": "耳机刚用一天就一边没声音了,是质量缺陷吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0468", "text": "包裹里的碗碎了两只,是运输问题还是质量太差?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["物流", "质量问题"]}
+{"id": "syn-0469", "text": "这件毛衣收到就有个明显的抽丝破洞,正常吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0470", "text": "相机拿到手就发现镜头有划痕,这算瑕疵品吧?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0471", "text": "这个商品运费多少钱,是不是包邮的?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-0472", "text": "我买的这个东西运费要我自己出吗?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-0473", "text": "退货运费谁承担啊,是你们出还是我出?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["退换货", "运费"]}
+{"id": "syn-0474", "text": "满多少才包邮,运费怎么算的?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-0475", "text": "换货运费需要我另外付吗?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["退换货", "运费"]}
+{"id": "syn-0476", "text": "下单后运费还能便宜点吗,感觉有点贵", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-0477", "text": "偏远地区运费是不是要加钱?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-0478", "text": "这个运费能不能合并到订单里一起算?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-0479", "text": "运费显示得太高了,能帮我看看怎么回事吗?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-0480", "text": "两件一起买运费怎么收,还是按一件算?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-0481", "text": "最近店里有没有满减活动呀,买两件能便宜多少?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0482", "text": "请问现在下单有什么优惠券可以领吗?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0483", "text": "你们这个折扣活动到几号结束啊?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0484", "text": "我看到有活动,买三件是不是能打折?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0485", "text": "优惠券在哪里领啊,我怎么没找到入口?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0486", "text": "这个满减能和店铺优惠券一起用吗?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0487", "text": "活动价是不是比平时便宜,现在买划算不?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0488", "text": "请问新用户有没有什么专属优惠呀?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0489", "text": "我领的券怎么下单时没抵扣,活动规则是啥?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0490", "text": "第二件半价的活动还有吗,怎么算价格的?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0491", "text": "你们店里现在有什么满减活动吗?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0492", "text": "请问优惠券在哪里领啊,我怎么没看到?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0493", "text": "这个折扣活动到什么时候结束呀?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0494", "text": "买两件能参加满减吗,具体怎么算?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0495", "text": "活动价和优惠券能一起用吗?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0496", "text": "我领的券怎么下单时用不了啊?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0497", "text": "最近有没有什么促销活动,力度大不大?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0498", "text": "满多少可以减多少,规则能说一下吗?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0499", "text": "这个商品参加活动吗,怎么没显示折扣?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0500", "text": "优惠券过期了还能补给我吗?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0501", "text": "最近店里有什么满减活动吗?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0502", "text": "优惠券在哪儿领啊,我怎么没看到?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0503", "text": "买两件能不能参加满减活动?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0504", "text": "活动规则里写的叠加使用是啥意思?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0505", "text": "我领的券怎么用不了,活动是不是变了?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0506", "text": "现在下单有优惠活动吗,能便宜点不?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0507", "text": "活动价和会员价能一起享受吗?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动", "会员积分"]}
+{"id": "syn-0508", "text": "满多少减多少的活动具体咋算的?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0509", "text": "这两个优惠券能不能同时用啊?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0510", "text": "最近店里有什么满减活动吗?想凑单买点东西.", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0511", "text": "请问现在下单能用什么优惠券啊?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0512", "text": "我看页面写着第二件半价,是全场都参加吗?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0513", "text": "优惠券和满减可以一起叠加使用吗?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0514", "text": "活动价是不是比平时便宜很多啊?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0515", "text": "我刚领的券怎么下单时没减钱呢?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0516", "text": "会员有没有额外的折扣或者专属优惠啊?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动", "会员积分"]}
+{"id": "syn-0517", "text": "买两件有优惠吗?想多囤一点.", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0518", "text": "这个限时抢购活动明天还有吗?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0519", "text": "最近店里有什么满减活动吗?买两件能便宜多少?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0520", "text": "这个优惠券怎么用啊,能和折扣活动一起叠加吗?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-0521", "text": "我前两天刚买的,今天一看就降价了,能补差价吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0522", "text": "下单才两天价格就降了,这个差价给退吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0523", "text": "刚买完就便宜了,是不是可以申请价保啊?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0524", "text": "我买的时候贵了,现在活动价更低,能补我差价不?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0525", "text": "东西还没收到就降价了,这个能补差价吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0526", "text": "之前下的单现在降价了,价保怎么申请?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0527", "text": "刚付款没几天就降了三十块,能退我差价吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0528", "text": "我买的商品现在搞活动更便宜了,差价能补吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0529", "text": "下单后价格掉下来了,价保期内能补差价吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0530", "text": "昨天刚买的今天就降价,能不能给我补个差价?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0531", "text": "我昨天刚买的今天就降了五十块,能补差价吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0532", "text": "下单才两天价格就变低了,这个差价你们给退不?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0533", "text": "买完没几天发现便宜了,能不能申请价保补我差价?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0534", "text": "我刚买完就降价了,这个保价怎么弄啊?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0535", "text": "之前买的现在降了三十,价保还来得及申请吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0536", "text": "下单后商品降价了,差价能退给我不?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0537", "text": "刚收到货就看到降价了,能补个差价吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0538", "text": "我这单买贵了,现在有活动便宜了,能补差价不?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0539", "text": "买的时候没优惠现在降了,价保怎么申请差价?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0540", "text": "前几天买的今天一看降价了,差价找谁补啊?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0541", "text": "我前两天刚买的,今天一看降了三十块,能补差价吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0542", "text": "刚下单还没发货就降价了,这个差价你们退不退啊?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0543", "text": "买完第二天就便宜了,我是不是可以申请价保啊?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0544", "text": "这个商品我买贵了,现在有活动价,能找你们补个差吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0545", "text": "之前下的单现在价格降了,价保怎么弄,需要我提供啥?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0546", "text": "我昨天买的今天降价了,能不能把少的钱退给我?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0547", "text": "刚收到货就发现降价了,价保是自动退还是我自己申请?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0548", "text": "下单没几天就跌价了,你们这有保价吗,怎么补?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0549", "text": "我看现在比我买的时候便宜不少,能退我差价不?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0550", "text": "买东西刚付款就降了,价保多久内有效,我要怎么操作?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0551", "text": "我前两天刚下的单,今天一看便宜了三十块,能补差价吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0552", "text": "刚买完就降价了,这差价你们给退不?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0553", "text": "下单第二天商品就搞活动降价了,能申请价保吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0554", "text": "买的时候没优惠,现在同款降了,差价怎么补?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0555", "text": "昨天刚付款,今天价格就降了,能退我差价吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0556", "text": "我看商品页写支持价保,刚买就便宜了,怎么操作?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0557", "text": "东西还没到就降价了,这个差价能补给我不?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0558", "text": "刚下单几个小时就降价,价保是不是可以退差额?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0559", "text": "请问价保怎么申请,我买完发现降了二十块.", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0560", "text": "这单买贵了,现在降价了,能按价保补我钱吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-0561", "text": "我付款的时候一直提示失败,试了好几次都不行,咋回事啊", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0562", "text": "刚下单扣了两次钱,是不是重复扣款了,能退回来吗", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["退换货", "支付"]}
+{"id": "syn-0563", "text": "支付页面卡住了,钱到底扣没扣成功啊", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0564", "text": "我想用花呗付款,怎么结算时选不了这个方式", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0565", "text": "银行卡里钱够的,为什么付款总显示余额不足", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0566", "text": "付完款订单还是待付款状态,这钱算付成功了吗", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0567", "text": "扫码支付的时候提示交易异常,换微信也一样", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0568", "text": "我付款时输错密码被锁了,现在还能继续付吗", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付", "账号"]}
+{"id": "syn-0569", "text": "下单后发现扣款金额跟订单显示的不一样,多了几块", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0570", "text": "能不能改成货到付款,我刚付款那笔想取消重下", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0571", "text": "我刚刚付款的时候一直失败,银行卡里钱够的,怎么回事啊?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0572", "text": "下单点了支付,页面卡住没反应,钱到底扣了没有?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0573", "text": "付款时提示支付超时,我该重新下单还是再付一次?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0574", "text": "我用微信付的款,显示扣钱了但订单还是待付款,这正常吗?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0575", "text": "能不能换成支付宝付款?刚才选错支付方式了.", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0576", "text": "支付密码输了好几次都不对,是不是账号被锁了?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付", "账号"]}
+{"id": "syn-0577", "text": "我付了两笔一样的钱,是不是重复扣款了,能退回来吗?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["退换货", "支付"]}
+{"id": "syn-0578", "text": "花呗分期付款一直提示额度不足,是你们这边的问题吗?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0579", "text": "付款成功后订单怎么没显示已支付,是不是系统延迟了?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0580", "text": "我想用货到付款,但下单时没看到这个选项,能改吗?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付", "订单修改"]}
+{"id": "syn-0581", "text": "我刚刚付款的时候页面卡住了,钱到底扣没扣啊?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0582", "text": "支付失败了但是银行卡里显示扣款了,这怎么办?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0583", "text": "请问你们支持哪些付款方式啊?可以用花呗吗?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0584", "text": "我下单点支付一直提示系统繁忙,是啥情况?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0585", "text": "付完款订单还是待支付状态,是不是没付成功?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0586", "text": "我想换成微信支付,刚才选的银行卡还没付,能改吗?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0587", "text": "付款时提示余额不足,但我卡里明明有钱,怎么回事?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0588", "text": "重复扣了我两次款,一笔订单怎么扣了两遍钱?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0589", "text": "支付密码输错几次被锁了,还能继续付款吗?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0590", "text": "我用信用卡付款怎么一直验证不通过啊?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0591", "text": "我刚刚付款一直转圈没成功,钱是不是已经被扣了?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0592", "text": "用花呗付不了款,一直提示支付失败怎么办?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0593", "text": "银行卡里钱够的,为什么下单付款总显示扣款异常?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0594", "text": "我付了两次款,是不是重复扣钱了,多扣的会退回来吗?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0595", "text": "付款时页面卡住了,重新下单会不会又扣一次钱?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0596", "text": "微信支付弹出错误,这个订单到底付成功没有啊?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0597", "text": "我想换种付款方式重新付,之前那笔钱会原路退回吗?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0598", "text": "信用卡付款被拒了好几次,是我的卡有问题还是你们系统问题?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0599", "text": "下单后提示支付超时,可我账户的钱好像已经扣了怎么办?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0600", "text": "付款成功但订单一直显示未支付,是不是系统没收到钱?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-0601", "text": "我刚刚下了一单还没发货,能帮我改一下收货地址吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-0602", "text": "下错颜色了,订单还没发出去,能换成黑色那款吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-0603", "text": "麻烦帮我把昨天那单取消掉,我重新拍一个.", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-0604", "text": "我想把两个订单合并成一个发过来,可以吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-0605", "text": "地址写错了但还没发货,能不能改一下地址?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-0606", "text": "刚下单发现买错型号了,还没发货能修改商品吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-0607", "text": "我下了两单想合并一起寄,省点事行不行?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-0608", "text": "订单还没发货,我想把收货人信息改一下可以吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-0609", "text": "能不能帮我取消刚下的那单,我选错数量了.", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-0610", "text": "还没发货的话,我想换个尺码,订单能直接改吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["尺码", "订单修改"]}
+{"id": "syn-0611", "text": "这款现在没货了,大概什么时候能补上呀?", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-0612", "text": "我想要的尺码缺货,补货了能提醒我一下吗?", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["尺码", "库存补货"]}
+{"id": "syn-0613", "text": "这个颜色卖完了,还会不会再进一批货?", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-0614", "text": "请问断货的商品什么时候能到货,等好久了.", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-0615", "text": "没货的这款还能补吗?我想等补货再买.", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-0616", "text": "这个型号一直显示缺货,近期会补货吗?", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-0617", "text": "我想买的那个规格没库存了,多久能补上?", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-0618", "text": "这款售罄了,能不能帮我登记一下到货通知?", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-0619", "text": "缺货的宝贝还补不补货呀,想买都买不到.", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-0620", "text": "这个商品下架是因为没货吗?啥时候能重新上架?", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-0621", "text": "这款衣服是什么材质的,会不会起球啊", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0622", "text": "这个颜色跟图片上差得多吗,有色差没", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0623", "text": "你们这个保质期一般还有多久的", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0624", "text": "这个型号的尺寸参数能不能发我看一下", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0625", "text": "这个适合几岁的小孩用啊,我家宝宝三岁", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0626", "text": "请问这个容量是多大的,能装多少升", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0627", "text": "这双鞋的鞋面是真皮还是人造革的", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0628", "text": "这款是充电的还是装电池用的", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0629", "text": "这个成分表能发我看看吗,我皮肤敏感", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0630", "text": "这个尺寸是单个的还是整套的,包含哪些", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0631", "text": "这款衣服是什么材质做的,会不会起球?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0632", "text": "这个杯子能装开水吗,耐高温多少度?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0633", "text": "请问这个护肤品适合敏感肌用吗?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0634", "text": "这个零食的保质期还有多久呀?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0635", "text": "这个包的颜色是偏米白还是纯白色?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0636", "text": "这款鞋是正码还是偏大偏小啊?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["尺码"]}
+{"id": "syn-0637", "text": "这个电饭煲内胆是什么涂层的?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0638", "text": "请问这条裤子是纯棉的吗?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0639", "text": "这个玩具适合几岁的小孩玩?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0640", "text": "这款枕头的尺寸是多少,能机洗吗?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0641", "text": "你们这个杯子能装多少毫升水呀?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0642", "text": "这个面霜适合敏感肌用吗?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0643", "text": "请问这个包的尺寸大概多大,能放下笔记本电脑吗?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0644", "text": "这个零食的保质期是多久啊?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0645", "text": "这个鞋子的鞋底是橡胶的还是别的材料?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0646", "text": "这款床单是什么面料的,夏天盖着会不会闷?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0647", "text": "这个充电宝是多少毫安的,能带上飞机吗?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0648", "text": "请问这个锅是不粘锅吗,用什么材质做的?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0649", "text": "这款口红的色号偏正红还是偏橘调啊?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0650", "text": "这个杯子是什么材质的,能装开水吗?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0651", "text": "你们这款拖鞋有几种颜色可以选啊?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0652", "text": "请问这个面霜适合敏感肌用吗?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0653", "text": "这个电饭煲是几升的,一家三口够用吗?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0654", "text": "这件衣服的面料是纯棉的还是混纺的?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0655", "text": "这款零食的保质期一般有多久啊?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0656", "text": "你们这个枕头是硬的还是软的,适合侧睡吗?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0657", "text": "这个充电宝的容量是多少毫安时的?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0658", "text": "我想问下这个锅的直径大概多少厘米?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0659", "text": "这款洗衣液是浓缩型的还是普通型的?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0660", "text": "这款衣服是什么材质的,贴身穿会不会扎人?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-0661", "text": "我买的电饭煲用了两个月就坏了,还在保修期内吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0662", "text": "这个耳机有一边没声音了,怎么申请维修啊?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0663", "text": "机器故障了,能寄回去给你们修吗?大概要多久?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0664", "text": "上次买的吹风机坏了,保修要自己出运费吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["运费", "保修维修"]}
+{"id": "syn-0665", "text": "我这款手表能保修多久?换电池算保修范围吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0666", "text": "商品坏了想找你们修,需要提供什么凭证?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0667", "text": "刚用一周的榨汁机不转了,可以换配件还是送修?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0668", "text": "这个保修是免费的还是收维修费?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0669", "text": "我的设备出故障了,附近有维修点吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0670", "text": "东西用了一段时间出问题了,维修要走什么流程?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0671", "text": "我买的这个电饭煲用半年就坏了,还在保修期内怎么修啊?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0672", "text": "这个耳机一只没声音了,能返修吗?维修要多久?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0673", "text": "空气炸锅用了两个月不加热了,能寄回去换配件修一下吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0674", "text": "我这台机器还在保修期内,坏了是免费维修还是要收零件钱?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0675", "text": "手表表带断了想修,你们有维修点还是得寄回去?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0676", "text": "买的风扇用了一个夏天转不动了,维修流程怎么走?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0677", "text": "这个锅把手松了能修吗,保修期一般多久?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0678", "text": "打印机卡纸修不好,能不能寄回去你们帮忙检修一下?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0679", "text": "我去年买的加湿器出雾变小了,过保了还能修吗,收费多少?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0680", "text": "这个按摩仪电池坏了,能换配件维修吗,大概几天能寄回?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0681", "text": "我买的电饭煲用了两个月就坏了,还在保修期内怎么申请维修?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0682", "text": "这个耳机充不进电了,能寄回去修吗?大概要多久?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0683", "text": "东西用着出故障了,维修要自己出配件钱吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0684", "text": "保修卡丢了还能正常保修吗,需要提供什么凭证?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0685", "text": "我这个机器坏了想换配件,是直接寄修还是你们寄零件过来?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0686", "text": "请问维修流程是怎样的,上门修还是得寄回去?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0687", "text": "耳机一边没声音了,能帮忙安排维修吗,运费谁出?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["运费", "保修维修"]}
+{"id": "syn-0688", "text": "用了一年多的手表不走字了,过了保修期还能修吗,怎么收费?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0689", "text": "东西坏了申请维修,修不好可以换新的吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["退换货", "保修维修"]}
+{"id": "syn-0690", "text": "怎么查我这个订单的保修期还剩多久,坏了想送修", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0691", "text": "这个电饭煲用半年就坏了,还在保修期内吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0692", "text": "耳机右耳没声音了,能寄回去维修吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0693", "text": "洗衣机保修卡丢了还能修吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0694", "text": "手机屏幕坏了但还在保修期,维修要多久?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0695", "text": "我买的电吹风坏了,怎么申请售后维修啊?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0696", "text": "这个扫地机器人故障了,配件换了要收费吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0697", "text": "桌子腿用几天就断了,保修能换配件不?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0698", "text": "手表走时不准,能保修期内免费修吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0699", "text": "冰箱还在保修期内,上门维修要预约吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0700", "text": "耳机保修一年,现在坏了寄修流程是怎样的?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-0701", "text": "我登不上账号了,一直提示密码错误,咋办啊?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0702", "text": "手机号换了,账号怎么重新绑定新号码?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0703", "text": "忘记登录密码了,怎么找回或者重置啊?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0704", "text": "账号好像被别人登录了,怎么改密码才安全?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0705", "text": "新用户怎么注册你们家账号,步骤说一下呗", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0706", "text": "账号被系统锁定了,说要验证,该怎么解封?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0707", "text": "我想换绑邮箱,账号里的邮箱怎么修改?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0708", "text": "登录时老收不到验证码,是账号出问题了吗?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0709", "text": "能不能注销我这个账号,不想用了怎么操作?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0710", "text": "账号绑定的是旧手机号,现在登录不上怎么弄?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0711", "text": "我登录密码忘了怎么办?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0712", "text": "怎么注册新账号?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0713", "text": "账号被锁了怎么解锁?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0714", "text": "我想修改登录手机号怎么弄?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0715", "text": "账号突然登不上去了怎么回事?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0716", "text": "换手机了账号还能登吗?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0717", "text": "密码输错好几次被限制了怎么办?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0718", "text": "账号绑定的邮箱能改吗?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0719", "text": "怎么退出登录重新登?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0720", "text": "我的账号好像被盗了怎么办?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0721", "text": "我登录密码忘了怎么找回啊?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0722", "text": "账号怎么注册啊,我弄半天没成功.", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0723", "text": "我想改一下登录密码,在哪改啊?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0724", "text": "我账号好像被盗了,别人能登我的,怎么办?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0725", "text": "手机号换了,账号绑定怎么改成新号码?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0726", "text": "账号被锁定了登不上去,怎么解锁啊?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0727", "text": "我两个账号能合并吗?里面都有订单.", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0728", "text": "登录一直提示验证失败,是什么原因?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0729", "text": "我想注销这个账号,具体怎么操作?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0730", "text": "账号绑定邮箱怎么换,我原来的不用了.", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0731", "text": "我登录不上账号了,密码输了好几遍都不对,怎么办?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0732", "text": "注册新账号时收不到验证码,手机号是不是有问题?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0733", "text": "我的账号好像被别人登录了,怎么才能把密码改掉?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0734", "text": "忘记密码了,绑定的手机号也不用了,还能找回来吗?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0735", "text": "账号突然被退出登录,重新登也登不上,是什么原因?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0736", "text": "我想换个手机号绑定账号,原来的号码停机了怎么操作?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0737", "text": "账号密码明明是对的,为什么一直提示登录失败?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0738", "text": "注册的时候提示我账号已存在,可我根本没注册过啊?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0739", "text": "账号被盗了,里面的信息会不会泄露,要怎么处理?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0740", "text": "登录时提示账号被冻结,这要怎么解冻才能用?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-0741", "text": "我买的东西怎么没给我加积分啊?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-0742", "text": "会员积分怎么查?我攒了多少了?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-0743", "text": "积分能抵现金用吗?怎么用啊?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-0744", "text": "我的会员积分会过期吗?能留多久?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-0745", "text": "积分兑换的东西从哪里进去换?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-0746", "text": "为什么我下单后积分一直没到账?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-0747", "text": "会员等级怎么升?积分够了自动升吗?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-0748", "text": "退货以后积分会被扣回去吗?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["退换货", "会员积分"]}
+{"id": "syn-0749", "text": "生日当月有双倍积分吗?怎么领?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-0750", "text": "积分兑换的优惠券在哪看?没收到啊", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["优惠活动", "会员积分"]}
+{"id": "syn-0751", "text": "我收到货了,怎么在订单里给商品写评价呀?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0752", "text": "之前给的那条评价能改吗,我想重新写一下", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0753", "text": "我买的这个还没评价,入口在哪儿找不到了", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0754", "text": "差评能给撤掉吗,给了之后有点后悔", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0755", "text": "评价不小心写错了,能不能删掉重新评", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0756", "text": "东西收到了,评价怎么一直提交不了啊", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0757", "text": "我想把之前那条好评再改改,可以吗", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0758", "text": "订单显示已完成,但评价按钮在哪呢", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0759", "text": "给了一星差评后想修改,还来得及吗", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0760", "text": "想问问评价在哪里删,我发错图片了", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0761", "text": "我买的那个东西想改评价,怎么找不到修改入口了?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0762", "text": "确认收货后还能不能把已经写的评价删掉重写呀?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0763", "text": "我上次给的中评能改成好评吗,该怎么操作?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0764", "text": "收到货了想给个评价,从哪个页面进去写啊?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0765", "text": "不小心点错写了差评,能帮忙删掉那条评价吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0766", "text": "我想追加评价说说用后感受,入口在哪呢?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0767", "text": "订单里评价一直显示待评价,点进去没反应咋回事?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0768", "text": "能不能把之前那条差评内容改一下,我想重新写?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0769", "text": "我给了差评现在有点后悔,还能撤回或者修改吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0770", "text": "刚确认收货想马上评价,但评价按钮是灰的怎么办?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0771", "text": "我买的东西收到后想改评价,在哪里能改啊?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0772", "text": "给你们的差评怎么删除掉,能帮我处理下吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0773", "text": "评价不小心点错了,能重新修改吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0774", "text": "这个差评不是我本意,能帮我删掉那条评价吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0775", "text": "我想追加评价,入口在哪里找不到了.", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0776", "text": "刚才给了一星差评,现在想改好评,能不能改?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0777", "text": "评价写错了想删掉重写,怎么操作?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0778", "text": "你们客服能帮忙把差评撤销掉吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0779", "text": "在哪里可以修改我已经提交的商品评价?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0780", "text": "我不小心给了差评,现在想改回好评可以吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0781", "text": "我昨天给的评价怎么找不到了,是不是被你们删了?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0782", "text": "买完东西想改一下评价内容,从哪里进去改啊?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0783", "text": "我能不能把之前那个差评删掉重新写一条?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0784", "text": "评价不小心点错了,能帮我改回好评吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0785", "text": "在哪可以看到我买过的东西的评价入口?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0786", "text": "我给了一星差评,你们能不能帮我处理一下?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0787", "text": "确认收货之后多久内还可以评价呀?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0788", "text": "想追评补充点使用感受,怎么操作?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0789", "text": "我那条评价想删掉,删了影响积分吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["会员积分", "评价"]}
+{"id": "syn-0790", "text": "差评提交以后还能改文字内容吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0791", "text": "我买的那个东西想改评价,怎么改成好评啊?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0792", "text": "评价写错了想删掉,在哪里可以删除自己的评价?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0793", "text": "确认收货之后还能改评价吗,入口在哪儿找?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0794", "text": "我想给刚收到的商品追加评价,怎么操作?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0795", "text": "给了差评之后商家找我,能帮我改一下评价吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0796", "text": "评价不小心点错星了,还能重新修改评价内容吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0797", "text": "在哪里可以查看我之前的评价记录并修改?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0798", "text": "商品还没评价,评价按钮在哪里找不到?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0799", "text": "我想把之前写的评价删掉重写,可以吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0800", "text": "给了一星差评现在想改成五星好评,怎么弄?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0801", "text": "我买的东西用着挺好的,想给它写个好评,入口在哪啊?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0802", "text": "之前给的那条评价我想改一下内容,怎么修改?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0803", "text": "我发的评价能删除吗?说错话了想删掉.", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0804", "text": "我买的商品还没评价,在哪里可以评价呀?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0805", "text": "我给了个差评,现在想追评一下,可以吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0806", "text": "评价能匿名吗?不想让别人看到我的账号.", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0807", "text": "我想把之前的差评改成好评,怎么操作?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0808", "text": "我评价里好像写了不合适的话,能帮我删掉吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0809", "text": "确认收货以后多久内可以评价啊?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0810", "text": "商家让我删差评,我该怎么处理这个评价?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0811", "text": "我买的那个东西想改一下评价内容,从哪里进去改啊?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0812", "text": "之前给的差评能删掉重新写吗,找半天没找到入口.", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0813", "text": "收到货觉得不错,想追加个好评,怎么操作呀?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0814", "text": "评价好像写错东西了,能不能修改一下评价内容?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0815", "text": "我想把刚下的那单评价删了,请问在哪里删除?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0816", "text": "买完忘记评价了,现在还能补一个评价吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0817", "text": "给了一星差评想改成好评,可以修改吗怎么改?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0818", "text": "评价入口在哪儿啊,我订单完成了找不到写评价的地方.", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0819", "text": "我那条评价怎么被隐藏了,能不能帮我恢复一下?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0820", "text": "想重新评价一下商品,之前那条可以删掉重写吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-0821", "text": "有人吗?回我一下.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0822", "text": "你好,我想问点事情.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0823", "text": "客服在不在呀?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0824", "text": "我就随便问问,没什么事.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0825", "text": "你好,请问能看到我消息吗?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0826", "text": "没什么大事,就是来找你们聊聊.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0827", "text": "打扰一下,你们这边有人值班吗?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0828", "text": "我有个事想问,但还没想好怎么说.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0829", "text": "客服你好,我先随便问一句.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0830", "text": "在吗?我就是随便看看,先问问你们家一般什么时候上新呀?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0831", "text": "你好,我没什么事,就是想说你们客服回复还挺快的.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0832", "text": "请问你们店铺平时几点下班呀?现在有人吗?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0833", "text": "我就想问问,你们家开了多少年了?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0834", "text": "没啥问题,就是路过进来打个招呼,生意兴隆哈.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0835", "text": "你好,我想问一下你们店叫什么名字来着?我忘了.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0836", "text": "嗯......我也不知道要问啥,你能给我介绍一下你们店吗?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0837", "text": "我就随便问一句,你们客服是真人还是机器人呀?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0838", "text": "打扰了,我没别的意思,就是想确认一下你们还在营业吗?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0839", "text": "嗨,我今天心情不太好,能陪我聊两句吗?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0840", "text": "你好,我就是随便看看,没什么事.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0841", "text": "请问有人吗?我就想找个人聊两句.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0842", "text": "嗯,我没别的意思,就是来打个招呼.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0843", "text": "那个,我也说不上来要问啥,先这样吧.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0844", "text": "你好,我这边没啥问题,就是想问一下你在不在.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0845", "text": "嗨,没什么特别的事,就是想随便问问.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0846", "text": "我暂时没有要咨询的,就是进来看看.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0847", "text": "你好呀,我也不知道该问点什么,就随便说说.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0848", "text": "没事没事,我就随便逛逛,你不用管我.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0849", "text": "在吗?我没啥具体要问的,就是闲得无聊.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0850", "text": "你好,在吗?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0851", "text": "请问有人吗,想咨询点事.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0852", "text": "我这单有点问题,不知道找谁问.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0853", "text": "客服在不在,回我一下呗.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0854", "text": "麻烦帮我看下我这个情况该咋办.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0855", "text": "我就是想问问,没什么别的事.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0856", "text": "在吗在吗,有个事想确认一下.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0857", "text": "你好,我这边有个疑问想请教下.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0858", "text": "随便问一下,你们一般几点在线啊?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0859", "text": "我有个小问题,方便的时候回复我.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0860", "text": "在吗,随便问一下,你们一般几点上班呀?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0861", "text": "你好,我就是想找个人聊两句,有人在吗?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0862", "text": "没啥事,就是进来看看,你们店还开着吧?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0863", "text": "我就想问问,你们客服是真人还是机器人啊?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0864", "text": "打扰一下,我暂时没问题,就是先来打个招呼.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0865", "text": "你好在不在,我先看看,等下有问题再问你.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0866", "text": "没什么要问的,就是随便逛逛,你们忙你的.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0867", "text": "我就试试这个客服能不能回我,回个话呗.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0868", "text": "想问问你们明天上不上班,别的倒没什么事.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0869", "text": "你好,我这边没什么诉求,就是想确认下有人值班吗?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0870", "text": "在吗?我就是随便看看,没啥事.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0871", "text": "你好,我就想问问你们客服几点下班呀?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0872", "text": "没事,就是路过进来逛逛,不用管我.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0873", "text": "嗯......我也不太清楚要问啥,先打个招呼吧.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0874", "text": "你们店开了多久啦?就是好奇问一下.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0875", "text": "我就想确认一下你们是不是真人客服呀?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0876", "text": "没啥问题,就是想说你们页面做得挺好看的.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0877", "text": "你好,我暂时没别的事,先收藏一下你们店.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0878", "text": "在不在?我就随便问一句,你们今天忙不忙?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0879", "text": "在吗?想咨询点事,不知道找谁问比较好", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0880", "text": "你们客服是真人还是机器人啊,随便聊两句", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0881", "text": "我就想问问,你们家平时几点下班呀", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0882", "text": "你好,我没什么事,就是想问问在不在", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0883", "text": "随便看看,也不知道该问点什么好", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0884", "text": "请问你们这个店铺开了多久啦", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0885", "text": "我就路过看看,你们家主要卖什么的", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0886", "text": "喂,有人吗?我就是想找个人说说话", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0887", "text": "你好,请问你们客服上班时间是几点到几点", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0888", "text": "没啥具体问题,就是先来打个招呼", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0889", "text": "在吗,想咨询点事情", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0890", "text": "你好,有个事想问一下", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0891", "text": "随便问问,你们客服几点下班", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0892", "text": "我有个问题不知道该怎么问", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0893", "text": "你们店一般多久回复消息啊", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0894", "text": "麻烦帮我看看这个该怎么弄", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0895", "text": "你好,请问有人在线吗", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0896", "text": "我就想问一下,没别的意思", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0897", "text": "能帮我转一下人工客服吗", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0898", "text": "有个小问题想跟你确认下", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0899", "text": "在吗?没啥事,就是想问一下.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0900", "text": "喂你好,我这边没别的问题,就打个招呼.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-0901", "text": "我买的衣服穿着不合适,想申请退货,流程怎么走?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0902", "text": "这个商品我不想要了,能直接退吗,需要什么条件?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0903", "text": "收到的东西跟描述不一样,我想换货,具体怎么操作?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0904", "text": "请问退款一般多久能到账,我要怎么提交退款申请?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0905", "text": "尺码买小了想换大一码,换货需要我自己出运费吗?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货", "尺码", "运费"]}
+{"id": "syn-0906", "text": "刚收到的鞋子有点磨脚,能退货吗,包装要留着吗?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0907", "text": "我想把昨天买的那个换一款颜色,换货流程麻烦吗?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0908", "text": "商品还没拆封,七天内可以无理由退货吧,怎么申请?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0909", "text": "退款申请提交了但一直没动静,能帮我催一下吗?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0910", "text": "我想退货但是不知道寄回地址,能发我一下退货流程吗?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0911", "text": "这件衣服我穿着不合适,想退掉,怎么操作?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0912", "text": "刚收到的鞋子有点挤脚,能换大一码吗?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0913", "text": "我不想要了,申请退货要满足什么条件?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0914", "text": "这个商品可以七天无理由退货吗?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0915", "text": "尺码选错了,想换货,流程麻烦吗?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货", "尺码"]}
+{"id": "syn-0916", "text": "东西还没拆封,想直接退款可以吗?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0917", "text": "收到的颜色跟图片不一样,我要退货怎么弄?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0918", "text": "退货需要把赠品一起寄回去吗?", "labels": ["退换货"], "origin": "synthetic", "target_labels": ["退换货"], "prelabels": ["退换货"]}
+{"id": "syn-0919", "text": "我的快递到哪了,怎么一直显示在中转站?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0920", "text": "下单两天了还没发货,能帮我催一下物流吗?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0921", "text": "包裹显示签收了但我没收到,放哪去了?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0922", "text": "物流信息好几天没更新了,是不是丢件了?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0923", "text": "能帮我问下快递什么时候派送吗?我急着用.", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0924", "text": "显示已到本地网点,今天会送到吗?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0925", "text": "我买的东西能不能换个快递公司发?这个太慢了.", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0926", "text": "快递员没打电话就把件放驿站了,能送上门吗?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0927", "text": "这个订单的物流单号发我一下,我自己查查.", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0928", "text": "为什么别人买的都到了,我的还在路上?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0929", "text": "我的快递昨天显示已发出,怎么到现在物流信息都没更新啊?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0930", "text": "包裹到站点好几天了还没派送,能帮我催一下吗?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0931", "text": "物流显示已签收,但我根本没收到货,这是怎么回事?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0932", "text": "我买的东西大概几天能送到啊,能查下现在到哪了吗?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0933", "text": "快递一直卡在中转站不动,是不是丢件了?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0934", "text": "能帮我改一下收货时间,让快递晚两天再送吗?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0935", "text": "包裹显示派送中,但快递员一直没联系我,什么时候能到?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0936", "text": "我这单发的是什么快递,能给我单号我自己查下进度吗?", "labels": ["物流"], "origin": "synthetic", "target_labels": ["物流"], "prelabels": ["物流"]}
+{"id": "syn-0937", "text": "我身高一米七体重一百二,买这个尺码选M还是L合适?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0938", "text": "你们这个尺码表准不准,我平时穿均码的要拍大一号吗?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0939", "text": "裤子腰围偏大还是偏小,我一百五十斤穿XL会不会紧?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0940", "text": "这鞋子尺码标准吗,我平时穿三十八码的该买多大?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0941", "text": "客服在吗,我比较胖肚子大,上衣应该买哪个码合适?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0942", "text": "我腿比较粗,这条裙子买大一码会不会太宽松不好看?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0943", "text": "宝贝详情里的尺码看不懂,一米六八的个子八十斤选S还是M?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0944", "text": "这款外套偏小吗,我一百三十斤怕买小了穿不下", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0945", "text": "我想给我媳妇买件毛衣,她一百一十斤大概穿什么尺码?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0946", "text": "请问你们家衣服是正常码吗,我平时穿L这个选L行不行?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0947", "text": "我身高一米七体重一百三,穿哪个尺码合适啊?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0948", "text": "你们这个尺码表准不准,我平时穿L码该选哪个?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0949", "text": "我腿比较粗,这款裤子是不是得买大一码?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0950", "text": "这条裙子偏大还是偏小,我一百斤选S还是M?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0951", "text": "我腰围二尺三,对应你们家哪个尺码呀?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0952", "text": "鞋子码数正不正,我平时穿三十八码要不要拍大一号?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0953", "text": "我上半身比较壮,衬衫选哪个码不会太紧?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0954", "text": "孩子身高一米二,童装拍一百二十码还是大一码?", "labels": ["尺码"], "origin": "synthetic", "target_labels": ["尺码"], "prelabels": ["尺码"]}
+{"id": "syn-0955", "text": "确认收货后还能补开发票吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0956", "text": "下单时忘了选开发票,现在怎么申请?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0957", "text": "发票上的抬头能开公司名称和税号吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0958", "text": "我买的商品开票要加税点吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0959", "text": "电子发票什么时候能开好,怎么下载?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0960", "text": "发票抬头写错了,能重新开一张吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0961", "text": "我只想要纸质发票,用来报销可以吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0962", "text": "合并下单的几件商品能开在一张发票上吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0963", "text": "退货之后之前开的发票需要怎么处理?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["退换货", "发票"]}
+{"id": "syn-0964", "text": "我想开个发票,抬头写公司的,怎么弄啊?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0965", "text": "买的东西能开发票吗?我要报销用的.", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0966", "text": "电子发票在哪里下载啊,订单里没找到入口.", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0967", "text": "发票抬头可以开个人吗?还是只能开公司?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0968", "text": "我下单时忘记选开发票了,现在还能补开吗?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0969", "text": "发票的税号要填在哪里?我找不到填写的地方.", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0970", "text": "这个订单能开增值税专用发票不?需要提供什么资料?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0971", "text": "发票金额是按实付金额开还是按商品原价开?", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0972", "text": "开好的发票能改抬头吗?之前填错了.", "labels": ["发票"], "origin": "synthetic", "target_labels": ["发票"], "prelabels": ["发票"]}
+{"id": "syn-0973", "text": "我收到的杯子底部有裂纹,这个算质量问题吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0974", "text": "衣服拆开发现领口开线了,能换一件吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0975", "text": "刚收到的水果有好几个已经烂了,怎么处理?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0976", "text": "新买的电饭煲通电没反应,是不是坏的?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0977", "text": "收到的鞋子两只颜色不一样,一只浅一只深.", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0978", "text": "面膜拆开里面已经干掉了,这样还能用吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0979", "text": "我买的玻璃餐具到货碎了一个角,能补发吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0980", "text": "这件外套口袋位置有个明显的破洞,刚拆的.", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0981", "text": "刚收到的零食包装鼓包了,看着就不太对.", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0982", "text": "新到的台灯插上电就闪,是不是有质量问题?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0983", "text": "收到货打开就看到杯子是碎的,这种破损怎么处理?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0984", "text": "衣服到货发现袖子上有破洞,这是瑕疵吧,能换吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["退换货", "质量问题"]}
+{"id": "syn-0985", "text": "刚拆开快递,里面食品包装鼓包了,是不是变质了?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0986", "text": "买的鞋子到货一只鞋底开胶,这算质量问题吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0987", "text": "手机收到货就开不了机,是不是坏了,咋办?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0988", "text": "我收到的水果有几颗已经烂了,发货时就这样?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0989", "text": "拆开包裹发现瓶子里漏了一半,瓶身还裂了,怎么弄?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0990", "text": "新到的衣服上有明显污渍,这还能要吗?", "labels": ["质量问题"], "origin": "synthetic", "target_labels": ["质量问题"], "prelabels": ["质量问题"]}
+{"id": "syn-0991", "text": "这个运费是怎么算的呀,买多少能包邮?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-0992", "text": "我买两件的话运费要多少钱?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-0993", "text": "退货的运费是你们出还是我自己出啊?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["退换货", "运费"]}
+{"id": "syn-0994", "text": "偏远地区发货要加运费吗?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-0995", "text": "满多少金额能免运费呀?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-0996", "text": "这个运费能不能便宜点,感觉有点贵.", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-0997", "text": "换货运费谁承担,需要我另付吗?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["退换货", "运费"]}
+{"id": "syn-0998", "text": "为什么我下单显示要收运费,不是包邮吗?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-0999", "text": "发到新疆运费要多少,会不会很贵?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-1000", "text": "运费能开发票里一起算吗,还是要分开付?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["发票", "运费"]}
+{"id": "syn-1001", "text": "这个商品运费要多少钱呀?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-1002", "text": "我买的东西运费怎么算的?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-1003", "text": "下单的话运费是你们出还是我出?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-1004", "text": "这个运费能不能便宜点或者包邮?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-1005", "text": "满多少才免运费啊?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-1006", "text": "退货的话来回运费谁承担?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["退换货", "运费"]}
+{"id": "syn-1007", "text": "运费太贵了,有没有包邮的办法?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-1008", "text": "我这边偏远地区运费要加多少?", "labels": ["运费"], "origin": "synthetic", "target_labels": ["运费"], "prelabels": ["运费"]}
+{"id": "syn-1009", "text": "你们店里最近有什么满减活动吗?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-1010", "text": "这个优惠券怎么用啊,能叠加吗?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-1011", "text": "现在下单有折扣吗,活动到几号结束?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-1012", "text": "满三百减五十的活动我够门槛了吗?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-1013", "text": "那个限时优惠是不是今天最后一天呀?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-1014", "text": "我领的券怎么结算时没抵扣上?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-1015", "text": "第二件半价的活动还有吗,怎么算的?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-1016", "text": "会员日有没有额外优惠,能便宜多少?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-1017", "text": "活动价和用券能一起享受不?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-1018", "text": "新用户首单有什么优惠可以领?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-1019", "text": "你们店里最近有啥满减活动吗?买两件能便宜多少?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-1020", "text": "这个优惠券怎么用啊,下单的时候没看到能抵扣的地方", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-1021", "text": "活动说满三百减五十,我凑够三百了怎么没减呢?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-1022", "text": "请问现在下单有什么折扣吗?还是等活动日再买划算?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-1023", "text": "那个限时优惠是到几点结束啊,我想再考虑一下", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-1024", "text": "优惠券和满减能一起用吗?会不会冲突啊?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-1025", "text": "我看到首页有个领券入口,券领了在哪儿查看使用?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-1026", "text": "活动规则里写的第二件半价,是自动减还是要自己备注?", "labels": ["优惠活动"], "origin": "synthetic", "target_labels": ["优惠活动"], "prelabels": ["优惠活动"]}
+{"id": "syn-1027", "text": "我前两天刚下的单,今天一看降了三十块,能补差价吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-1028", "text": "刚买完就降价了,这个差价你们给退不?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-1029", "text": "下单第二天价格就便宜了,能申请价保补回来吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-1030", "text": "我买的那个今天做活动更便宜了,之前多花的钱能退差价不?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-1031", "text": "东西还没收到呢就降价了,价保怎么弄啊?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-1032", "text": "昨天刚付款,今天同款就降了,差价找谁补?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-1033", "text": "刚下单没几个小时就降价,能按新价格给我补差价吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-1034", "text": "这个商品支持价保吗?我买完才两天就便宜了.", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-1035", "text": "我买贵了,现在页面价更低,能退我差价不?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-1036", "text": "刚买的东西降价了,价保是自动退还是要我申请?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-1037", "text": "我前天刚下单买的,今天一看就降价了,能补差价吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-1038", "text": "刚买完没两天商品就便宜了,这差价你们给退不?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-1039", "text": "下单后才过一天价格就降了好几十,能申请价保吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-1040", "text": "我买的那个昨天还那个价,今天就打折了,差额能补给我吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-1041", "text": "买完就降价了,我看别人说可以找客服补差价,怎么弄?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-1042", "text": "这款我刚拍下就做活动便宜了,能按新价格给我退差价不?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-1043", "text": "下单第二天就降价,价保是不是有时间限制,我还能补吗?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-1044", "text": "东西还没收到就降价了,这个差价你们管不管?", "labels": ["价保"], "origin": "synthetic", "target_labels": ["价保"], "prelabels": ["价保"]}
+{"id": "syn-1045", "text": "我付款时一直提示失败,换了两张卡都不行,怎么回事啊?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-1046", "text": "刚才下单扣了两次钱,但订单只有一个,多的能退吗?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["退换货", "支付"]}
+{"id": "syn-1047", "text": "支付页面转圈半天没反应,是系统卡了还是我网络问题?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-1048", "text": "我想用花呗付款,怎么结算时找不到这个选项了?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-1049", "text": "银行卡明明有钱,付款却显示余额不足,什么情况?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-1050", "text": "扫码支付成功了,可订单还显示待付款,这钱到底扣没扣?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-1051", "text": "付款时验证码一直收不到,试了好几次都不行咋办?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-1052", "text": "我不小心重复付了一笔,另一个订单能帮我取消退款吗?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["退换货", "支付", "订单修改"]}
+{"id": "syn-1053", "text": "结算时提示支付超时,让我重新下单,之前的钱会退回来吗?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-1054", "text": "微信支付被限额了付不了,还有别的付款方式可以选吗?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-1055", "text": "刚才下单扣了两次钱,是不是重复扣款了,能帮我查一下吗?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-1056", "text": "我想用微信付款,但是页面只显示银行卡,怎么换支付方式?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-1057", "text": "支付成功了但订单显示未付款,钱到底扣没扣啊?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-1058", "text": "我这边花呗额度够的,为什么付款的时候用不了花呗?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-1059", "text": "付款时提示余额不足,可我卡里明明有钱,什么情况?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-1060", "text": "下单后一直卡在支付中,不敢再点,怕重复扣钱怎么办?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-1061", "text": "我想改成货到付款,订单还没付钱能改支付方式吗?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-1062", "text": "支付页面一直转圈打不开,是不是你们系统有问题?", "labels": ["支付"], "origin": "synthetic", "target_labels": ["支付"], "prelabels": ["支付"]}
+{"id": "syn-1063", "text": "我地址填错了还没发货,能帮我改一下收货地址吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-1064", "text": "刚下的单想换另一个颜色,还没发货可以改吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-1065", "text": "我想把昨天那个订单取消掉,还没发货呢能取消吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-1066", "text": "能不能帮我把这两个没发货的订单合并成一个发?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-1067", "text": "收件人手机号写错了,订单还没发出能改一下吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-1068", "text": "我下单时选错规格了,趁没发货帮我改成另一个型号行吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-1069", "text": "包裹还没发出去,我想把买的数量改少一点可以吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-1070", "text": "地址少写了个门牌号,麻烦在我催发货前帮我补上好吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-1071", "text": "刚才那个订单我不想要了,还没发货能直接帮我取消退款吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["退换货", "订单修改"]}
+{"id": "syn-1072", "text": "我下错单了想换成另一个套餐,没发货的情况下能改吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-1073", "text": "我刚下的单还没发货,能帮我把收货地址改一下吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-1074", "text": "订单拍错了,还没发货,能不能帮我取消掉?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-1075", "text": "我想把刚买的那件换成另一个颜色,还没发货可以改吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-1076", "text": "地址写错了,麻烦帮我改成新的,还没发货呢.", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-1077", "text": "两个订单能不能合并成一个一起发?还没发货.", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-1078", "text": "刚下单发现买错尺码了,还没发货能帮我改吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["尺码", "订单修改"]}
+{"id": "syn-1079", "text": "我下单后想再加一件商品,还没发货可以加进去吗?", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-1080", "text": "麻烦帮我把订单里的数量从一件改成两件,还没发货.", "labels": ["订单修改"], "origin": "synthetic", "target_labels": ["订单修改"], "prelabels": ["订单修改"]}
+{"id": "syn-1081", "text": "这款什么时候能补货啊,我等着买呢", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-1082", "text": "缺货的那个颜色啥时候能到货呀", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-1083", "text": "我想问下这个尺码什么时候有货?", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["尺码", "库存补货"]}
+{"id": "syn-1084", "text": "你们那个断货的款式还补不补货了啊", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-1085", "text": "能帮我看看这个商品什么时候能再上架吗", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-1086", "text": "这款一直显示没货,大概什么时候补上", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-1087", "text": "我想要的码数缺货了,啥时候能到货", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["尺码", "库存补货"]}
+{"id": "syn-1088", "text": "这个型号的库存还会补吗,等好久了", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-1089", "text": "请问缺货商品到货了能提醒我一下吗", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-1090", "text": "我想买的那个颜色没货了,还补吗", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-1091", "text": "我上次看中的那款没货了,大概什么时候能补货啊?", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-1092", "text": "这个尺码断货好久了,还能再补上吗?", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["尺码", "库存补货"]}
+{"id": "syn-1093", "text": "缺货的商品能不能到货提醒我一下?", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-1094", "text": "你们这款什么时候有货呀,等好久了.", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-1095", "text": "卖光的那个颜色还会补货吗?补的话大概几天?", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-1096", "text": "我想买的这个现在显示无货,还会再上架吗?", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-1097", "text": "这款缺码了,能不能帮我留意到货通知我?", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["尺码", "库存补货"]}
+{"id": "syn-1098", "text": "请问补货周期一般多久,我想要的都没货了.", "labels": ["库存补货"], "origin": "synthetic", "target_labels": ["库存补货"], "prelabels": ["库存补货"]}
+{"id": "syn-1099", "text": "这件衣服是什么材质的,穿着会不会扎皮肤?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-1100", "text": "这个电饭煲内胆是什么涂层,能用钢丝球刷吗?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-1101", "text": "这款奶粉适合几岁的宝宝喝,保质期多长时间?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-1102", "text": "这款鞋是头层牛皮还是二层牛皮做的?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-1103", "text": "这个杯子容量是多少毫升,能放进微波炉吗?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-1104", "text": "这款面霜孕妇可以用吗,成分里有没有酒精?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-1105", "text": "这个行李箱是几寸的,箱体是什么材质?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-1106", "text": "这条裤子含棉量多少,夏天穿会不会闷热?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-1107", "text": "这款台灯能调几种亮度,适合学生写作业用吗?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-1108", "text": "这个保温杯保温能撑几个小时,内胆是什么不锈钢的?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-1109", "text": "这款衣服是什么材质的,贴身穿会不会闷?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-1110", "text": "你们这个杯子是多大容量的,能装开水吗?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-1111", "text": "这个面霜适合敏感肌用吗,成分里有没有酒精?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-1112", "text": "想问下这个电饭煲内胆是什么涂层的呀?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-1113", "text": "这个背包能放下十五寸的笔记本电脑吗?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-1114", "text": "请问这款鞋子的鞋面是真皮还是人造革的?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-1115", "text": "这个零食的保质期多久,生产日期是什么时候的?", "labels": ["商品信息"], "origin": "synthetic", "target_labels": ["商品信息"], "prelabels": ["商品信息"]}
+{"id": "syn-1116", "text": "买来用了两个月坏了,还在保修期内吗?能不能免费修?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-1117", "text": "这个电器保修期多久啊,坏了是寄回去修还是上门修?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-1118", "text": "耳机保修期内出现没声音,维修要多久能寄回来?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-1119", "text": "我买的这个锅用了一段时间涂层掉了,能保修换配件吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-1120", "text": "维修需要自己出运费吗,还是你们负责来回寄?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["运费", "保修维修"]}
+{"id": "syn-1121", "text": "手表进水了还能修不,保修会不会算人为的?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-1122", "text": "空调还在保修期,坏了申请维修要提供什么凭证?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-1123", "text": "这个机器的电池坏了,保修里包含换新电池吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-1124", "text": "上次修过的设备又出同样问题,第二次维修怎么处理?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-1125", "text": "保修卡丢了还能享受保修吗,凭订单能修不?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-1126", "text": "我买的吹风机坏了,还在保修期内,怎么申请维修?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-1127", "text": "这个电饭煲用了一个月就出故障,能寄回去修吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-1128", "text": "耳机保修是多久啊?坏了是换新的还是帮我修?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-1129", "text": "手表表带断了,保修能换配件吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-1130", "text": "我买的锅涂层掉了,能走保修维修流程不?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["质量问题", "保修维修"]}
+{"id": "syn-1131", "text": "这个机器保修期内维修要自己出钱吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-1132", "text": "扫地机器人出问题了,本地有维修点吗?", "labels": ["保修维修"], "origin": "synthetic", "target_labels": ["保修维修"], "prelabels": ["保修维修"]}
+{"id": "syn-1133", "text": "我密码忘了登不上账号,怎么找回啊?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-1134", "text": "手机号换了,账号怎么换绑新号码?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-1135", "text": "账号突然被登出,重新登录一直提示密码错误怎么办?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-1136", "text": "我想注册个新账号,怎么弄啊?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-1137", "text": "账号好像被盗了,怎么改密码才安全?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-1138", "text": "我两个账号能合并吗?之前注册重复了.", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-1139", "text": "登录时老收不到验证码,是不是账号有问题?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-1140", "text": "账号绑定的邮箱不用了,怎么换成别的?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-1141", "text": "我账号被冻结了,怎么解冻啊?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-1142", "text": "能不能把账号注销掉?我不想用了.", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-1143", "text": "我登录的时候一直提示密码错误,怎么回事啊?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-1144", "text": "手机号换了,账号绑定的旧号码登不上了怎么办?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-1145", "text": "账号密码忘了,怎么才能找回来重新登录?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-1146", "text": "我的账号怎么突然被退出登录了,是不是被盗了?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-1147", "text": "注册新账号一直收不到验证码,是什么原因?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-1148", "text": "想改一下账号的登录密码,在哪里操作啊?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-1149", "text": "同一个手机号能注册两个账号吗?", "labels": ["账号"], "origin": "synthetic", "target_labels": ["账号"], "prelabels": ["账号"]}
+{"id": "syn-1150", "text": "我买的东西怎么没给积分啊,是不是漏了?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-1151", "text": "积分能当钱花吗,买东西可以抵扣多少?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-1152", "text": "积分快过期了,有没有提醒,怎么查还剩多少?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-1153", "text": "会员等级怎么升啊,升了积分是不是给得多?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-1154", "text": "退款以后之前送的积分会被收回去吗?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["退换货", "会员积分"]}
+{"id": "syn-1155", "text": "签到攒的积分在哪儿看,能换什么礼品?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-1156", "text": "为什么我积分兑换的券下单时用不了?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["优惠活动", "会员积分"]}
+{"id": "syn-1157", "text": "会员积分多久到账,确认收货后几天给?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-1158", "text": "积分可以转给别人或者合并到另一个账号吗?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["账号", "会员积分"]}
+{"id": "syn-1159", "text": "我看会员权益里说双倍积分,活动什么时候有?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["优惠活动", "会员积分"]}
+{"id": "syn-1160", "text": "我买的东西积分什么时候到账啊?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-1161", "text": "积分能直接当钱花抵扣吗?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-1162", "text": "会员积分怎么查还剩多少?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-1163", "text": "积分快过期了能延期吗?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-1164", "text": "为啥我这次下单没给积分?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-1165", "text": "积分兑换的礼品在哪里看?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-1166", "text": "会员等级升了积分会变多吗?", "labels": ["会员积分"], "origin": "synthetic", "target_labels": ["会员积分"], "prelabels": ["会员积分"]}
+{"id": "syn-1167", "text": "我收到货了想给个评价,在哪边写啊?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-1168", "text": "上次那个差评能删掉吗,现在想改好评", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-1169", "text": "评价不小心写错了,还能修改吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-1170", "text": "怎么评价才不会被折叠,我写的怎么看不到", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-1171", "text": "我想追评一下,入口在哪里找?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-1172", "text": "给差评之后卖家一直找我,能删评价吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-1173", "text": "评价可以匿名吗,不想显示我的昵称", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-1174", "text": "买完忘了评价,现在还能补评价吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-1175", "text": "商品评价里的图片怎么上传不了?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-1176", "text": "差评给出去了还能改成好评不?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-1177", "text": "我买的那个东西收到后想给它写个评价,入口在哪儿找啊?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-1178", "text": "之前给的那条评价我想改一下,能修改吗?怎么操作?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-1179", "text": "差评好像删不掉了,能帮我删掉那条评价吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-1180", "text": "买完东西想晒个图评价一下,从哪里点进去写啊?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-1181", "text": "评价不小心点错了,能不能重新编辑一下内容?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-1182", "text": "我想把之前那条评价删掉重新写,可以吗?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-1183", "text": "刚收到货想给个好评,评价页面在app哪里点开?", "labels": ["评价"], "origin": "synthetic", "target_labels": ["评价"], "prelabels": ["评价"]}
+{"id": "syn-1184", "text": "在吗,我随便看看,先咨询一下你们家的情况.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-1185", "text": "你好,我就是路过逛一逛,暂时没啥要问的.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-1186", "text": "客服在不在呀,我想找人说说话聊聊天.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-1187", "text": "没啥事,就是想问问你们几点下班呀.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-1188", "text": "你好,我这边不知道要问啥,你能帮我看看吗?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-1189", "text": "我就随便问问,你们店是做什么的呀?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-1190", "text": "嗨,在吗?我先mark一下,有问题再来找你.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-1191", "text": "请问你们客服是真人还是机器人呀?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-1192", "text": "你好,我就是来打个招呼,没别的意思.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-1193", "text": "我不太清楚要问什么,你先给我介绍介绍吧.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-1194", "text": "你好,我就是随便问问,没什么事.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-1195", "text": "在吗?我先看看,暂时没别的事.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-1196", "text": "客服你好,我想了解一下你们店铺的情况.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-1197", "text": "嗨,今天客服忙不忙呀?", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-1198", "text": "没啥问题,就是想找个人聊两句.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-1199", "text": "我点进来看看,也不知道要问什么.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}
+{"id": "syn-1200", "text": "你们平时几点上班呀,我就随便问问.", "labels": ["其他"], "origin": "synthetic", "target_labels": ["其他"], "prelabels": ["其他"]}

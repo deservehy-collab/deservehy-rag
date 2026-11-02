@@ -7,8 +7,13 @@ py -3.12 -m venv .venv
 if errorlevel 1 goto failed
 
 :check_dependencies
-".venv\Scripts\python.exe" -c "import fastapi, langchain_openai, pydantic_settings, uvicorn, sqlalchemy, pymysql, sentence_transformers, pymilvus, apscheduler, torch" >nul 2>&1
+rem Presence-only probe: importing sentence_transformers costs ~25s on every start.
+".venv\Scripts\python.exe" -c "import importlib.util as u; raise SystemExit(any(u.find_spec(m) is None for m in ('fastapi','langchain_openai','pydantic_settings','uvicorn','sqlalchemy','pymysql','sentence_transformers','transformers','pymilvus','apscheduler','torch')))" >nul 2>&1
+if errorlevel 1 goto install_dependencies
+".venv\Scripts\python.exe" -c "import torch" >nul 2>&1
 if not errorlevel 1 goto run
+
+:install_dependencies
 ".venv\Scripts\python.exe" -m pip install -i https://mirrors.aliyun.com/pypi/simple/ -f https://mirrors.aliyun.com/pytorch-wheels/cu128/ -r requirements.lock.txt
 if errorlevel 1 goto failed
 

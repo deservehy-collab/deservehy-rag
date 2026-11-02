@@ -280,3 +280,24 @@ class EvalRun(Base):
     dataset_size: Mapped[int] = mapped_column(CountType, nullable=False)
     metrics: Mapped[dict | None] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+
+class TopicClassification(Base):
+    """ch10 主题归类结果：一条低置信问题只保留一行，重跑按 question_id 更新。"""
+
+    __tablename__ = "topic_classifications"
+    __table_args__ = (
+        UniqueConstraint("question_id", name="uk_question_id"),
+        TABLE_OPTIONS,
+    )
+
+    id: Mapped[int] = mapped_column(IdType, primary_key=True, autoincrement=True)
+    question_id: Mapped[int] = mapped_column(
+        IdType,
+        ForeignKey("low_confidence_questions.id", name="fk_topic_question"),
+        nullable=False,
+    )
+    labels: Mapped[list[str]] = mapped_column(JSON, nullable=False)
+    classified_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=func.now()
+    )
